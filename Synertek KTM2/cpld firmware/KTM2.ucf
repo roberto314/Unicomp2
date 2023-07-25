@@ -1,0 +1,36 @@
+NET "nRRDIS"   LOC = "p32"  ;
+NET "A[1]"   LOC = "p31"  ;
+NET "A[2]"   LOC = "p30"  ;
+NET "A[3]"   LOC = "p29"  ;
+NET "A[4]"   LOC = "p28"  ;
+NET "A[5]"   LOC = "p27"  ;
+NET "A[6]"   LOC = "p23"  ;
+NET "A[7]"   LOC = "p22"  ;
+NET "A[8]"   LOC = "p21"  ;
+NET "A[9]"   LOC = "p20"  ;
+NET "A[10]"  LOC = "p19"  ;
+NET "A[11]"  LOC = "p18"  ;
+NET "A[12]"  LOC = "p16"  ;
+NET "A[13]"  LOC = "p14"  ;
+NET "A[14]"  LOC = "p13"  ;
+NET "A[15]"  LOC = "p12"  ;
+
+NET "nWE"    LOC = "p39"  ;
+NET "nUWE"   LOC = "p40"  ;
+NET "nEDEN"  LOC = "p41"  ;
+NET "nOVR"   LOC = "p42"  ;
+NET "CLK_in" LOC = "p43"  ;
+NET "PHI2"   LOC = "p44"  ;
+NET "nDE"    LOC = "p1"   ;
+NET "nMRD"   LOC = "p33"  ;
+NET "nMWR"   LOC = "p34"  ;
+NET "nOE595" LOC = "p36"  ;
+NET "nEWE"   LOC = "p37"  ;
+NET "nLOAD"  LOC = "p38"  ;
+
+NET "MOSI"   LOC = "p6"  ;
+NET "SCK"    LOC = "p7"  ;
+NET "nSPICS" LOC = "p8"  ;
+NET "CON0"   LOC = "p5"  ;
+NET "CON1"   LOC = "p3"  ;
+NET "CON2"   LOC = "p2"  ;

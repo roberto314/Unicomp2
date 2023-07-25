@@ -1,0 +1,8 @@
+V3 3
+FL "/home/rob/Data/rob/Projects/unicomp/6502 Board/cpld firmware 6802/board_6802.vhd" 2023/06/08.19:45:30 P.20131013
+EN work/board_6802 1686246402 \
+      FL "/home/rob/Data/rob/Projects/unicomp/6502 Board/cpld firmware 6802/board_6802.vhd" \
+      PB ieee/std_logic_1164 1381692176 PB ieee/NUMERIC_STD 1381692181
+AR work/board_6802/Behavioral 1686246403 \
+      FL "/home/rob/Data/rob/Projects/unicomp/6502 Board/cpld firmware 6802/board_6802.vhd" \
+      EN work/board_6802 1686246402

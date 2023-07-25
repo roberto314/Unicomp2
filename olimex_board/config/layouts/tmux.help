@@ -1,0 +1,10 @@
+#!/bin/bash
+echo -e "\033[33m"
+echo -e "\033[1m"
+echo "--------------- TMUX HELP --------------------"
+echo
+echo "Bind key is changed to Ctrl-z (for US Layout)"
+echo "bind-p is previous window, bind-n is next window"
+echo "bind-w shows a window list, bind-l toggles to last active window"
+echo "bind-; toggles to last active pane, bind-q shows pane numbers, bind-q [0..9] jumps to pane"
+echo -e "\033[m"

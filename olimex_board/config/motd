@@ -1,0 +1,11 @@
+
+The programs included with the Debian GNU/Linux system are free software;
+the exact distribution terms for each program are described in the
+individual files in /usr/share/doc/*/copyright.
+
+Debian GNU/Linux comes with ABSOLUTELY NO WARRANTY, to the extent
+permitted by applicable law.
+echo -e "\033[33m"
+echo -e "\033[1m"
+start tmux with tmuxifier -s session1
+echo -e "\033[m"

@@ -1,0 +1,7 @@
+#!/bin/bash
+echo -e "\033[33m"
+echo -e "\033[1m"
+clear
+echo "--------------- console ttyS4 9600 (=RX6,TX6) --------------------"
+echo -e "\033[m"
+picocom -b 9600 /dev/ttyS4
