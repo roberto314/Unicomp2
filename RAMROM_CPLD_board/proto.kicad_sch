@@ -1421,7 +1421,7 @@
     (pin "1" (uuid febf836a-68da-4887-a88f-a345491d2e20))
     (pin "2" (uuid 55867142-7af9-481f-a88c-86ee37be6558))
     (instances
-      (project "RAMROM_Board"
+      (project "RAMROM_CPLD_board"
         (path "/2eaa3998-c9cb-43b1-9b23-df656c8158b0/a52275eb-5ca9-4d9e-b6e3-271f884a7187"
           (reference "C1") (unit 1)
         )
@@ -1483,7 +1483,7 @@
     (pin "8" (uuid 6d669f40-6f14-454a-ab4a-f79aca01f51c))
     (pin "9" (uuid 7ebab960-df6e-4842-b151-824aadfe47a7))
     (instances
-      (project "RAMROM_Board"
+      (project "RAMROM_CPLD_board"
         (path "/2eaa3998-c9cb-43b1-9b23-df656c8158b0/a52275eb-5ca9-4d9e-b6e3-271f884a7187"
           (reference "J18") (unit 1)
         )
@@ -1508,7 +1508,7 @@
     )
     (pin "1" (uuid a8f4d9ab-9d3c-407c-95dc-edeae3d9b5bc))
     (instances
-      (project "RAMROM_Board"
+      (project "RAMROM_CPLD_board"
         (path "/2eaa3998-c9cb-43b1-9b23-df656c8158b0/a52275eb-5ca9-4d9e-b6e3-271f884a7187"
           (reference "#PWR0110") (unit 1)
         )
@@ -1532,7 +1532,7 @@
       (effects (font (size 1.27 1.27)) hide)
     )
     (instances
-      (project "RAMROM_Board"
+      (project "RAMROM_CPLD_board"
         (path "/2eaa3998-c9cb-43b1-9b23-df656c8158b0/a52275eb-5ca9-4d9e-b6e3-271f884a7187"
           (reference "H2") (unit 1)
         )
@@ -1556,7 +1556,7 @@
       (effects (font (size 1.27 1.27)) hide)
     )
     (instances
-      (project "RAMROM_Board"
+      (project "RAMROM_CPLD_board"
         (path "/2eaa3998-c9cb-43b1-9b23-df656c8158b0/a52275eb-5ca9-4d9e-b6e3-271f884a7187"
           (reference "H3") (unit 1)
         )
@@ -1581,7 +1581,7 @@
     )
     (pin "1" (uuid eaf0e8da-2f6a-4c3b-8d5d-d1b02559057d))
     (instances
-      (project "RAMROM_Board"
+      (project "RAMROM_CPLD_board"
         (path "/2eaa3998-c9cb-43b1-9b23-df656c8158b0/a52275eb-5ca9-4d9e-b6e3-271f884a7187"
           (reference "#PWR029") (unit 1)
         )
@@ -1607,7 +1607,7 @@
     (pin "1" (uuid ba2e3e84-b955-46e2-8866-7cf16f9f624e))
     (pin "2" (uuid ad0fe027-9aa7-44ab-b8fb-9706f0ee2b12))
     (instances
-      (project "RAMROM_Board"
+      (project "RAMROM_CPLD_board"
         (path "/2eaa3998-c9cb-43b1-9b23-df656c8158b0/a52275eb-5ca9-4d9e-b6e3-271f884a7187"
           (reference "C6") (unit 1)
         )
@@ -1633,7 +1633,7 @@
     (pin "1" (uuid d2e70373-1250-43db-873a-3b8b7b1d16c9))
     (pin "2" (uuid 36bc63b9-dc4c-4ae4-af80-46abde45ba97))
     (instances
-      (project "RAMROM_Board"
+      (project "RAMROM_CPLD_board"
         (path "/2eaa3998-c9cb-43b1-9b23-df656c8158b0/a52275eb-5ca9-4d9e-b6e3-271f884a7187"
           (reference "C4") (unit 1)
         )
@@ -1695,7 +1695,7 @@
     (pin "8" (uuid 33329970-e84f-473e-a8e9-4a64ccf96322))
     (pin "9" (uuid 643c1f3f-5bcc-4cb2-8d55-8637db053cb8))
     (instances
-      (project "RAMROM_Board"
+      (project "RAMROM_CPLD_board"
         (path "/2eaa3998-c9cb-43b1-9b23-df656c8158b0/a52275eb-5ca9-4d9e-b6e3-271f884a7187"
           (reference "J109") (unit 1)
         )
@@ -1721,7 +1721,7 @@
     (pin "1" (uuid b5c5e8e8-b50b-441e-9b21-9960efeb2f3a))
     (pin "2" (uuid 051b7dd2-defc-4db6-b3aa-fa90d9f0bd8f))
     (instances
-      (project "RAMROM_Board"
+      (project "RAMROM_CPLD_board"
         (path "/2eaa3998-c9cb-43b1-9b23-df656c8158b0/a52275eb-5ca9-4d9e-b6e3-271f884a7187"
           (reference "C7") (unit 1)
         )
@@ -1746,7 +1746,7 @@
     )
     (pin "1" (uuid d809d583-f55c-4aa5-b02b-c80a37be1104))
     (instances
-      (project "RAMROM_Board"
+      (project "RAMROM_CPLD_board"
         (path "/2eaa3998-c9cb-43b1-9b23-df656c8158b0/a52275eb-5ca9-4d9e-b6e3-271f884a7187"
           (reference "#PWR0122") (unit 1)
         )
@@ -1770,7 +1770,7 @@
       (effects (font (size 1.27 1.27)) hide)
     )
     (instances
-      (project "RAMROM_Board"
+      (project "RAMROM_CPLD_board"
         (path "/2eaa3998-c9cb-43b1-9b23-df656c8158b0/a52275eb-5ca9-4d9e-b6e3-271f884a7187"
           (reference "H5") (unit 1)
         )
@@ -1794,7 +1794,7 @@
       (effects (font (size 1.27 1.27)) hide)
     )
     (instances
-      (project "RAMROM_Board"
+      (project "RAMROM_CPLD_board"
         (path "/2eaa3998-c9cb-43b1-9b23-df656c8158b0/a52275eb-5ca9-4d9e-b6e3-271f884a7187"
           (reference "H4") (unit 1)
         )
@@ -1850,7 +1850,7 @@
     (pin "8" (uuid 6c2d465e-aefd-4ee4-998e-6042aa449418))
     (pin "9" (uuid 8b5d6258-ba2a-48b6-a513-7afbf9f0c849))
     (instances
-      (project "RAMROM_Board"
+      (project "RAMROM_CPLD_board"
         (path "/2eaa3998-c9cb-43b1-9b23-df656c8158b0/a52275eb-5ca9-4d9e-b6e3-271f884a7187"
           (reference "J106") (unit 1)
         )
@@ -1906,7 +1906,7 @@
     (pin "8" (uuid 63dbc775-01c7-4f01-8df6-aecf8d3d2758))
     (pin "9" (uuid 93d35113-77ee-4491-a851-8ef58541a3e1))
     (instances
-      (project "RAMROM_Board"
+      (project "RAMROM_CPLD_board"
         (path "/2eaa3998-c9cb-43b1-9b23-df656c8158b0/a52275eb-5ca9-4d9e-b6e3-271f884a7187"
           (reference "J107") (unit 1)
         )
@@ -1931,7 +1931,7 @@
     )
     (pin "1" (uuid 0e8577ab-378d-4079-8d4e-bacd53dfc785))
     (instances
-      (project "RAMROM_Board"
+      (project "RAMROM_CPLD_board"
         (path "/2eaa3998-c9cb-43b1-9b23-df656c8158b0/a52275eb-5ca9-4d9e-b6e3-271f884a7187"
           (reference "#PWR027") (unit 1)
         )
@@ -1957,7 +1957,7 @@
     (pin "1" (uuid b83333ca-7e5c-4514-802d-c4f67f4684ac))
     (pin "2" (uuid 8a615fb7-d145-407b-b48b-b95be80914a9))
     (instances
-      (project "RAMROM_Board"
+      (project "RAMROM_CPLD_board"
         (path "/2eaa3998-c9cb-43b1-9b23-df656c8158b0/a52275eb-5ca9-4d9e-b6e3-271f884a7187"
           (reference "C12") (unit 1)
         )
@@ -1983,7 +1983,7 @@
     (pin "1" (uuid 48c58f6d-cb13-475f-b0f2-046cf378dbd8))
     (pin "2" (uuid 3dd9b219-3a5c-4cd9-95c4-94f747b860d8))
     (instances
-      (project "RAMROM_Board"
+      (project "RAMROM_CPLD_board"
         (path "/2eaa3998-c9cb-43b1-9b23-df656c8158b0/a52275eb-5ca9-4d9e-b6e3-271f884a7187"
           (reference "C11") (unit 1)
         )
@@ -2045,7 +2045,7 @@
     (pin "8" (uuid 2dce8443-0b44-40ff-873a-c769c2fc4382))
     (pin "9" (uuid 93d921d8-b391-42e5-b5a3-197cc6bcd041))
     (instances
-      (project "RAMROM_Board"
+      (project "RAMROM_CPLD_board"
         (path "/2eaa3998-c9cb-43b1-9b23-df656c8158b0/a52275eb-5ca9-4d9e-b6e3-271f884a7187"
           (reference "J108") (unit 1)
         )
@@ -2107,7 +2107,7 @@
     (pin "8" (uuid 277d1bf6-9db2-49c4-a6aa-e93977e6578e))
     (pin "9" (uuid f0b5c5ee-d8ab-4ae5-b9f0-5d66555d73f5))
     (instances
-      (project "RAMROM_Board"
+      (project "RAMROM_CPLD_board"
         (path "/2eaa3998-c9cb-43b1-9b23-df656c8158b0/a52275eb-5ca9-4d9e-b6e3-271f884a7187"
           (reference "J110") (unit 1)
         )
@@ -2133,7 +2133,7 @@
     (pin "1" (uuid f5c6f70a-d88a-4a8d-b325-febe64d47b23))
     (pin "2" (uuid d83cd58b-ba91-4032-9273-5a593393a4eb))
     (instances
-      (project "RAMROM_Board"
+      (project "RAMROM_CPLD_board"
         (path "/2eaa3998-c9cb-43b1-9b23-df656c8158b0/a52275eb-5ca9-4d9e-b6e3-271f884a7187"
           (reference "C10") (unit 1)
         )
@@ -2159,7 +2159,7 @@
     (pin "1" (uuid e8987ba2-fcd6-4ffa-ad27-7fd6edf43dfb))
     (pin "2" (uuid 51a1eeaf-cbc7-4fd6-aa2b-aab2aedeaae4))
     (instances
-      (project "RAMROM_Board"
+      (project "RAMROM_CPLD_board"
         (path "/2eaa3998-c9cb-43b1-9b23-df656c8158b0/a52275eb-5ca9-4d9e-b6e3-271f884a7187"
           (reference "C2") (unit 1)
         )
@@ -2184,7 +2184,7 @@
     )
     (pin "1" (uuid f59ba828-ed1c-4bb8-8429-9ac2914d228c))
     (instances
-      (project "RAMROM_Board"
+      (project "RAMROM_CPLD_board"
         (path "/2eaa3998-c9cb-43b1-9b23-df656c8158b0/a52275eb-5ca9-4d9e-b6e3-271f884a7187"
           (reference "#PWR0132") (unit 1)
         )
@@ -2209,7 +2209,7 @@
     )
     (pin "1" (uuid c764dec7-4605-416e-a329-de8f1cd5a9cf))
     (instances
-      (project "RAMROM_Board"
+      (project "RAMROM_CPLD_board"
         (path "/2eaa3998-c9cb-43b1-9b23-df656c8158b0/a52275eb-5ca9-4d9e-b6e3-271f884a7187"
           (reference "#PWR0133") (unit 1)
         )
@@ -2235,7 +2235,7 @@
     (pin "1" (uuid fcf42d2f-e8ef-4c91-8270-5710ee4ee666))
     (pin "2" (uuid 6283a391-a7cd-496a-b39a-8100a97e334e))
     (instances
-      (project "RAMROM_Board"
+      (project "RAMROM_CPLD_board"
         (path "/2eaa3998-c9cb-43b1-9b23-df656c8158b0/a52275eb-5ca9-4d9e-b6e3-271f884a7187"
           (reference "C3") (unit 1)
         )

@@ -3068,7 +3068,7 @@
     (property "Sheetname" "Buffers")
     (property "ki_description" "Quad buffer 3-State outputs")
     (property "ki_keywords" "TTL buffer 3State")
-    (path "/2ed056fa-40eb-4286-9388-b8c2d3bca346/896563df-9ce6-444c-96fc-29d0aee04807")
+    (path "/2ed056fa-40eb-4286-9388-b8c2d3bca346/b42c324f-ff83-4554-a925-cd7d7a5ab706")
     (attr smd)
     (fp_text reference "U9" (at -4.953 -3.937 90) (layer "F.SilkS")
         (effects (font (size 1 1) (thickness 0.15)))

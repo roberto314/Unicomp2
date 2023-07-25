@@ -2,6 +2,6 @@
 echo -e "\033[33m"
 echo -e "\033[1m"
 clear
-echo "------------ console for ChibiOS debug 115200 ----------------"
+echo "--------------- console ttyS4 9600 (=RX6,TX6) --------------------"
 echo -e "\033[m"
-picocom -b 115200 /dev/ttyS5
+picocom -b 9600 /dev/ttyS4

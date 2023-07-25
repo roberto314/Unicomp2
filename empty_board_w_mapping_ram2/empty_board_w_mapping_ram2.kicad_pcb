@@ -1819,7 +1819,7 @@
     (property "Sheetname" "")
     (property "ki_description" "Hex inverter schmitt trigger")
     (property "ki_keywords" "HCMOS not inverter")
-    (path "/989e71fa-bdab-4242-b9a3-51f16529c69d")
+    (path "/2b590b3b-f909-4c96-ab36-58c80b0b0af3")
     (attr through_hole)
     (fp_text reference "U2" (at 2.276 0.415131) (layer "F.SilkS")
         (effects (font (size 1 1) (thickness 0.15)))
