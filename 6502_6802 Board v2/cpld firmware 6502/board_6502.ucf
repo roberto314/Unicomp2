@@ -1,0 +1,47 @@
+NET "MOSI"  LOC = "p5"  ;
+NET "SCK"   LOC = "p6"  ;
+NET "A[0]"   LOC = "p30"  ;
+NET "A[1]"   LOC = "p29"  ;
+NET "A[2]"  LOC = "p28"  ;
+NET "A[3]"  LOC = "p27"  ;
+NET "A[4]"  LOC = "p23"  ;
+NET "A[5]"  LOC = "p22"  ;
+NET "A[6]"  LOC = "p21"  ;
+NET "A[7]"  LOC = "p20"  ;
+NET "A[8]"   LOC = "p19"  ;
+NET "A[9]"   LOC = "p18"  ;
+NET "A[10]"  LOC = "p16"  ;
+NET "A[11]"  LOC = "p14"  ;
+NET "A[12]"  LOC = "p13"  ;
+NET "A[13]"  LOC = "p12"  ;
+NET "A[14]"  LOC = "p8"  ;
+NET "A[15]"  LOC = "p7"  ;
+
+NET "RES0"  LOC = "p40"  ;
+NET "RES1"  LOC = "p41"  ;
+NET "RES2"  LOC = "p42"  ;
+
+NET "nML"      LOC = "p39"  ;
+NET "nBUSFREE" LOC = "p43"  ;
+NET "nRST"     LOC = "p44"  ;
+NET "PH0"      LOC = "p1"  ;
+NET "nPH0"     LOC = "p2"  ;
+NET "CLKF"     LOC = "p3"  ;
+NET "nDOE"     LOC = "p31"  ;
+NET "nAOE"     LOC = "p32"  ;
+NET "nMWR"     LOC = "p33"  ;
+NET "nMRD"     LOC = "p34"  ;
+NET "RnW"      LOC = "p36"  ;
+NET "PHI2CPU"  LOC = "p37"  ;
+NET "PHI1CPU"  LOC = "p38"  ;
+
+# ; NET "GND" LOC = "p4"  ;
+# ; NET "TDI" LOC = "p9"  ;
+# ; NET "TMS" LOC = "p10" ;
+# ; NET "TCK" LOC = "p11" ;
+# ; NET "VCC" LOC = "p15" ;
+# ; NET "GND" LOC = "p17" ;
+# ; NET "TDO" LOC = "p24" ;
+# ; NET "GND" LOC = "p25" ;
+# ; NET "VCC" LOC = "p26" ;
+# ; NET "VCC" LOC = "p35" ;
