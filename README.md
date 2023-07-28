@@ -23,22 +23,27 @@ Version 2.00
 
 * CPU board:
 	- can be any 8-bit CPU (6502, 6802, 6809, 68008, 6803, 8051,...)
-	- a CPLD (XC9572) for address decoding and glue logic
+	- a CPLD (XC9572) for clock generation and glue logic
 
 * Multi Serial boaŕd:
 	- suggested write_enable #0
-	- can be used with the following serial interface chips: MC6850, MOS6551, Zilog Z8442 or pin compatible
+	- two chip selects on board (second one not connected, but broken out)
+	- can be used with the following serial interface chips: MC6850, MOS6551, MOS6552 or pin compatible
 	- RAM for address decoding
 
 * Multi Parallel boaŕd:
 	- suggested write_enable #1
-	- can be used with the following parallel interface chips: MC6821, MOS6522, MOS6532
+	- two chip selects on board
+	- can be used with the following parallel interface chips: MC6820, MC6821, MOS6520, MOS6521, MOS6522, MOS6526, MOS8520, MOS6532 in the first slot
+    - the first slot can additionally mimic a MOS6530
+	- the second slot can accommodate a MOS6522 or pin compatible
     - RAM for address decoding
 
 * RAMROM board:
-	- write_enable fixed at #14 and #15
+	- write_enable fixed at #14 (for chipselect) and #15 (rom content)
 	- 512k of battery backed SRAM plus an extra RAM for address decoding
-	- a STM32F401 'blackpill' board to fill the SRAM with data over serial port from the SBC
+	- a STM32F401 'blackpill' board to fill the SRAM with data over USB port from the SBC
+	- serial shell on the STM32 to change ROM content on the fly
 	- also configures the Address Range of all peripheral modules
 
 * Prototype board:

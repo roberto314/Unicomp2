@@ -7,7 +7,7 @@
   (title_block
     (title "Unicomp v2 - RAMROM Board")
     (date "2023-07-06")
-    (rev "v1.1")
+    (rev "v1.2")
     (company "100% Offner")
     (comment 1 "v1: Initial")
   )

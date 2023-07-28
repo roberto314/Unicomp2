@@ -12,11 +12,12 @@ EQ | 2 |
 
 MACROCELL | 1 | 5 | nDOE_OBUF
 ATTRIBUTES | 264962 | 0
-INPUTS | 2 | PH0  | PHI2CPU
+INPUTS | 3 | nRST  | PH0  | PHI2CPU
 INPUTMC | 1 | 0 | 13
-INPUTP | 1 | 9
-EQ | 1 | 
-   nDOE = !PH0 & !PHI2CPU;
+INPUTP | 2 | 21 | 9
+EQ | 2 | 
+   nDOE = !nRST
+	# !PH0 & !PHI2CPU;
 
 MACROCELL | 0 | 16 | clk_divider<0>
 ATTRIBUTES | 4326176 | 0
@@ -53,11 +54,12 @@ EQ | 1 |
 
 MACROCELL | 1 | 7 | nDOE_OBUF$BUF0
 ATTRIBUTES | 264962 | 0
-INPUTS | 2 | PH0  | PHI2CPU
+INPUTS | 3 | nRST  | PH0  | PHI2CPU
 INPUTMC | 1 | 0 | 13
-INPUTP | 1 | 9
-EQ | 1 | 
-   nAOE = !PH0 & !PHI2CPU;
+INPUTP | 2 | 21 | 9
+EQ | 2 | 
+   nAOE = !nRST
+	# !PH0 & !PHI2CPU;
 
 MACROCELL | 0 | 14 | nPH0_OBUF
 ATTRIBUTES | 8651558 | 0
@@ -70,6 +72,7 @@ EQ | 3 |
    nPH0.CLK = CLKF;
 
 PIN | CLKF | 64 | 0 | N/A | 27 | 4 | 0 | 13 | 0 | 16 | 0 | 17 | 0 | 14
+PIN | nRST | 64 | 0 | N/A | 21 | 2 | 1 | 5 | 1 | 7
 PIN | PHI2CPU | 64 | 0 | N/A | 9 | 4 | 1 | 5 | 1 | 10 | 1 | 8 | 1 | 7
 PIN | RnW | 64 | 0 | N/A | 7 | 2 | 1 | 10 | 1 | 8
 PIN | PH0 | 536871040 | 0 | N/A | 24

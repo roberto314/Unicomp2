@@ -1,7 +1,7 @@
 Release 8.1i - Fit P.20131013
 Copyright(c) 1995-2003 Xilinx Inc. All rights reserved
 
- 7-25-2023  2:53PM
+ 7-28-2023  1:27PM
 
 NOTE: This file is designed to be imported into a spreadsheet program
 such as Microsoft Excel for viewing, printing and sorting. The comma ','
@@ -61,7 +61,7 @@ P40,TIE,,I/O,,,,,,,,,,
 P41,TIE,,I/O,,,,,,,,,,
 P42,TIE,,I/O,,,,,,,,,,
 P43,TIE,,I/O/GCK1,,,,,,,,,,
-P44,TIE,,I/O/GCK2,,,,,,,,,,
+P44,nRST,I,I/O/GCK2,INPUT,,,,,,,,,
 
 To preserve the pinout above for future design iterations in
 Project Navigator simply execute the (Lock Pins) process

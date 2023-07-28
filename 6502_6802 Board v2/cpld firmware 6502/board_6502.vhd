@@ -43,7 +43,7 @@ s_nMWR <= NOT((NOT RnW) AND PHI2CPU); -- thats how it is usually done.
 --nAOE <= PHI1CPU;
 --nAOE <= NOT(clk_divider(2)); --test -works
 -- nAOE <= '0'; -- works (2MHz possible)
-nAOE <= NOT(clk_divider(2) OR PHI2CPU); -- test -works
+nAOE <= NOT( nRST AND (clk_divider(2) OR PHI2CPU)); -- test -works
 
 -- For nDOE:
 -- NOT(PHI2CPU); does not work
@@ -55,7 +55,7 @@ nAOE <= NOT(clk_divider(2) OR PHI2CPU); -- test -works
 -- NOT(clk_divider(1)); does work!
 
 --nDOE <= NOT(clk_divider(2)); 
-nDOE <= NOT(clk_divider(2) OR PHI2CPU); -- test
+nDOE <= NOT( nRST AND (clk_divider(2) OR PHI2CPU)); -- test
 
 -------------------- external RD and WR Signals ---------------
 nMRD <= s_nMRD;
