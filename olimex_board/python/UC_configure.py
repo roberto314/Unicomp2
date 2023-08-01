@@ -216,7 +216,10 @@ def add_key(peripheral, address, addr):
 def fix_hole(peripheral, addr):
 	print(f'----- fixing Holes...')
 	idx = 0
+	if not peripheral['0xFFN']: # check if list is empty
+		return
 	for v in peripheral['0xFFN']:
+		
 		if ((idx%2 == 0) and (v%2 == 0)):
 			print(f'Start - ok {v:04X}')
 		elif ((idx%2 == 1) and (v%2 == 1)):
@@ -309,8 +312,6 @@ def make_dict_per(cf):
 					if oe != oe2:   # if the indices are not equal (as in odd or even) there is an overlap!
 						print(f'{bcolors.FAIL}Found overlap at index: {idx2} in {keys[i]} Value: 0x{peripheral[keys[i]][idx2]:04X}{bcolors.ENDC}')
 		for address in addr:
-#			if address > 0:
-#				peripheral, addr = add_key(peripheral, address, addr)
 			#print(f'1Value: {address:04X}')
 			if address % 2: # Endaddresses
 				if (address & 7) != 7:
@@ -335,6 +336,7 @@ def make_dict_per(cf):
 				cnt += 1
 #		print(f'Total number of events: {cnt}')
 		addr.sort()             # sort it again
+
 		for i in addr:
 			if i % 2 == 0:
 				key = find_key(peripheral, i)
@@ -377,8 +379,6 @@ def get_bitmask(start, finish, tp):
 		eoff = 0xFE
 
 	temp = (soff | eoff)%(2**8)
-	#temp = temp.to_bytes(1,'big')
-	#print (f'Type of temp: {type(temp)}')
 	
 	if tp == 'A': # RAM - low nibble (WP) 0, Low and high nibble same
 		retval = ((temp * 16) + (temp)%(2**4))%(2**8)
@@ -410,9 +410,8 @@ def make_bytearray(clist):
 		retval += chip.to_bytes(1,'big')
 		mask = (clist[i+2])
 		retval += mask.to_bytes(1,'big')
-		print(f'addr: {addr:04x}, chip: {chip}, mask: {mask}')
+		#print(f'Address: {addr:04x}, cs: {chip:02X}, mask: {mask:02X}')
 	return retval
-
 
 def config_per(cf): 
 	try:
