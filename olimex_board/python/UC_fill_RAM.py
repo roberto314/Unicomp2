@@ -222,7 +222,7 @@ def read_memory(ser, start, end): # only block < 256
 
 def bulk_write_memory(ser, data, start_address):
 	chunk_size = 0x100
-	print('---------------------------- Bulk Write ----------------------------')
+	print('-------------------------- Bulk Write (ZW) -------------------------')
 	print (f'Length of data: {len(data)} or 0x{len(data):04x}')
 	print (f'Start Address: {start_address} or 0x{start_address:04x}')
 	for address in range(start_address, start_address + len(data), chunk_size):
@@ -240,6 +240,8 @@ def bulk_write_memory(ser, data, start_address):
 		#print (f'bytecount: {bc} or 0x{bc:04x}')
 		#print (f'mmsb: {mmsb:02X} msb: {msb:02X} lsb: {lsb:02X} offset: {offset:04X} chunk: {chunk_size:03X}')
 		
+		#dump_data(data) # DEBUG
+
 		message = bytearray(b'ZW') # Bulk Write
 		message += bytes((bytecount,))
 		message += bytes((mmsb,))
@@ -322,6 +324,19 @@ def bulk_read_memory(ser, start, end, chunk_size = 0x100):
 		print(f'Checksum Error. cs: 0x{cs:02X}, cs_file: 0x{cs_file:02X}')
 		return []
 
+def write_config(ser, data):
+	print('------------------------------ Config ------------------------------')
+	length = len(data)
+	print (f'Length of data: {length} or 0x{length:04x}')
+	if length > 256:
+		print(f'Only config <= 256 Bytes supported!')
+		exit()
+	message = bytearray(b'C') # Config Write
+	message += bytes((length,))
+	message += data
+	write_with_checksum(ser, message)
+	expect_ok(ser)
+
 def check_bank(ser, start, end):
 	bank = get_io_bank(ser)
 	banks = start // 0x10000
@@ -402,6 +417,8 @@ def main(func, data = 0, start = 0, end = 0):
 			return bulk_read_memory(ser, start, end)
 		else:
 			return read_memory(ser, start, end)
+	elif func == 'config':
+		write_config(ser, data)
 
 def extract_files(img):
 	start = int.from_bytes(img[0:3], 'big', signed=False)
@@ -455,6 +472,13 @@ if __name__ == '__main__':
 		help = 'output filename [default: use stdout]')
 	#---------------------------------------------------------------------------------    
 	subparser = subparsers.add_parser(
+		'config',
+		help = 'writes configuration data')
+	subparser.add_argument(
+		'file',
+		help = 'input filename')
+	#---------------------------------------------------------------------------------    
+	subparser = subparsers.add_parser(
 		'setbank',
 		help = 'set bank for emulation and I/O')
 	subparser.add_argument(
@@ -491,6 +515,10 @@ if __name__ == '__main__':
 
 	elif args.command == 'getbank':
 		main('getbank')
+
+	elif args.command == 'config':
+		img = read_file(args.file)
+		main('config', img)
 
 	elif args.command == 'write':
 		if args.file[0] == ':': # Number of bytes received

@@ -1,7 +1,7 @@
  
 cpldfit:  version P.20131013                        Xilinx Inc.
                                   Fitter Report
-Design Name: board_6502                          Date:  7-28-2023,  1:27PM
+Design Name: board_6502                          Date:  7-29-2023,  7:53PM
 Device Used: XC9572XL-10-VQ44
 Fitting Status: Successful
 
@@ -9,18 +9,18 @@ Fitting Status: Successful
 
 Macrocells     Product Terms    Function Block   Registers      Pins           
 Used/Tot       Used/Tot         Inps Used/Tot    Used/Tot       Used/Tot       
-8  /72  ( 11%) 14  /360  (  4%) 8  /216 (  4%)   4  /72  (  6%) 10 /34  ( 29%)
+9  /72  ( 12%) 16  /360  (  4%) 12 /216 (  6%)   4  /72  (  6%) 11 /34  ( 32%)
 
 ** Function Block Resources **
 
 Function    Mcells      FB Inps     Pterms      IO          
 Block       Used/Tot    Used/Tot    Used/Tot    Used/Tot    
-FB1           4/18        4/54        8/90       4/ 9
+FB1           3/18        6/54        7/90       5/ 9
 FB2           4/18        4/54        6/90       6/ 9
-FB3           0/18        0/54        0/90       0/ 9
+FB3           2/18        2/54        3/90       0/ 9
 FB4           0/18        0/54        0/90       0/ 7
              -----       -----       -----      -----    
-              8/72        8/216      14/360     10/34 
+              9/72       12/216      16/360     11/34 
 
 * - Resource is exhausted
 
@@ -35,17 +35,17 @@ Global set/reset net(s) unused.
 Signal Type    Required     Mapped  |  Pin Type            Used    Total 
 ------------------------------------|------------------------------------
 Input         :    4           4    |  I/O              :     5      28
-Output        :    6           6    |  GCK/IO           :     2       3
+Output        :    7           7    |  GCK/IO           :     3       3
 Bidirectional :    0           0    |  GTS/IO           :     2       2
 GCK           :    0           0    |  GSR/IO           :     1       1
 GTS           :    0           0    |
 GSR           :    0           0    |
                  ----        ----
-        Total     10          10
+        Total     11          11
 
 ** Power Data **
 
-There are 8 macrocells in high performance mode (MCHP).
+There are 9 macrocells in high performance mode (MCHP).
 There are 0 macrocells in low power mode (MCLP).
 End of Mapped Resource Summary
 **************************  Errors and Warnings  ***************************
@@ -54,11 +54,6 @@ WARNING:Cpld - Unable to retrieve the path to the iSE Project Repository. Will
    use the default filename of 'board_6502.ise'.
 INFO:Cpld - Inferring BUFG constraint for signal 'nRST' based upon the LOC
    constraint 'P44'. It is recommended that you declare this BUFG explicitedly
-   in your design. Note that for certain device families the output of a BUFG
-   constraint can not drive a gated clock, and the BUFG constraint will be
-   ignored.
-INFO:Cpld - Inferring BUFG constraint for signal 'nBUSFREE' based upon the LOC
-   constraint 'P43'. It is recommended that you declare this BUFG explicitedly
    in your design. Note that for certain device families the output of a BUFG
    constraint can not drive a gated clock, and the BUFG constraint will be
    ignored.
@@ -106,8 +101,6 @@ WARNING:Cpld:1007 - Removing unused input(s) 'RES2'.  The input(s) are unused
    after optimization. Please verify functionality via simulation.
 WARNING:Cpld:1007 - Removing unused input(s) 'SCK'.  The input(s) are unused
    after optimization. Please verify functionality via simulation.
-WARNING:Cpld:1007 - Removing unused input(s) 'nBUSFREE'.  The input(s) are
-   unused after optimization. Please verify functionality via simulation.
 WARNING:Cpld:1007 - Removing unused input(s) 'nML'.  The input(s) are unused
    after optimization. Please verify functionality via simulation.
 WARNING:Cpld:1239 - The global clock designation (BUFG) on signal 'nRST_IBUF' is
@@ -115,10 +108,11 @@ WARNING:Cpld:1239 - The global clock designation (BUFG) on signal 'nRST_IBUF' is
    global control signal.
 *************************  Summary of Mapped Logic  ************************
 
-** 6 Outputs **
+** 7 Outputs **
 
 Signal              Total Total Loc     Pin  Pin     Pin     Pwr  Slew Reg Init
 Name                Pts   Inps          No.  Type    Use     Mode Rate State
+nBUSFREE            2     3     FB1_9   43   GCK/I/O O       STD  FAST 
 PH0                 2     3     FB1_14  1    GCK/I/O O       STD  FAST RESET
 nPH0                3     4     FB1_15  2    I/O     O       STD  FAST SET
 nDOE                2     3     FB2_6   31   I/O     O       STD  FAST 
@@ -130,8 +124,8 @@ nMRD                1     2     FB2_11  34   GTS/I/O O       STD  FAST
 
 Signal              Total Total Loc     Pwr  Reg Init
 Name                Pts   Inps          Mode State
-clk_divider<0>      1     1     FB1_17  STD  RESET
-clk_divider<1>      2     2     FB1_18  STD  RESET
+clk_divider<0>      1     1     FB3_17  STD  RESET
+clk_divider<1>      2     2     FB3_18  STD  RESET
 
 ** 4 Inputs **
 
@@ -158,8 +152,8 @@ Pin Type/Use - I  - Input             GCK - Global Clock
 X            - Signal used as input to the macrocell logic.
 Pin No.      - ~  - User Assigned
 *********************************** FB1  ***********************************
-Number of function block inputs used/remaining:               4/50
-Number of signals used by logic mapping into function block:  4
+Number of function block inputs used/remaining:               6/48
+Number of signals used by logic mapping into function block:  6
 Signal              Total   Imp   Exp Unused  Loc     Pin   Pin     Pin
 Name                Pt      Pt    Pt  Pt               #    Type    Use
 (unused)              0       0     0   5     FB1_1         (b)     
@@ -170,7 +164,7 @@ Name                Pt      Pt    Pt  Pt               #    Type    Use
 (unused)              0       0     0   5     FB1_6   41    I/O     
 (unused)              0       0     0   5     FB1_7         (b)     
 (unused)              0       0     0   5     FB1_8   42    I/O     
-(unused)              0       0     0   5     FB1_9   43    GCK/I/O 
+nBUSFREE              2       0     0   3     FB1_9   43    GCK/I/O O
 (unused)              0       0     0   5     FB1_10        (b)     
 (unused)              0       0     0   5     FB1_11  44    GCK/I/O I
 (unused)              0       0     0   5     FB1_12        (b)     
@@ -178,19 +172,18 @@ Name                Pt      Pt    Pt  Pt               #    Type    Use
 PH0                   2       0     0   3     FB1_14  1     GCK/I/O O
 nPH0                  3       0     0   2     FB1_15  2     I/O     O
 (unused)              0       0     0   5     FB1_16        (b)     
-clk_divider<0>        1       0     0   4     FB1_17  3     I/O     I
-clk_divider<1>        2       0     0   3     FB1_18        (b)     (b)
+(unused)              0       0     0   5     FB1_17  3     I/O     I
+(unused)              0       0     0   5     FB1_18        (b)     
 
 Signals Used by Logic in Function Block
-  1: CLKF               3: clk_divider<0>     4: clk_divider<1> 
-  2: PH0              
+  1: CLKF               3: PHI2CPU            5: clk_divider<1> 
+  2: PH0                4: clk_divider<0>     6: nRST 
 
 Signal                        1         2         3         4 FB
 Name                0----+----0----+----0----+----0----+----0 Inputs
-PH0                  X.XX.................................... 3
-nPH0                 XXXX.................................... 4
-clk_divider<0>       X....................................... 1
-clk_divider<1>       X.X..................................... 2
+nBUSFREE             .XX..X.................................. 3
+PH0                  X..XX................................... 3
+nPH0                 XX.XX................................... 4
                     0----+----1----+----2----+----3----+----4
                               0         0         0         0
 *********************************** FB2  ***********************************
@@ -230,8 +223,8 @@ nMRD                 .XX..................................... 2
                     0----+----1----+----2----+----3----+----4
                               0         0         0         0
 *********************************** FB3  ***********************************
-Number of function block inputs used/remaining:               0/54
-Number of signals used by logic mapping into function block:  0
+Number of function block inputs used/remaining:               2/52
+Number of signals used by logic mapping into function block:  2
 Signal              Total   Imp   Exp Unused  Loc     Pin   Pin     Pin
 Name                Pt      Pt    Pt  Pt               #    Type    Use
 (unused)              0       0     0   5     FB3_1         (b)     
@@ -250,8 +243,18 @@ Name                Pt      Pt    Pt  Pt               #    Type    Use
 (unused)              0       0     0   5     FB3_14  13    I/O     
 (unused)              0       0     0   5     FB3_15  14    I/O     
 (unused)              0       0     0   5     FB3_16  18    I/O     
-(unused)              0       0     0   5     FB3_17  16    I/O     
-(unused)              0       0     0   5     FB3_18        (b)     
+clk_divider<0>        1       0     0   4     FB3_17  16    I/O     (b)
+clk_divider<1>        2       0     0   3     FB3_18        (b)     (b)
+
+Signals Used by Logic in Function Block
+  1: CLKF               2: clk_divider<0>   
+
+Signal                        1         2         3         4 FB
+Name                0----+----0----+----0----+----0----+----0 Inputs
+clk_divider<0>       X....................................... 1
+clk_divider<1>       XX...................................... 2
+                    0----+----1----+----2----+----3----+----4
+                              0         0         0         0
 *********************************** FB4  ***********************************
 Number of function block inputs used/remaining:               0/54
 Number of signals used by logic mapping into function block:  0
@@ -287,12 +290,16 @@ FTCPE_clk_divider0: FTCPE port map (clk_divider(0),'1',CLKF,'0','0');
 FTCPE_clk_divider1: FTCPE port map (clk_divider(1),clk_divider(0),CLKF,'0','0');
 
 
-nAOE <= ((NOT nRST)
-	OR (NOT PH0 AND NOT PHI2CPU));
+nAOE <= NOT (((PH0 AND nRST)
+	OR (nRST AND PHI2CPU)));
 
 
-nDOE <= ((NOT nRST)
-	OR (NOT PH0 AND NOT PHI2CPU));
+nBUSFREE <= ((PH0 AND nRST)
+	OR (nRST AND PHI2CPU));
+
+
+nDOE <= NOT (((PH0 AND nRST)
+	OR (nRST AND PHI2CPU)));
 
 
 nMRD <= NOT ((PHI2CPU AND RnW));
@@ -354,7 +361,7 @@ No. Name                           No. Name
  18 KPR                              40 KPR                           
  19 KPR                              41 KPR                           
  20 KPR                              42 KPR                           
- 21 KPR                              43 KPR                           
+ 21 KPR                              43 nBUSFREE                      
  22 KPR                              44 nRST                          
 
 

@@ -1,0 +1,419 @@
+NDS Database:  version P.20131013
+
+NDS_INFO | xc9500xl | 9572XL44VQ | XC9572XL-10-VQ44
+
+DEVICE | 9572XL | 9572XL44VQ | 
+
+NETWORK | board_6502 | 0 | 0 | 16391
+
+INPUT_INSTANCE | 0 | 0 | NULL | nRST_IBUF | board_6502_COPY_0_COPY_0 | 16 | 1 | 1
+INPUT_NODE_TYPE | 0 | 5 | II_IN
+NODE | nRST | 424 | PI | 0 | 0 | board_6502_COPY_0_COPY_0 | NULL | NULL | NULL | 0 | 100 | NOTYPE
+OUTPUT_NODE_TYPE | 0 | 5 | II_IMUX
+NODE | nRST_IBUF | 403 | ? | 0 | 0 | board_6502_COPY_0_COPY_0 | NULL | NULL | nRST_IBUF | 0 | 5 | II_IMUX
+
+INPUT_INSTANCE | 0 | 0 | NULL | PHI2CPU_IBUF | board_6502_COPY_0_COPY_0 | 16 | 1 | 1
+INPUT_NODE_TYPE | 0 | 5 | II_IN
+NODE | PHI2CPU | 426 | PI | 0 | 0 | board_6502_COPY_0_COPY_0 | NULL | NULL | NULL | 0 | 100 | NOTYPE
+OUTPUT_NODE_TYPE | 0 | 5 | II_IMUX
+NODE | PHI2CPU_IBUF | 409 | ? | 0 | 0 | board_6502_COPY_0_COPY_0 | NULL | NULL | PHI2CPU_IBUF | 0 | 5 | II_IMUX
+
+MACROCELL_INSTANCE | OptxMapped | nBUSFREE_OBUF | board_6502_COPY_0_COPY_0 | 2155872256 | 3 | 1
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | nRST_IBUF | 403 | ? | 0 | 0 | board_6502_COPY_0_COPY_0 | NULL | NULL | nRST_IBUF | 0 | 5 | II_IMUX
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | PHI2CPU_IBUF | 409 | ? | 0 | 0 | board_6502_COPY_0_COPY_0 | NULL | NULL | PHI2CPU_IBUF | 0 | 5 | II_IMUX
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | clk_divider<2> | 406 | ? | 0 | 0 | board_6502_COPY_0_COPY_0 | NULL | clk_divider<2>.Q | clk_divider<2> | 1 | 0 | MC_UIM
+OUTPUT_NODE_TYPE | 0 | 0 | MC_Q
+NODE | nBUSFREE_OBUF$Q | 404 | ? | 0 | 0 | board_6502_COPY_0_COPY_0 | NULL | nBUSFREE_OBUF.Q | nBUSFREE_OBUF | 0 | 0 | MC_Q
+
+SIGNAL_INSTANCE | nBUSFREE_OBUF.SI | nBUSFREE_OBUF | 0 | 3 | 2
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | nRST_IBUF | 403 | ? | 0 | 0 | board_6502_COPY_0_COPY_0 | NULL | NULL | nRST_IBUF | 0 | 5 | II_IMUX
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | PHI2CPU_IBUF | 409 | ? | 0 | 0 | board_6502_COPY_0_COPY_0 | NULL | NULL | PHI2CPU_IBUF | 0 | 5 | II_IMUX
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | clk_divider<2> | 406 | ? | 0 | 0 | board_6502_COPY_0_COPY_0 | NULL | clk_divider<2>.Q | clk_divider<2> | 1 | 0 | MC_UIM
+OUTPUT_NODE_TYPE | 1 | 9 | MC_SI_D1
+SIGNAL | NODE | nBUSFREE_OBUF.D1 | 429 | ? | 0 | 4096 | nBUSFREE_OBUF | NULL | NULL | nBUSFREE_OBUF.SI | 1 | 9 | MC_SI_D1
+SPPTERM | 0 | IV_ZERO
+OUTPUT_NODE_TYPE | 2 | 9 | MC_SI_D2
+SIGNAL | NODE | nBUSFREE_OBUF.D2 | 430 | ? | 0 | 4096 | nBUSFREE_OBUF | NULL | NULL | nBUSFREE_OBUF.SI | 2 | 9 | MC_SI_D2
+SPPTERM | 2 | IV_TRUE | nRST_IBUF | IV_TRUE | clk_divider<2>
+SPPTERM | 2 | IV_TRUE | nRST_IBUF | IV_TRUE | PHI2CPU_IBUF
+
+SRFF_INSTANCE | nBUSFREE_OBUF.REG | nBUSFREE_OBUF | 0 | 1 | 1
+INPUT_NODE_TYPE | 0 | 8 | SRFF_D
+NODE | nBUSFREE_OBUF.D | 428 | ? | 0 | 0 | nBUSFREE_OBUF | NULL | NULL | nBUSFREE_OBUF.XOR | 0 | 7 | ALU_F
+OUTPUT_NODE_TYPE | 0 | 8 | SRFF_Q
+NODE | nBUSFREE_OBUF.Q | 431 | ? | 0 | 0 | nBUSFREE_OBUF | NULL | NULL | nBUSFREE_OBUF.REG | 0 | 8 | SRFF_Q
+
+INPUT_INSTANCE | 0 | 0 | NULL | CLKF_IBUF | board_6502_COPY_0_COPY_0 | 16 | 1 | 1
+INPUT_NODE_TYPE | 0 | 5 | II_IN
+NODE | CLKF | 425 | PI | 0 | 0 | board_6502_COPY_0_COPY_0 | NULL | NULL | NULL | 0 | 100 | NOTYPE
+OUTPUT_NODE_TYPE | 0 | 5 | II_IMUX
+NODE | CLKF_IBUF | 405 | ? | 0 | 0 | board_6502_COPY_0_COPY_0 | NULL | NULL | CLKF_IBUF | 0 | 5 | II_IMUX
+
+MACROCELL_INSTANCE | PrldLow+Tff+OptxMapped | clk_divider<2> | board_6502_COPY_0_COPY_0 | 2155877376 | 3 | 1
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | clk_divider<0> | 407 | ? | 0 | 0 | board_6502_COPY_0_COPY_0 | NULL | clk_divider<0>.Q | clk_divider<0> | 1 | 0 | MC_UIM
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | clk_divider<1> | 408 | ? | 0 | 0 | board_6502_COPY_0_COPY_0 | NULL | clk_divider<1>.Q | clk_divider<1> | 1 | 0 | MC_UIM
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | CLKF_IBUF | 405 | ? | 0 | 0 | board_6502_COPY_0_COPY_0 | NULL | NULL | CLKF_IBUF | 0 | 5 | II_IMUX
+OUTPUT_NODE_TYPE | 1 | 0 | MC_UIM
+NODE | clk_divider<2> | 406 | ? | 0 | 0 | board_6502_COPY_0_COPY_0 | NULL | clk_divider<2>.Q | clk_divider<2> | 1 | 0 | MC_UIM
+
+SIGNAL_INSTANCE | clk_divider<2>.SI | clk_divider<2> | 0 | 3 | 3
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | clk_divider<0> | 407 | ? | 0 | 0 | board_6502_COPY_0_COPY_0 | NULL | clk_divider<0>.Q | clk_divider<0> | 1 | 0 | MC_UIM
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | clk_divider<1> | 408 | ? | 0 | 0 | board_6502_COPY_0_COPY_0 | NULL | clk_divider<1>.Q | clk_divider<1> | 1 | 0 | MC_UIM
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | CLKF_IBUF | 405 | ? | 0 | 0 | board_6502_COPY_0_COPY_0 | NULL | NULL | CLKF_IBUF | 0 | 5 | II_IMUX
+OUTPUT_NODE_TYPE | 1 | 9 | MC_SI_D1
+SIGNAL | NODE | clk_divider<2>.D1 | 433 | ? | 0 | 0 | clk_divider<2> | NULL | NULL | clk_divider<2>.SI | 1 | 9 | MC_SI_D1
+SPPTERM | 0 | IV_ZERO
+OUTPUT_NODE_TYPE | 2 | 9 | MC_SI_D2
+SIGNAL | NODE | clk_divider<2>.D2 | 434 | ? | 0 | 4096 | clk_divider<2> | NULL | NULL | clk_divider<2>.SI | 2 | 9 | MC_SI_D2
+SPPTERM | 2 | IV_TRUE | clk_divider<0> | IV_TRUE | clk_divider<1>
+OUTPUT_NODE_TYPE | 3 | 9 | MC_SI_CLKF
+SIGNAL | NODE | clk_divider<2>.CLKF | 435 | ? | 0 | 4096 | clk_divider<2> | NULL | NULL | clk_divider<2>.SI | 3 | 9 | MC_SI_CLKF
+SPPTERM | 1 | IV_TRUE | CLKF_IBUF
+
+SRFF_INSTANCE | clk_divider<2>.REG | clk_divider<2> | 0 | 2 | 1
+INPUT_NODE_TYPE | 0 | 8 | SRFF_D
+NODE | clk_divider<2>.D | 432 | ? | 0 | 0 | clk_divider<2> | NULL | NULL | clk_divider<2>.XOR | 0 | 7 | ALU_F
+INPUT_NODE_TYPE | 1 | 8 | SRFF_C
+SIGNAL | NODE | clk_divider<2>.CLKF | 435 | ? | 0 | 4096 | clk_divider<2> | NULL | NULL | clk_divider<2>.SI | 3 | 9 | MC_SI_CLKF
+SPPTERM | 1 | IV_TRUE | CLKF_IBUF
+OUTPUT_NODE_TYPE | 0 | 8 | SRFF_Q
+NODE | clk_divider<2>.Q | 436 | ? | 0 | 0 | clk_divider<2> | NULL | NULL | clk_divider<2>.REG | 0 | 8 | SRFF_Q
+
+MACROCELL_INSTANCE | PrldLow+Tff+OptxMapped | clk_divider<0> | board_6502_COPY_0_COPY_0 | 2155877376 | 1 | 1
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | CLKF_IBUF | 405 | ? | 0 | 0 | board_6502_COPY_0_COPY_0 | NULL | NULL | CLKF_IBUF | 0 | 5 | II_IMUX
+OUTPUT_NODE_TYPE | 1 | 0 | MC_UIM
+NODE | clk_divider<0> | 407 | ? | 0 | 0 | board_6502_COPY_0_COPY_0 | NULL | clk_divider<0>.Q | clk_divider<0> | 1 | 0 | MC_UIM
+
+SIGNAL_INSTANCE | clk_divider<0>.SI | clk_divider<0> | 0 | 1 | 3
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | CLKF_IBUF | 405 | ? | 0 | 0 | board_6502_COPY_0_COPY_0 | NULL | NULL | CLKF_IBUF | 0 | 5 | II_IMUX
+OUTPUT_NODE_TYPE | 1 | 9 | MC_SI_D1
+SIGNAL | NODE | clk_divider<0>.D1 | 438 | ? | 0 | 4096 | clk_divider<0> | NULL | NULL | clk_divider<0>.SI | 1 | 9 | MC_SI_D1
+SPPTERM | 0 | IV_ZERO
+OUTPUT_NODE_TYPE | 2 | 9 | MC_SI_D2
+SIGNAL | NODE | clk_divider<0>.D2 | 439 | ? | 0 | 4096 | clk_divider<0> | NULL | NULL | clk_divider<0>.SI | 2 | 9 | MC_SI_D2
+SPPTERM | 0 | IV_DC
+OUTPUT_NODE_TYPE | 3 | 9 | MC_SI_CLKF
+SIGNAL | NODE | clk_divider<0>.CLKF | 440 | ? | 0 | 4096 | clk_divider<0> | NULL | NULL | clk_divider<0>.SI | 3 | 9 | MC_SI_CLKF
+SPPTERM | 1 | IV_TRUE | CLKF_IBUF
+
+SRFF_INSTANCE | clk_divider<0>.REG | clk_divider<0> | 0 | 2 | 1
+INPUT_NODE_TYPE | 0 | 8 | SRFF_D
+NODE | clk_divider<0>.D | 437 | ? | 0 | 0 | clk_divider<0> | NULL | NULL | clk_divider<0>.XOR | 0 | 7 | ALU_F
+INPUT_NODE_TYPE | 1 | 8 | SRFF_C
+SIGNAL | NODE | clk_divider<0>.CLKF | 440 | ? | 0 | 4096 | clk_divider<0> | NULL | NULL | clk_divider<0>.SI | 3 | 9 | MC_SI_CLKF
+SPPTERM | 1 | IV_TRUE | CLKF_IBUF
+OUTPUT_NODE_TYPE | 0 | 8 | SRFF_Q
+NODE | clk_divider<0>.Q | 441 | ? | 0 | 0 | clk_divider<0> | NULL | NULL | clk_divider<0>.REG | 0 | 8 | SRFF_Q
+
+MACROCELL_INSTANCE | PrldLow+Tff+OptxMapped | clk_divider<1> | board_6502_COPY_0_COPY_0 | 2155877376 | 2 | 1
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | clk_divider<0> | 407 | ? | 0 | 0 | board_6502_COPY_0_COPY_0 | NULL | clk_divider<0>.Q | clk_divider<0> | 1 | 0 | MC_UIM
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | CLKF_IBUF | 405 | ? | 0 | 0 | board_6502_COPY_0_COPY_0 | NULL | NULL | CLKF_IBUF | 0 | 5 | II_IMUX
+OUTPUT_NODE_TYPE | 1 | 0 | MC_UIM
+NODE | clk_divider<1> | 408 | ? | 0 | 0 | board_6502_COPY_0_COPY_0 | NULL | clk_divider<1>.Q | clk_divider<1> | 1 | 0 | MC_UIM
+
+SIGNAL_INSTANCE | clk_divider<1>.SI | clk_divider<1> | 0 | 2 | 3
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | clk_divider<0> | 407 | ? | 0 | 0 | board_6502_COPY_0_COPY_0 | NULL | clk_divider<0>.Q | clk_divider<0> | 1 | 0 | MC_UIM
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | CLKF_IBUF | 405 | ? | 0 | 0 | board_6502_COPY_0_COPY_0 | NULL | NULL | CLKF_IBUF | 0 | 5 | II_IMUX
+OUTPUT_NODE_TYPE | 1 | 9 | MC_SI_D1
+SIGNAL | NODE | clk_divider<1>.D1 | 443 | ? | 0 | 0 | clk_divider<1> | NULL | NULL | clk_divider<1>.SI | 1 | 9 | MC_SI_D1
+SPPTERM | 0 | IV_ZERO
+OUTPUT_NODE_TYPE | 2 | 9 | MC_SI_D2
+SIGNAL | NODE | clk_divider<1>.D2 | 444 | ? | 0 | 4096 | clk_divider<1> | NULL | NULL | clk_divider<1>.SI | 2 | 9 | MC_SI_D2
+SPPTERM | 1 | IV_TRUE | clk_divider<0>
+OUTPUT_NODE_TYPE | 3 | 9 | MC_SI_CLKF
+SIGNAL | NODE | clk_divider<1>.CLKF | 445 | ? | 0 | 4096 | clk_divider<1> | NULL | NULL | clk_divider<1>.SI | 3 | 9 | MC_SI_CLKF
+SPPTERM | 1 | IV_TRUE | CLKF_IBUF
+
+SRFF_INSTANCE | clk_divider<1>.REG | clk_divider<1> | 0 | 2 | 1
+INPUT_NODE_TYPE | 0 | 8 | SRFF_D
+NODE | clk_divider<1>.D | 442 | ? | 0 | 0 | clk_divider<1> | NULL | NULL | clk_divider<1>.XOR | 0 | 7 | ALU_F
+INPUT_NODE_TYPE | 1 | 8 | SRFF_C
+SIGNAL | NODE | clk_divider<1>.CLKF | 445 | ? | 0 | 4096 | clk_divider<1> | NULL | NULL | clk_divider<1>.SI | 3 | 9 | MC_SI_CLKF
+SPPTERM | 1 | IV_TRUE | CLKF_IBUF
+OUTPUT_NODE_TYPE | 0 | 8 | SRFF_Q
+NODE | clk_divider<1>.Q | 446 | ? | 0 | 0 | clk_divider<1> | NULL | NULL | clk_divider<1>.REG | 0 | 8 | SRFF_Q
+
+MACROCELL_INSTANCE | PrldLow+OptxMapped | PH0_OBUF | board_6502_COPY_0_COPY_0 | 2155873280 | 2 | 1
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | clk_divider<2> | 406 | ? | 0 | 0 | board_6502_COPY_0_COPY_0 | NULL | clk_divider<2>.Q | clk_divider<2> | 1 | 0 | MC_UIM
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | CLKF_IBUF | 405 | ? | 0 | 0 | board_6502_COPY_0_COPY_0 | NULL | NULL | CLKF_IBUF | 0 | 5 | II_IMUX
+OUTPUT_NODE_TYPE | 0 | 0 | MC_Q
+NODE | PH0_OBUF | 410 | ? | 0 | 0 | board_6502_COPY_0_COPY_0 | NULL | PH0_OBUF.Q | PH0_OBUF | 0 | 0 | MC_Q
+
+SIGNAL_INSTANCE | PH0_OBUF.SI | PH0_OBUF | 0 | 2 | 3
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | clk_divider<2> | 406 | ? | 0 | 0 | board_6502_COPY_0_COPY_0 | NULL | clk_divider<2>.Q | clk_divider<2> | 1 | 0 | MC_UIM
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | CLKF_IBUF | 405 | ? | 0 | 0 | board_6502_COPY_0_COPY_0 | NULL | NULL | CLKF_IBUF | 0 | 5 | II_IMUX
+OUTPUT_NODE_TYPE | 1 | 9 | MC_SI_D1
+SIGNAL | NODE | PH0_OBUF.D1 | 448 | ? | 0 | 4096 | PH0_OBUF | NULL | NULL | PH0_OBUF.SI | 1 | 9 | MC_SI_D1
+SPPTERM | 0 | IV_ZERO
+OUTPUT_NODE_TYPE | 2 | 9 | MC_SI_D2
+SIGNAL | NODE | PH0_OBUF.D2 | 449 | ? | 0 | 4096 | PH0_OBUF | NULL | NULL | PH0_OBUF.SI | 2 | 9 | MC_SI_D2
+SPPTERM | 1 | IV_TRUE | clk_divider<2>
+OUTPUT_NODE_TYPE | 3 | 9 | MC_SI_CLKF
+SIGNAL | NODE | PH0_OBUF.CLKF | 450 | ? | 0 | 4096 | PH0_OBUF | NULL | NULL | PH0_OBUF.SI | 3 | 9 | MC_SI_CLKF
+SPPTERM | 1 | IV_FALSE | CLKF_IBUF
+
+SRFF_INSTANCE | PH0_OBUF.REG | PH0_OBUF | 0 | 2 | 1
+INPUT_NODE_TYPE | 0 | 8 | SRFF_D
+NODE | PH0_OBUF.D | 447 | ? | 0 | 0 | PH0_OBUF | NULL | NULL | PH0_OBUF.XOR | 0 | 7 | ALU_F
+INPUT_NODE_TYPE | 1 | 8 | SRFF_C
+SIGNAL | NODE | PH0_OBUF.CLKF | 450 | ? | 0 | 4096 | PH0_OBUF | NULL | NULL | PH0_OBUF.SI | 3 | 9 | MC_SI_CLKF
+SPPTERM | 1 | IV_FALSE | CLKF_IBUF
+OUTPUT_NODE_TYPE | 0 | 8 | SRFF_Q
+NODE | PH0_OBUF.Q | 451 | ? | 0 | 0 | PH0_OBUF | NULL | NULL | PH0_OBUF.REG | 0 | 8 | SRFF_Q
+
+MACROCELL_INSTANCE | PrldLow+OptxMapped | nPH0_OBUF | board_6502_COPY_0_COPY_0 | 2155873280 | 2 | 1
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | clk_divider<2> | 406 | ? | 0 | 0 | board_6502_COPY_0_COPY_0 | NULL | clk_divider<2>.Q | clk_divider<2> | 1 | 0 | MC_UIM
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | CLKF_IBUF | 405 | ? | 0 | 0 | board_6502_COPY_0_COPY_0 | NULL | NULL | CLKF_IBUF | 0 | 5 | II_IMUX
+OUTPUT_NODE_TYPE | 0 | 0 | MC_Q
+NODE | nPH0_OBUF | 411 | ? | 0 | 0 | board_6502_COPY_0_COPY_0 | NULL | nPH0_OBUF.Q | nPH0_OBUF | 0 | 0 | MC_Q
+
+SIGNAL_INSTANCE | nPH0_OBUF.SI | nPH0_OBUF | 0 | 2 | 3
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | clk_divider<2> | 406 | ? | 0 | 0 | board_6502_COPY_0_COPY_0 | NULL | clk_divider<2>.Q | clk_divider<2> | 1 | 0 | MC_UIM
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | CLKF_IBUF | 405 | ? | 0 | 0 | board_6502_COPY_0_COPY_0 | NULL | NULL | CLKF_IBUF | 0 | 5 | II_IMUX
+OUTPUT_NODE_TYPE | 1 | 9 | MC_SI_D1
+SIGNAL | NODE | nPH0_OBUF.D1 | 453 | ? | 0 | 4096 | nPH0_OBUF | NULL | NULL | nPH0_OBUF.SI | 1 | 9 | MC_SI_D1
+SPPTERM | 0 | IV_ZERO
+OUTPUT_NODE_TYPE | 2 | 9 | MC_SI_D2
+SIGNAL | NODE | nPH0_OBUF.D2 | 454 | ? | 0 | 4096 | nPH0_OBUF | NULL | NULL | nPH0_OBUF.SI | 2 | 9 | MC_SI_D2
+SPPTERM | 1 | IV_FALSE | clk_divider<2>
+OUTPUT_NODE_TYPE | 3 | 9 | MC_SI_CLKF
+SIGNAL | NODE | nPH0_OBUF.CLKF | 455 | ? | 0 | 4096 | nPH0_OBUF | NULL | NULL | nPH0_OBUF.SI | 3 | 9 | MC_SI_CLKF
+SPPTERM | 1 | IV_FALSE | CLKF_IBUF
+
+SRFF_INSTANCE | nPH0_OBUF.REG | nPH0_OBUF | 0 | 2 | 1
+INPUT_NODE_TYPE | 0 | 8 | SRFF_D
+NODE | nPH0_OBUF.D | 452 | ? | 0 | 0 | nPH0_OBUF | NULL | NULL | nPH0_OBUF.XOR | 0 | 7 | ALU_F
+INPUT_NODE_TYPE | 1 | 8 | SRFF_C
+SIGNAL | NODE | nPH0_OBUF.CLKF | 455 | ? | 0 | 4096 | nPH0_OBUF | NULL | NULL | nPH0_OBUF.SI | 3 | 9 | MC_SI_CLKF
+SPPTERM | 1 | IV_FALSE | CLKF_IBUF
+OUTPUT_NODE_TYPE | 0 | 8 | SRFF_Q
+NODE | nPH0_OBUF.Q | 456 | ? | 0 | 0 | nPH0_OBUF | NULL | NULL | nPH0_OBUF.REG | 0 | 8 | SRFF_Q
+
+INPUT_INSTANCE | 0 | 0 | NULL | RnW_IBUF | board_6502_COPY_0_COPY_0 | 16 | 1 | 1
+INPUT_NODE_TYPE | 0 | 5 | II_IN
+NODE | RnW | 427 | PI | 0 | 0 | board_6502_COPY_0_COPY_0 | NULL | NULL | NULL | 0 | 100 | NOTYPE
+OUTPUT_NODE_TYPE | 0 | 5 | II_IMUX
+NODE | RnW_IBUF | 412 | ? | 0 | 0 | board_6502_COPY_0_COPY_0 | NULL | NULL | RnW_IBUF | 0 | 5 | II_IMUX
+
+MACROCELL_INSTANCE | Inv+OptxMapped | nMRD_OBUF | board_6502_COPY_0_COPY_0 | 2155872512 | 2 | 1
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | PHI2CPU_IBUF | 409 | ? | 0 | 0 | board_6502_COPY_0_COPY_0 | NULL | NULL | PHI2CPU_IBUF | 0 | 5 | II_IMUX
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | RnW_IBUF | 412 | ? | 0 | 0 | board_6502_COPY_0_COPY_0 | NULL | NULL | RnW_IBUF | 0 | 5 | II_IMUX
+OUTPUT_NODE_TYPE | 0 | 0 | MC_Q
+NODE | nMRD_OBUF | 413 | ? | 0 | 0 | board_6502_COPY_0_COPY_0 | NULL | nMRD_OBUF.Q | nMRD_OBUF | 0 | 0 | MC_Q
+
+SIGNAL_INSTANCE | nMRD_OBUF.SI | nMRD_OBUF | 0 | 2 | 2
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | PHI2CPU_IBUF | 409 | ? | 0 | 0 | board_6502_COPY_0_COPY_0 | NULL | NULL | PHI2CPU_IBUF | 0 | 5 | II_IMUX
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | RnW_IBUF | 412 | ? | 0 | 0 | board_6502_COPY_0_COPY_0 | NULL | NULL | RnW_IBUF | 0 | 5 | II_IMUX
+OUTPUT_NODE_TYPE | 1 | 9 | MC_SI_D1
+SIGNAL | NODE | nMRD_OBUF.D1 | 458 | ? | 0 | 4096 | nMRD_OBUF | NULL | NULL | nMRD_OBUF.SI | 1 | 9 | MC_SI_D1
+SPPTERM | 0 | IV_ZERO
+OUTPUT_NODE_TYPE | 2 | 9 | MC_SI_D2
+SIGNAL | NODE | nMRD_OBUF.D2 | 459 | ? | 0 | 4096 | nMRD_OBUF | NULL | NULL | nMRD_OBUF.SI | 2 | 9 | MC_SI_D2
+SPPTERM | 2 | IV_TRUE | PHI2CPU_IBUF | IV_TRUE | RnW_IBUF
+
+SRFF_INSTANCE | nMRD_OBUF.REG | nMRD_OBUF | 0 | 1 | 1
+INPUT_NODE_TYPE | 0 | 8 | SRFF_D
+NODE | nMRD_OBUF.D | 457 | ? | 0 | 0 | nMRD_OBUF | NULL | NULL | nMRD_OBUF.XOR | 0 | 7 | ALU_F
+OUTPUT_NODE_TYPE | 0 | 8 | SRFF_Q
+NODE | nMRD_OBUF.Q | 460 | ? | 0 | 0 | nMRD_OBUF | NULL | NULL | nMRD_OBUF.REG | 0 | 8 | SRFF_Q
+
+MACROCELL_INSTANCE | Inv+OptxMapped | nMWR_OBUF | board_6502_COPY_0_COPY_0 | 2155872512 | 2 | 1
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | PHI2CPU_IBUF | 409 | ? | 0 | 0 | board_6502_COPY_0_COPY_0 | NULL | NULL | PHI2CPU_IBUF | 0 | 5 | II_IMUX
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | RnW_IBUF | 412 | ? | 0 | 0 | board_6502_COPY_0_COPY_0 | NULL | NULL | RnW_IBUF | 0 | 5 | II_IMUX
+OUTPUT_NODE_TYPE | 0 | 0 | MC_Q
+NODE | nMWR_OBUF | 414 | ? | 0 | 0 | board_6502_COPY_0_COPY_0 | NULL | nMWR_OBUF.Q | nMWR_OBUF | 0 | 0 | MC_Q
+
+SIGNAL_INSTANCE | nMWR_OBUF.SI | nMWR_OBUF | 0 | 2 | 2
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | PHI2CPU_IBUF | 409 | ? | 0 | 0 | board_6502_COPY_0_COPY_0 | NULL | NULL | PHI2CPU_IBUF | 0 | 5 | II_IMUX
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | RnW_IBUF | 412 | ? | 0 | 0 | board_6502_COPY_0_COPY_0 | NULL | NULL | RnW_IBUF | 0 | 5 | II_IMUX
+OUTPUT_NODE_TYPE | 1 | 9 | MC_SI_D1
+SIGNAL | NODE | nMWR_OBUF.D1 | 462 | ? | 0 | 4096 | nMWR_OBUF | NULL | NULL | nMWR_OBUF.SI | 1 | 9 | MC_SI_D1
+SPPTERM | 0 | IV_ZERO
+OUTPUT_NODE_TYPE | 2 | 9 | MC_SI_D2
+SIGNAL | NODE | nMWR_OBUF.D2 | 463 | ? | 0 | 4096 | nMWR_OBUF | NULL | NULL | nMWR_OBUF.SI | 2 | 9 | MC_SI_D2
+SPPTERM | 2 | IV_TRUE | PHI2CPU_IBUF | IV_FALSE | RnW_IBUF
+
+SRFF_INSTANCE | nMWR_OBUF.REG | nMWR_OBUF | 0 | 1 | 1
+INPUT_NODE_TYPE | 0 | 8 | SRFF_D
+NODE | nMWR_OBUF.D | 461 | ? | 0 | 0 | nMWR_OBUF | NULL | NULL | nMWR_OBUF.XOR | 0 | 7 | ALU_F
+OUTPUT_NODE_TYPE | 0 | 8 | SRFF_Q
+NODE | nMWR_OBUF.Q | 464 | ? | 0 | 0 | nMWR_OBUF | NULL | NULL | nMWR_OBUF.REG | 0 | 8 | SRFF_Q
+
+MACROCELL_INSTANCE | Inv+OptxMapped | nDOE_OBUF | board_6502_COPY_0_COPY_0 | 2155872512 | 3 | 1
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | nRST_IBUF | 403 | ? | 0 | 0 | board_6502_COPY_0_COPY_0 | NULL | NULL | nRST_IBUF | 0 | 5 | II_IMUX
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | PHI2CPU_IBUF | 409 | ? | 0 | 0 | board_6502_COPY_0_COPY_0 | NULL | NULL | PHI2CPU_IBUF | 0 | 5 | II_IMUX
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | clk_divider<2> | 406 | ? | 0 | 0 | board_6502_COPY_0_COPY_0 | NULL | clk_divider<2>.Q | clk_divider<2> | 1 | 0 | MC_UIM
+OUTPUT_NODE_TYPE | 0 | 0 | MC_Q
+NODE | nDOE_OBUF$Q | 415 | ? | 0 | 0 | board_6502_COPY_0_COPY_0 | NULL | nDOE_OBUF.Q | nDOE_OBUF | 0 | 0 | MC_Q
+
+SIGNAL_INSTANCE | nDOE_OBUF.SI | nDOE_OBUF | 0 | 3 | 2
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | nRST_IBUF | 403 | ? | 0 | 0 | board_6502_COPY_0_COPY_0 | NULL | NULL | nRST_IBUF | 0 | 5 | II_IMUX
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | PHI2CPU_IBUF | 409 | ? | 0 | 0 | board_6502_COPY_0_COPY_0 | NULL | NULL | PHI2CPU_IBUF | 0 | 5 | II_IMUX
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | clk_divider<2> | 406 | ? | 0 | 0 | board_6502_COPY_0_COPY_0 | NULL | clk_divider<2>.Q | clk_divider<2> | 1 | 0 | MC_UIM
+OUTPUT_NODE_TYPE | 1 | 9 | MC_SI_D1
+SIGNAL | NODE | nDOE_OBUF.D1 | 466 | ? | 0 | 4096 | nDOE_OBUF | NULL | NULL | nDOE_OBUF.SI | 1 | 9 | MC_SI_D1
+SPPTERM | 0 | IV_ZERO
+OUTPUT_NODE_TYPE | 2 | 9 | MC_SI_D2
+SIGNAL | NODE | nDOE_OBUF.D2 | 467 | ? | 0 | 4096 | nDOE_OBUF | NULL | NULL | nDOE_OBUF.SI | 2 | 9 | MC_SI_D2
+SPPTERM | 2 | IV_TRUE | nRST_IBUF | IV_TRUE | clk_divider<2>
+SPPTERM | 2 | IV_TRUE | nRST_IBUF | IV_TRUE | PHI2CPU_IBUF
+
+SRFF_INSTANCE | nDOE_OBUF.REG | nDOE_OBUF | 0 | 1 | 1
+INPUT_NODE_TYPE | 0 | 8 | SRFF_D
+NODE | nDOE_OBUF.D | 465 | ? | 0 | 0 | nDOE_OBUF | NULL | NULL | nDOE_OBUF.XOR | 0 | 7 | ALU_F
+OUTPUT_NODE_TYPE | 0 | 8 | SRFF_Q
+NODE | nDOE_OBUF.Q | 468 | ? | 0 | 0 | nDOE_OBUF | NULL | NULL | nDOE_OBUF.REG | 0 | 8 | SRFF_Q
+
+MACROCELL_INSTANCE | Inv+OptxMapped | nDOE_OBUF$BUF0 | board_6502_COPY_0_COPY_0 | 2155872512 | 3 | 1
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | nRST_IBUF | 403 | ? | 0 | 0 | board_6502_COPY_0_COPY_0 | NULL | NULL | nRST_IBUF | 0 | 5 | II_IMUX
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | PHI2CPU_IBUF | 409 | ? | 0 | 0 | board_6502_COPY_0_COPY_0 | NULL | NULL | PHI2CPU_IBUF | 0 | 5 | II_IMUX
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | clk_divider<2> | 406 | ? | 0 | 0 | board_6502_COPY_0_COPY_0 | NULL | clk_divider<2>.Q | clk_divider<2> | 1 | 0 | MC_UIM
+OUTPUT_NODE_TYPE | 0 | 0 | MC_Q
+NODE | nDOE_OBUF$BUF0 | 416 | ? | 0 | 0 | board_6502_COPY_0_COPY_0 | NULL | nDOE_OBUF$BUF0.Q | nDOE_OBUF$BUF0 | 0 | 0 | MC_Q
+
+SIGNAL_INSTANCE | nDOE_OBUF$BUF0.SI | nDOE_OBUF$BUF0 | 0 | 3 | 2
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | nRST_IBUF | 403 | ? | 0 | 0 | board_6502_COPY_0_COPY_0 | NULL | NULL | nRST_IBUF | 0 | 5 | II_IMUX
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | PHI2CPU_IBUF | 409 | ? | 0 | 0 | board_6502_COPY_0_COPY_0 | NULL | NULL | PHI2CPU_IBUF | 0 | 5 | II_IMUX
+INPUT_NODE_TYPE | 1 | 100 | NOTYPE
+NODE | clk_divider<2> | 406 | ? | 0 | 0 | board_6502_COPY_0_COPY_0 | NULL | clk_divider<2>.Q | clk_divider<2> | 1 | 0 | MC_UIM
+OUTPUT_NODE_TYPE | 1 | 9 | MC_SI_D1
+SIGNAL | NODE | nDOE_OBUF$BUF0.D1 | 470 | ? | 0 | 4096 | nDOE_OBUF$BUF0 | NULL | NULL | nDOE_OBUF$BUF0.SI | 1 | 9 | MC_SI_D1
+SPPTERM | 0 | IV_ZERO
+OUTPUT_NODE_TYPE | 2 | 9 | MC_SI_D2
+SIGNAL | NODE | nDOE_OBUF$BUF0.D2 | 471 | ? | 0 | 4096 | nDOE_OBUF$BUF0 | NULL | NULL | nDOE_OBUF$BUF0.SI | 2 | 9 | MC_SI_D2
+SPPTERM | 2 | IV_TRUE | nRST_IBUF | IV_TRUE | clk_divider<2>
+SPPTERM | 2 | IV_TRUE | nRST_IBUF | IV_TRUE | PHI2CPU_IBUF
+
+SRFF_INSTANCE | nDOE_OBUF$BUF0.REG | nDOE_OBUF$BUF0 | 0 | 1 | 1
+INPUT_NODE_TYPE | 0 | 8 | SRFF_D
+NODE | nDOE_OBUF$BUF0.D | 469 | ? | 0 | 0 | nDOE_OBUF$BUF0 | NULL | NULL | nDOE_OBUF$BUF0.XOR | 0 | 7 | ALU_F
+OUTPUT_NODE_TYPE | 0 | 8 | SRFF_Q
+NODE | nDOE_OBUF$BUF0.Q | 472 | ? | 0 | 0 | nDOE_OBUF$BUF0 | NULL | NULL | nDOE_OBUF$BUF0.REG | 0 | 8 | SRFF_Q
+
+OUTPUT_INSTANCE | 0 | nBUSFREE | board_6502_COPY_0_COPY_0 | 7 | 1 | 1
+INPUT_NODE_TYPE | 0 | 6 | OI_IN
+NODE | nBUSFREE_OBUF$Q | 404 | ? | 0 | 0 | board_6502_COPY_0_COPY_0 | NULL | nBUSFREE_OBUF.Q | nBUSFREE_OBUF | 0 | 0 | MC_Q
+OUTPUT_NODE_TYPE | 0 | 6 | OI_OUT
+NODE | nBUSFREE | 417 | PO | 0 | 0 | board_6502_COPY_0_COPY_0 | NULL | NULL | nBUSFREE | 0 | 6 | OI_OUT
+
+OUTPUT_INSTANCE | 0 | PH0 | board_6502_COPY_0_COPY_0 | 7 | 1 | 1
+INPUT_NODE_TYPE | 0 | 6 | OI_IN
+NODE | PH0_OBUF | 410 | ? | 0 | 0 | board_6502_COPY_0_COPY_0 | NULL | PH0_OBUF.Q | PH0_OBUF | 0 | 0 | MC_Q
+OUTPUT_NODE_TYPE | 0 | 6 | OI_OUT
+NODE | PH0 | 418 | PO | 0 | 0 | board_6502_COPY_0_COPY_0 | NULL | NULL | PH0 | 0 | 6 | OI_OUT
+
+OUTPUT_INSTANCE | 0 | nPH0 | board_6502_COPY_0_COPY_0 | 7 | 1 | 1
+INPUT_NODE_TYPE | 0 | 6 | OI_IN
+NODE | nPH0_OBUF | 411 | ? | 0 | 0 | board_6502_COPY_0_COPY_0 | NULL | nPH0_OBUF.Q | nPH0_OBUF | 0 | 0 | MC_Q
+OUTPUT_NODE_TYPE | 0 | 6 | OI_OUT
+NODE | nPH0 | 419 | PO | 0 | 0 | board_6502_COPY_0_COPY_0 | NULL | NULL | nPH0 | 0 | 6 | OI_OUT
+
+OUTPUT_INSTANCE | 0 | nMRD | board_6502_COPY_0_COPY_0 | 7 | 1 | 1
+INPUT_NODE_TYPE | 0 | 6 | OI_IN
+NODE | nMRD_OBUF | 413 | ? | 0 | 0 | board_6502_COPY_0_COPY_0 | NULL | nMRD_OBUF.Q | nMRD_OBUF | 0 | 0 | MC_Q
+OUTPUT_NODE_TYPE | 0 | 6 | OI_OUT
+NODE | nMRD | 420 | PO | 0 | 0 | board_6502_COPY_0_COPY_0 | NULL | NULL | nMRD | 0 | 6 | OI_OUT
+
+OUTPUT_INSTANCE | 0 | nMWR | board_6502_COPY_0_COPY_0 | 7 | 1 | 1
+INPUT_NODE_TYPE | 0 | 6 | OI_IN
+NODE | nMWR_OBUF | 414 | ? | 0 | 0 | board_6502_COPY_0_COPY_0 | NULL | nMWR_OBUF.Q | nMWR_OBUF | 0 | 0 | MC_Q
+OUTPUT_NODE_TYPE | 0 | 6 | OI_OUT
+NODE | nMWR | 421 | PO | 0 | 0 | board_6502_COPY_0_COPY_0 | NULL | NULL | nMWR | 0 | 6 | OI_OUT
+
+OUTPUT_INSTANCE | 0 | nDOE | board_6502_COPY_0_COPY_0 | 7 | 1 | 1
+INPUT_NODE_TYPE | 0 | 6 | OI_IN
+NODE | nDOE_OBUF$Q | 415 | ? | 0 | 0 | board_6502_COPY_0_COPY_0 | NULL | nDOE_OBUF.Q | nDOE_OBUF | 0 | 0 | MC_Q
+OUTPUT_NODE_TYPE | 0 | 6 | OI_OUT
+NODE | nDOE | 422 | PO | 0 | 0 | board_6502_COPY_0_COPY_0 | NULL | NULL | nDOE | 0 | 6 | OI_OUT
+
+OUTPUT_INSTANCE | 0 | nAOE | board_6502_COPY_0_COPY_0 | 7 | 1 | 1
+INPUT_NODE_TYPE | 0 | 6 | OI_IN
+NODE | nDOE_OBUF$BUF0 | 416 | ? | 0 | 0 | board_6502_COPY_0_COPY_0 | NULL | nDOE_OBUF$BUF0.Q | nDOE_OBUF$BUF0 | 0 | 0 | MC_Q
+OUTPUT_NODE_TYPE | 0 | 6 | OI_OUT
+NODE | nAOE | 423 | PO | 0 | 0 | board_6502_COPY_0_COPY_0 | NULL | NULL | nAOE | 0 | 6 | OI_OUT
+
+FB_INSTANCE | FOOBAR1_ | board_6502_COPY_0_COPY_0 | 0 | 0 | 0
+FBPIN | 9 | nBUSFREE_OBUF | 1 | NULL | 0 | nBUSFREE | 1 | 43 | 57344
+FBPIN | 11 | NULL | 0 | nRST_IBUF | 1 | NULL | 0 | 44 | 57344
+FBPIN | 14 | PH0_OBUF | 1 | NULL | 0 | PH0 | 1 | 1 | 57344
+FBPIN | 15 | nPH0_OBUF | 1 | NULL | 0 | nPH0 | 1 | 2 | 49152
+FBPIN | 17 | NULL | 0 | CLKF_IBUF | 1 | NULL | 0 | 3 | 49152
+FBPIN | 18 | clk_divider<0> | 1 | NULL | 0 | NULL | 0
+
+FB_INSTANCE | FOOBAR2_ | board_6502_COPY_0_COPY_0 | 0 | 0 | 0
+FBPIN | 6 | nDOE_OBUF | 1 | NULL | 0 | nDOE | 1 | 31 | 49152
+FBPIN | 8 | nDOE_OBUF$BUF0 | 1 | NULL | 0 | nAOE | 1 | 32 | 49152
+FBPIN | 9 | nMWR_OBUF | 1 | NULL | 0 | nMWR | 1 | 33 | 51200
+FBPIN | 11 | nMRD_OBUF | 1 | NULL | 0 | nMRD | 1 | 34 | 53248
+FBPIN | 14 | NULL | 0 | RnW_IBUF | 1 | NULL | 0 | 36 | 53248
+FBPIN | 15 | NULL | 0 | PHI2CPU_IBUF | 1 | NULL | 0 | 37 | 49152
+
+FB_INSTANCE | FOOBAR3_ | board_6502_COPY_0_COPY_0 | 0 | 0 | 0
+FBPIN | 17 | clk_divider<2> | 1 | NULL | 0 | NULL | 0 | 16 | 49152
+FBPIN | 18 | clk_divider<1> | 1 | NULL | 0 | NULL | 0
+
+FB_INSTANCE | FOOBAR4_ | board_6502_COPY_0_COPY_0 | 0 | 0 | 0
+
+FB_INSTANCE | INPUTPINS_FOOBAR5_ | board_6502_COPY_0_COPY_0 | 0 | 0 | 0
+
+BUSINFO | A<15:0> | 16 | 0 | 0 | A<0> | 15 | A<10> | 5 | A<11> | 4 | A<12> | 3 | A<13> | 2 | A<14> | 1 | A<15> | 0 | A<1> | 14 | A<2> | 13 | A<3> | 12 | A<4> | 11 | A<5> | 10 | A<6> | 9 | A<7> | 8 | A<8> | 7 | A<9> | 6
+
+FB_ORDER_OF_INPUTS | FOOBAR1_ | 12 | PHI2CPU | 37 | 32 | CLKF | 3 | 44 | clk_divider<2> | NULL | 48 | nRST | 44
+
+FB_IMUX_INDEX | FOOBAR1_ | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | 102 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | 132 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | 52 | -1 | -1 | -1 | 122 | -1 | -1 | -1 | -1 | -1
+
+
+FB_ORDER_OF_INPUTS | FOOBAR2_ | 8 | RnW | 36 | 12 | PHI2CPU | 37 | 44 | clk_divider<2> | NULL | 48 | nRST | 44
+
+FB_IMUX_INDEX | FOOBAR2_ | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | 98 | -1 | -1 | -1 | 102 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | 52 | -1 | -1 | -1 | 122 | -1 | -1 | -1 | -1 | -1
+
+
+FB_ORDER_OF_INPUTS | FOOBAR3_ | 32 | CLKF | 3 | 43 | clk_divider<0> | NULL | 52 | clk_divider<1> | NULL
+
+FB_IMUX_INDEX | FOOBAR3_ | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | 132 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | 17 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | 53 | -1
+

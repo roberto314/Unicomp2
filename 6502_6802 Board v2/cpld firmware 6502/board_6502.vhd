@@ -20,7 +20,7 @@ entity board_6502 is
         nPH0     : out STD_LOGIC; -- PHI 0 to CPU (inverted)
         nML      : in  STD_LOGIC; -- Memory Lock from CPU
         nRST     : in  STD_LOGIC; -- Reset CPU
-        nBUSFREE : in  STD_LOGIC; -- Bus Free means High-Z on Bus
+        nBUSFREE : out  STD_LOGIC; -- Bus Free means High-Z on Bus
         nMWR     : out STD_LOGIC := '1'; -- Mem Write to Bus
         nMRD     : out STD_LOGIC := '1'; -- Mem Read to Bus
         PHI1     : out STD_LOGIC; -- PHI Output to Bus
@@ -33,6 +33,8 @@ architecture Behavioral of board_6502 is
     signal clk_divider  : unsigned(3 downto 0);
     signal s_nMRD       : std_logic :='1';
     signal s_nMWR       : std_logic :='1';
+    signal s_BUS        : std_logic :='1';
+    signal s_BUSCLK     : std_logic :='1';
 
 begin
 
@@ -43,7 +45,9 @@ s_nMWR <= NOT((NOT RnW) AND PHI2CPU); -- thats how it is usually done.
 --nAOE <= PHI1CPU;
 --nAOE <= NOT(clk_divider(2)); --test -works
 -- nAOE <= '0'; -- works (2MHz possible)
-nAOE <= NOT( nRST AND (clk_divider(2) OR PHI2CPU)); -- test -works
+s_BUS <= nRST AND (s_BUSCLK OR PHI2CPU);
+
+nAOE <= NOT(s_BUS); -- test -works
 
 -- For nDOE:
 -- NOT(PHI2CPU); does not work
@@ -55,8 +59,8 @@ nAOE <= NOT( nRST AND (clk_divider(2) OR PHI2CPU)); -- test -works
 -- NOT(clk_divider(1)); does work!
 
 --nDOE <= NOT(clk_divider(2)); 
-nDOE <= NOT( nRST AND (clk_divider(2) OR PHI2CPU)); -- test
-
+nDOE <= NOT(s_BUS); -- test
+nBUSFREE <= s_BUS;
 -------------------- external RD and WR Signals ---------------
 nMRD <= s_nMRD;
 nMWR <= s_nMWR;
@@ -67,6 +71,17 @@ process (CLKF)
             clk_divider   <= clk_divider + 1;
         end if;
     end process;
-    PH0 <= clk_divider(2);
-    nPH0 <= NOT(clk_divider(2));
+    s_BUSCLK <= clk_divider(2);
+    nPH0 <= NOT(s_BUSCLK);
+    PH0 <= s_BUSCLK;
+
+process (CLKF, s_BUSCLK) --this delays the PHI0 to the CPU for half period of CLKF (8MHz)
+    begin
+        if falling_edge(CLKF) then
+            --if s_BUSCLK = '1' then
+                --nPH0 <= NOT(s_BUSCLK);
+                --PH0 <= s_BUSCLK;
+            --end if;
+        end if;
+    end process;
 end Behavioral;

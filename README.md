@@ -26,13 +26,13 @@ Version 2.00
 	- a CPLD (XC9572) for clock generation and glue logic
 
 * Multi Serial boaŕd:
-	- suggested write_enable #0
+	- suggested chip select #0
 	- two chip selects on board (second one not connected, but broken out)
 	- can be used with the following serial interface chips: MC6850, MOS6551, MOS6552 or pin compatible
 	- RAM for address decoding
 
 * Multi Parallel boaŕd:
-	- suggested write_enable #1
+	- suggested chip select #1
 	- two chip selects on board
 	- can be used with the following parallel interface chips: MC6820, MC6821, MOS6520, MOS6521, MOS6522, MOS6526, MOS8520, MOS6532 in the first slot
     - the first slot can additionally mimic a MOS6530
@@ -40,7 +40,7 @@ Version 2.00
     - RAM for address decoding
 
 * RAMROM board:
-	- write_enable fixed at #14 (for chipselect) and #15 (rom content)
+	- chip select fixed at #14 (for chipselect) and #15 (rom content)
 	- 512k of battery backed SRAM plus an extra RAM for address decoding
 	- a STM32F401 'blackpill' board to fill the SRAM with data over USB port from the SBC
 	- serial shell on the STM32 to change ROM content on the fly
@@ -51,9 +51,42 @@ Version 2.00
 	- no CPLD
 
 * self made module:
-	- write_enable can be any non-used line in the Range from 0 to 13.
+	- chip select can be any non-used line in the Range from 0 to 13.
 	- size is 100mm x 100mm
 	- there is the prototype board in the repository for the position of the connectors and also the labels (pinout)
+
+### Configuration RAM ###
+The configuration is done with 128kx8 fast ram on the peripheral boards. These will be configured from the STM32F401.
+One bit is for one Output (of which there are two) and for two addresses (resolution for chipselect is 2 bytes).
+The cs = 15 is for writing the main RAM, cs = 14 is the chip select for the RAMROM board.
+The rest is free. With two chip select lines per board these are 28 lines.
+One byte in the mapping ram has the following format:
+
+| 7    | 6    | 5    | 4    | 3    | 2    | 1    | 0    | Bits       |
+|------|------|------|------|------|------|------|------|------------|
+| 7,6  | 5,4  | 3,2  | 1,0  | 7,6  | 5,4  | 3,2  | 1,0  | Address    |
+| /CS0 | /CS0 | /CS0 | /CS0 | /CS1 | /CS1 | /CS1 | /CS1 | Peripheral |
+| /CS  | /CS  | /CS  | /CS  | WP   | WP   | WP   | WP   | RAMROM     |
+|      |      |      |      |      |      |      |      |            |
+
+So 128k are good for 128kx8 Bytes of Addressspace (=1MByte)
+The data gets transferred to the STM32 in compact form. Only the Start address, the chipselect and the bitmask (which is Low-active) for every addresses where someting changes are transferred.
+A 0xFE for a bitmask means Peripheral chipselect /CS1 is active for two addresses. If the board is the RAMROM board the low nibble is Writeprotect (Hi-active).
+
+A simple configuration block looks líke this:
+
+    (RAM: 0-9FFF, ACIA0: A000-A001, ACIA1: A010-A011, ROM: C000-FFFF)
+
+    00 00 00 0E 00  :  RAM
+    00 A0 00 00 EF  :  ACIA0
+    00 A0 02 FF FF  :  HOLE
+    00 A0 10 00 FE  :  ACIA1
+    00 A0 12 FF FF  :  HOLE
+    00 C0 00 0E 0F  :  ROM
+    01 00 00 FF FF  :  END
+    00 00 00        :  noting further
+
+
 
 ### linux single board computer (SBC) ###
 
@@ -86,22 +119,9 @@ tmux serial window:
 	- configures the RAM, ROM and chipselect of all the boards with a configuration file
 	- Example: sudo UC_configure.py apple1
 
-* US_set_freq_ntsc.sh
-	- sets the main clock frequency to 14.31818 MHz
-
-* US_set_freq_pal.sh
-	- sets the main clock frequency to 17.734475 MHz
-
-* set_chipselect.py [0..8]
-	- sets one of the chipselect lines to low or all high
-	- Example: sudo set_chipselect.py 0 - selects chip 0 
-	- Example: sudo set_chipselect.py 8 - selects none
-
-* set_config.py [0..7]
-	- sets one of the configurations for the CPLD
-
-* set_reset.py [0,1]
+* set_reset.py [0,1,xx]
 	- sets the reset line high or low (low = active)
+	- if value is anything other than 0 or 1 then a reset of approx. 10mS will be performed.
 
 * UC_check_jtag.sh
 	- looks for devices (CPLDs) in the JTAG chain.

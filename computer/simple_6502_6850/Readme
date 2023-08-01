@@ -1,0 +1,22 @@
+Source: https://sbc.rictor.org/sbcos.html
+Daryl's Computer Hobby Page
+Here is a list of my operating system's commands:
+
+This is a cut-down version from this thread:
+http://forum.6502.org/viewtopic.php?f=2&t=2566
+
+65C02 Monitor V5.1 Ready
+with Enhanced Basic Interpreter (c) Lee Davison
+(Press ? for help)
+
+Syntax = {} required, [] optional, HHHH hex address, DD hex data
+
+[HHHH]{.HHHH}{Return} - Hex dump range of addresses (16 per line)
+[HHHH]{:DD}[ DD]{Return} - Change data bytes
+[HHHH]{G}{Return} - Execute a program (use RTS to return to monitor)
+{HHHH.HHHH>HHHH{I}{Return} - move range at 2nd HHHH down to 1st to 3rd HHHH
+{HHHH.HHHH>HHHH{M}{Return} - Move range at 1st HHHH thru 2nd to 3rd HHHH
+[HHHH][ HHHH]{Q}{Return} - Text dump address(s)
+[HHHH]{.HHHH}{Q}{Return} - Text dump range of addresses (16 per line)
+{R}{Return} - Print register contents from memory locations
+{V}{Return} - Monitor Version

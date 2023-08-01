@@ -6,6 +6,7 @@ PHI2CPU S:PIN37
 RnW S:PIN36
 nRST S:PIN44
 PH0 S:PIN1
+nBUSFREE S:PIN43
 nDOE S:PIN31
 nAOE S:PIN32
 nMRD S:PIN34
@@ -16,12 +17,13 @@ nPH0 S:PIN2
 ;The remaining section of the .gyd file is for documentation purposes only.
 ;It shows where your internal equations were placed in the last successful fit.
 
+PARTITION FB1_9 nBUSFREE_OBUF
 PARTITION FB1_14 clk_divider<2> nPH0_OBUF
-PARTITION FB1_17 clk_divider<0> clk_divider<1>
+
 PARTITION FB2_6 nDOE_OBUF
 PARTITION FB2_8 nDOE_OBUF$BUF0 nMWR_OBUF
 PARTITION FB2_11 nMRD_OBUF
 
-
+PARTITION FB3_17 clk_divider<0> clk_divider<1>
 
 

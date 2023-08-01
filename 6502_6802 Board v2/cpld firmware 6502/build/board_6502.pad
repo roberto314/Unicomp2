@@ -1,7 +1,7 @@
 Release 8.1i - Fit P.20131013
 Copyright(c) 1995-2003 Xilinx Inc. All rights reserved
 
- 7-28-2023  1:27PM
+ 7-29-2023  7:53PM
 
 NOTE: This file is designed to be imported into a spreadsheet program
 such as Microsoft Excel for viewing, printing and sorting. The pipe '|'
@@ -60,7 +60,7 @@ P39|TIE||I/O||||||||||
 P40|TIE||I/O||||||||||
 P41|TIE||I/O||||||||||
 P42|TIE||I/O||||||||||
-P43|TIE||I/O/GCK1||||||||||
+P43|nBUSFREE|O|I/O/GCK1|OUTPUT|||||||||
 P44|nRST|I|I/O/GCK2|INPUT|||||||||
 
 To preserve the pinout above for future design iterations in
