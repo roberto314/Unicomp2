@@ -1,0 +1,11 @@
+Apple I Replica.
+patched code changes PIA Address from D0F2 to D012 because an address range from D010 to D0FF won't work with
+unicomp version 1. This is the same as BRIELBASIC config in a1basic.asm line 144-147.
+D010 to D0FF works and this should be the correct range for this replica.
+Programs:
+Load program (.ucb file) with ./UC_fill_RAM.py write memory_test.ucb
+and start with 280R.
+For Basic programs go to BASIC without clearing RAM = warmstart (E2B3R).
+There one can LIST or RUN.
+To find out if a program is BASIC or machine Language look at the load address. A load address of 0x280 or 0x300 suggests a 
+machine language program, 0x800 sugests a BASIC program.
