@@ -3,10 +3,40 @@
 import logging, sys, argparse, math
 from serial import Serial
 from serial import SerialException
+
+ver = 1.21
+
+# this is the upload script for the Unicom Project.
+# It uses the "ostrich" protocol from moates (see the file:
+# Moates Hardware Protocol v19.xls in the various folder).
+#
+# Version History:
+# v1.0: Initial Version
+# v1.2: comments at the end are shown in the console
+# v1.21: now it is possible to enter start and end if a read is performed.
+
 #port = '/dev/ttyS3'
 port = '/dev/ttyACM0'
 
 RAMMAX = 0x7FFFF
+
+class bcolors:
+    FAIL = '\033[91m'    #red
+    OKGREEN = '\033[92m' #green
+    WARNING = '\033[93m' #yellow
+    OKBLUE = '\033[94m'  #dblue
+    HEADER = '\033[95m'  #purple
+    OKCYAN = '\033[96m'  #cyan
+    ENDC = '\033[0m'
+    BOLD = '\033[1m'
+    UNDERLINE = '\033[4m'
+#print(f'{bcolors.FAIL}{bcolors.ENDC}')
+#print(f'{bcolors.OKGREEN}{bcolors.ENDC}')
+#print(f'{bcolors.WARNING}{bcolors.ENDC}')
+#print(f'{bcolors.OKBLUE}{bcolors.ENDC}')
+#print(f'{bcolors.HEADER}{bcolors.ENDC}')
+#print(f'{bcolors.OKCYAN}{bcolors.ENDC}')
+
 #----------------------------------
 def dump_data(data):
 	#print(len(data))
@@ -310,7 +340,7 @@ def bulk_read_memory(ser, start, end, chunk_size = 0x100):
 		trim_end = None
 	else:
 		trim_end = -trim_end
-	data = []
+	data = bytearray()
 	for block in range(blockcount - 1, -1, -1):
 		#trim_end = (address + 256) - end - 1
 		data += read(ser, 256)
@@ -322,7 +352,7 @@ def bulk_read_memory(ser, start, end, chunk_size = 0x100):
 		return data[trim_start:trim_end]
 	else:
 		print(f'Checksum Error. cs: 0x{cs:02X}, cs_file: 0x{cs_file:02X}')
-		return []
+		return ''
 
 def write_config(ser, data):
 	print('------------------------------ Config ------------------------------')
@@ -423,10 +453,16 @@ def main(func, data = 0, start = 0, end = 0):
 def extract_files(img):
 	start = int.from_bytes(img[0:3], 'big', signed=False)
 	imglen = int.from_bytes(img[3:6], 'big', signed=False)
-	end = start + imglen
-	ret = img[6:imglen+7]
-	rest = img[imglen+7:]
-	return start,end,ret,rest
+	if ((start == 0xFFFFFF) and (imglen == 0)): # comment
+		#comment = (img[6:]).encode('ascii',errors='ignore')
+		comment = (img[6:]).decode('utf8')
+		print(f'{bcolors.OKGREEN}{comment}{bcolors.ENDC}')
+		return 0,0,0,''
+	else:
+		end = start + imglen
+		ret = img[6:imglen+7]
+		rest = img[imglen+7:]
+		return start,end,ret,rest
 
 ############################################
 if __name__ == '__main__':
@@ -463,7 +499,7 @@ if __name__ == '__main__':
 		help = 'start address (inclusive)')
 	subparser.add_argument(
 		'size',
-		help = 'bytecount')
+		help = 'bytecount or with a _ in front until (_0xFF means start to 0xFF)')
 	subparser.add_argument(
 		'file',
 		nargs = '?',
@@ -533,7 +569,7 @@ if __name__ == '__main__':
 		else:                  # real file received
 			print(f'real file received {args.file}')
 			img = read_file(args.file)
-			ext = args.file.split(".")[-1]
+			ext = args.file.split(".")[-1] # check extension
 			if ext != 'ucb': 
 				start = int(args.start, 0) & RAMMAX
 				end = start + len(img) - 1
@@ -541,23 +577,32 @@ if __name__ == '__main__':
 					print(f'Write goes beyond 0x7FFF! (size: 0x{len(img):04X})')
 					exit()
 				main('write', img, start)	
-			else:    # .ucb file has startaddress and size within
+			else:                          # .ucb file has startaddress and size within
 				print(f'Extension: {ext}')
 
 				while True:
 					start,end,oimg,rest = extract_files(img) # ucb file can contain more than one image
+					if len(rest) == 0:
+						break
 					print(f'start: 0x{start:04X} end: 0x{end:04X}')
 					main('write', oimg, start)
 					img = rest
-					if len(rest) == 0:
-						break
 
 	elif args.command == 'read':
-		size = int(args.size, 0)
+		start = int(args.start, 0) & RAMMAX
+
+		sizetemp = args.size
+		if sizetemp[0] == '_':
+			endtemp = int(sizetemp[1:], 0)
+			#print(f'sizetemp: {sizetemp[1:]}, endtemp: {endtemp}')
+			size = endtemp - start + 1
+			print(f'Using endvalue. Calculated Size is: {size:04X} or {size}') 
+		else:
+			size = int(sizetemp, 0)
+			print(f'Using size. Size is: {size:04X} or {size}') 
 		if (size < 1) or (size > 0x7FFF):
 			print('Size must be between 0 and 0x7FFF!')
 			exit()
-		start = int(args.start, 0) & RAMMAX
 		end = start + size - 1
 		if end > RAMMAX:
 			print('Read goes beyond 0x7FFF!')

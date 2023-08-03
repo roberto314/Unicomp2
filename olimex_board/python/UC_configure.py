@@ -79,15 +79,16 @@ def upload_image(dir, cf, i):
 		imgend  = int(cf[name]['end'] , 0)
 		imgnumber = dir + '/' + cf[name]['file']
 		size = imgend - imgstart + 1
-		print(f'{bcolors.OKGREEN}-------------------------- Upload Image {i} --------------------------{bcolors.ENDC}')
-		print(f'Image {i}: {imgstart:04X} to {imgend:04X} (size: {size} bytes) file: {imgnumber}')
+		#print(f'Image {i}: {imgstart:04X} to {imgend:04X} (size: {size} bytes) file: {imgnumber}')
+		print(f'{bcolors.OKGREEN}------------ trying to upload {name} from: {imgstart:04X} to {imgend:04X} --------------{bcolors.ENDC}')
 		img = read_file(imgnumber)
 		if len(img) != size:
 			print(f'{bcolors.FAIL}          ###### Size is too big! ######{bcolors.ENDC}')
 			exit()
 		fr.main('write', img, imgstart)
 		return 0
-	except:
+	except Exception as e:
+		print(f'Error {e}!')
 		return 1
 
 def make_bytes(val):
@@ -270,10 +271,10 @@ def make_dict_per(cf):
 					if name != 'ram' and name != 'rom': # here we are in any other per. than ram or rom
 						if (('hstart' in valname) or ('hend' in valname)):
 							valH.append((value))
-							#print(f'Got HI {valname} in {name} with ')
+							print(f'Got HI {valname} in {name} with {value:04X}')
 						else:
 							valL.append((value))
-							#print(f'Got LO {valname} in {name} with ')
+							print(f'Got LO {valname} in {name} with {value:04X}')
 
 				if 'ram' in name:
 					valL.append((value))
@@ -568,6 +569,7 @@ def main(dir, cf, norom):
 	while 1:
 		if norom == 'false':
 			if (upload_image(dir, cf, i)):
+				print(f'{bcolors.FAIL}Problem uploading Image!{bcolors.ENDC}')
 				break
 			
 		else:
