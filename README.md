@@ -82,7 +82,7 @@ One byte in the mapping ram has the following format:
 | 7,6  | 5,4  | 3,2  | 1,0  | 7,6  | 5,4  | 3,2  | 1,0  | Address    |
 | /CS0 | /CS0 | /CS0 | /CS0 | /CS1 | /CS1 | /CS1 | /CS1 | Peripheral |
 | /CS  | /CS  | /CS  | /CS  | WP   | WP   | WP   | WP   | RAMROM     |
-|      |      |      |      |      |      |      |      |            |
+|------|------|------|------|------|------|------|------|------------|
 
 So 128k are good for 128kx8 Bytes of Addressspace (=1MByte)
 The data gets transferred to the STM32 in compact form. Only the Start address, the chipselect and the bitmask (which is Low-active) for every addresses where someting changes are transferred.
