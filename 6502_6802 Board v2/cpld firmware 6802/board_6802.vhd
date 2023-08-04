@@ -46,10 +46,14 @@ PHI2 <= s_EVMA;
 s_nMRD <= NOT(RnW AND s_EVMA);
 s_nMWR <= NOT((NOT RnW) AND s_EVMA);
 
-s_BUS <= nRST AND (NOT(s_BUSCLK OR s_BCLKWS) OR E_CPU); -- Reset must release bus bc. of STM32!
+--s_BUS <= nRST AND (NOT(s_BUSCLK OR s_BCLKWS) OR E_CPU); -- Reset must release bus bc. of STM32!
+s_BUS <= nRST AND (VMA); --low if reset == 0 OR BA == 0 (only VMA here so we take this)
 
-nAOE <= NOT(s_BUS); 
-nDOE <= NOT(s_BUS); 
+--nAOE <= NOT(s_BUS); 
+--nDOE <= NOT(s_BUS); 
+nAOE <= '0';
+nDOE <= '0';
+
 nBUSFREE <= s_BUS;
 RES0 <= s_BUSCLK;
 RES1 <= s_BCLKWS;
