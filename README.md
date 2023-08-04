@@ -2,6 +2,7 @@
 
 A modular 8-bit Computer able to recreate (nearly) every microcomputer of the mid 70s to early 80s 
 in Hardware without FPGAs (although an FPGA can be added). Can also be used as a teaching tool for:
+
     - VHDL or Verilog
     - C
     - RTOS (STM32F401 runs ChibiOS Link: https://www.chibios.org)
