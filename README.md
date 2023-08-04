@@ -71,6 +71,7 @@ Version 2.00
 	- there is the prototype board in the repository for the position of the connectors and also the labels (pinout)
 
 ### Configuration RAM ###
+
 The configuration is done with 128kx8 fast ram on the peripheral boards. These will be configured from the STM32F401.
 One bit is for one Output (of which there are two) and for two addresses (resolution for chipselect is 2 bytes).
 The cs = 15 is for writing the main RAM, cs = 14 is the chip select for the RAMROM board.
@@ -101,7 +102,16 @@ A simple configuration block looks líke this:
     01 00 00 FF FF  :  END
     00 00 00        :  noting further
 
+### Working Recreations of old computers ###
 
+| Name                     | prim. IO    | chips used         | os                    | weblink                                                             |
+|--------------------------|-------------|--------------------|-----------------------|---------------------------------------------------------------------|
+| Grant Searle 6502 board  | serial      | MOS6502, MC6850    | OSI Basic             |Link: http://searle.x10host.com/6502/Simple6502.html                 |
+| Daryl Rictor 6502 board  | serial      | MOS6502, R6551     | SBC-2 (monitor only)  |Link: https://sbc.rictor.org/info2.html                              |
+| Daryl Rictor 6502 board  | serial      | MOS6502, MC6850    | SBC-2 (monitor only)  |Link: https://sbc.rictor.org/info2.html                              |
+| SYM1                     | serial      | MOS6502, UM6532    | SYM1 ( +BASIC +RAE)   |Link: http://retro.hansotten.nl/6502-sbc/synertek-sym-ktm/sym-1/     |
+| KIM1                     | serial      | MOS6502, UM6532    | KIM1                  |Link: http://retro.hansotten.nl/6502-sbc/kim-1-manuals-and-software/ |
+| Apple I                  | serial      | MOS6502, MĆ6821    | Wozmon + BASIC        |Link: http://retro.hansotten.nl/6502-sbc/apple-1/                    |
 
 ### linux single board computer (SBC) ###
 
