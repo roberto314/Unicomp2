@@ -23,6 +23,8 @@ It is different from other designs because of these points:
 * it is configureable via STM32 (RAM and ROM content, Clock frequency, chip select lines),
 * it can program the CPLDs (only XC9572 and XC9536 tested) from the olimex board - no external programmer and no cables to connect,
 * Board size is 100mm x 100mm - no backplane (like the PC/104 standard. Link: https://en.wikipedia.org/wiki/PC/104).
+* and maybe most convenient: it can change RAM and ROM content on the fly without crashing the CPU. 
+  For example starting the Apple I going to Basic, uploading the program in about half a second is really nice.
 
 
 Version 2.00
