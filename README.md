@@ -12,13 +12,24 @@ in Hardware without FPGAs (although an FPGA can be added). Can also be used as a
     - SPI and I2C Interfaces
     - CPLDs and FPGAs
 
+It is different from other designs because of these points:
+
+* it uses a 3.3V only Bus,
+* it uses fast RAM for chipselect with two byte resolution over the whole 1MB range
+* it uses one SRAM for RAM and ROM replacement (can be write writeprotected) with 512kB (1MB possible)
+* it uses a clock generator chip (DS1085) - no more crystals to change
+* it is configureable via STM32 (RAM and ROM content, Clock frequency, chip select lines)
+* it can program the CPLDs (only XC9572 and XC9536 tested) from the olimex board - no external programmer and no cables to connect.
+* Board size is 100mm x 100mm - no backplane (like the PC/104 standard. Link: https://en.wikipedia.org/wiki/PC/104)
+
+
 Version 2.00
 
 ### Unicomp modules ###
 
 * Input board:
 	- a simple board to connect the signals to a linux SBC like a Raspberry Pi or an Olimex A20
-	- also generates the main clock with a DS1085 chip.
+	- also generates the main clock with a DS1085 chip (in v2 this will be moved to the RAMROM board).
 	- no CPLD
 
 * CPU board:
@@ -40,10 +51,10 @@ Version 2.00
     - RAM for address decoding
 
 * RAMROM board:
-	- chip select fixed at #14 (for chipselect) and #15 (rom content)
-	- 512k of battery backed SRAM plus an extra RAM for address decoding
-	- a STM32F401 'blackpill' board to fill the SRAM with data over USB port from the SBC
-	- serial shell on the STM32 to change ROM content on the fly
+	- chip select fixed at #14 (for chipselect RAM) and #15 (rom content)
+	- 512k of SRAM plus an extra RAM for address decoding
+	- a STM32F401 'blackpill' board to fill the SRAMs with data over USB port from the SBC
+	- USB shell on the STM32 to change ROM content on the fly
 	- also configures the Address Range of all peripheral modules
 
 * Prototype board:
