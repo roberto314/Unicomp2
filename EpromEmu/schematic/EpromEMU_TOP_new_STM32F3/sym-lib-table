@@ -1,4 +1,0 @@
-(sym_lib_table
-  (version 7)
-  (lib (name "my_ics_new")(type "KiCad")(uri "/home/rob/Nextcloud/Documents/Elektronik/kicad/Libraries/my_own/my_ics_new.kicad_sym")(options "")(descr ""))
-)

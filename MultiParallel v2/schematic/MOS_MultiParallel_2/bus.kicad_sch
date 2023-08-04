@@ -10,7 +10,7 @@
     (rev "v1.1")
     (company "100% Offner")
     (comment 1 "v1: Initial")
-    (comment 2 "v1.1: ~{DOE} is now ~{CS_ACIA} and ~{CS_ACIA2}")
+    (comment 2 "v1.1: ~{DOE} is now ~{CS_ACIA} and ~{CS_ACIA2}, J27-1 is now inverted.")
   )
 
   (lib_symbols

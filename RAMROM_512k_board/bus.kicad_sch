@@ -9,7 +9,8 @@
     (date "2023-07-06")
     (rev "v1.3")
     (company "100% Offner")
-    (comment 1 "v1: Initial")
+    (comment 2 "v1.2: WP doesnt work, changed to OR-Gate U3.")
+    (comment 3 "v1.3: U21C wrong, ~{CSRAM} directly to U1, ~{RAMCSOR} new, Clock chip added")
   )
 
   (lib_symbols
