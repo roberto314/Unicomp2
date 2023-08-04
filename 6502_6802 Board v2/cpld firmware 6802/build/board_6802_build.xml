@@ -5,7 +5,7 @@
 <design name='board_6802'/>
 <rptdir name='board_6802'/>
 <xilinx path='/home/rob/Data/14.7/ISE_DS/ISE:'/>
-<projDir path='/home/rob/Data/rob/Projects/unicomp/6502 Board/cpld firmware 6802/build'/>
+<projDir path='/home/rob/Data/rob/Projects/Unicomp2/6502_6802 Board v2/cpld firmware 6802/build'/>
 <xslDir path='chipviewer/data/xsl'/>
 <fileDir path='/chipviewer/data/html'/>
 <dataFile file='index.htm'/>

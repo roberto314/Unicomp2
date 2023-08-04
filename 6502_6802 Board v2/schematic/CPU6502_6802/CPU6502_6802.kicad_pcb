@@ -4415,7 +4415,7 @@
     (property "Sheetname" "")
     (path "/be734383-72f6-4ad5-8631-e9987083b2b2")
     (attr smd)
-    (fp_text reference "U1" (at 0 -7.45 90) (layer "F.SilkS") hide
+    (fp_text reference "U1" (at -7.370195 -5.8678 90) (layer "F.SilkS")
         (effects (font (size 1 1) (thickness 0.15)))
       (tstamp e7a519d7-7783-4da0-94a1-103ab06b3a1f)
     )

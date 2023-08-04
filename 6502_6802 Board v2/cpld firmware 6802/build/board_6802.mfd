@@ -1,76 +1,113 @@
 MDF Database:  version 1.0
 MDF_INFO | board_6802 | XC9572XL-10-VQ44
-MACROCELL | 1 | 10 | clk_divider<0>
-ATTRIBUTES | 4457250 | 0
-INPUTS | 1 | DOT_CLK
-INPUTP | 1 | 9
+MACROCELL | 0 | 13 | clk_divider<0>
+ATTRIBUTES | 4588322 | 0
+OUTPUTMC | 3 | 0 | 4 | 2 | 17 | 0 | 14
+INPUTS | 1 | CLKF
+INPUTP | 1 | 27
 EQ | 2 | 
-   PHI0CPU.T = Vcc;
-   PHI0CPU.CLK = DOT_CLK;
+   PH0.T = Vcc;
+   PH0.CLK = CLKF;
 
-MACROCELL | 0 | 7 | nMRD_OBUF
+MACROCELL | 0 | 4 | clk_divider<2>
+ATTRIBUTES | 4588322 | 0
+OUTPUTMC | 4 | 0 | 8 | 0 | 5 | 1 | 5 | 1 | 7
+INPUTS | 3 | PH0  | clk_divider<1>  | CLKF
+INPUTMC | 2 | 0 | 13 | 2 | 17
+INPUTP | 1 | 27
+EQ | 2 | 
+   RES0.T = PH0 & clk_divider<1>;
+   RES0.CLK = CLKF;
+
+MACROCELL | 2 | 1 | PHI2_OBUF
 ATTRIBUTES | 264962 | 0
-INPUTS | 2 | VMA  | RnW
-INPUTP | 2 | 7 | 72
+INPUTS | 2 | VMA  | E_CPU
+INPUTP | 2 | 11 | 9
 EQ | 1 | 
-   !nMRD = VMA & RnW;
+   PHI2 = VMA & E_CPU;
 
-MACROCELL | 0 | 5 | nMWR_OBUF
+MACROCELL | 0 | 8 | nBUSFREE_OBUF
 ATTRIBUTES | 264962 | 0
-INPUTS | 2 | VMA  | RnW
-INPUTP | 2 | 7 | 72
-EQ | 1 | 
-   !nMWR = VMA & !RnW;
+INPUTS | 4 | E_CPU  | nRST  | RES0  | RES1
+INPUTMC | 2 | 0 | 4 | 0 | 5
+INPUTP | 2 | 9 | 21
+EQ | 2 | 
+   nBUSFREE = E_CPU & nRST
+	# !RES0 & nRST & !RES1;
 
-MACROCELL | 0 | 13 | PHI2_OBUF$BUF0
+MACROCELL | 0 | 5 | s_BCLKWS
+ATTRIBUTES | 8782630 | 0
+OUTPUTMC | 3 | 0 | 8 | 1 | 5 | 1 | 7
+INPUTS | 2 | RES0  | CLKF
+INPUTMC | 1 | 0 | 4
+INPUTP | 1 | 27
+EQ | 2 | 
+   RES1.D = RES0;
+   RES1.CLK = CLKF;
+
+MACROCELL | 2 | 17 | clk_divider<1>
+ATTRIBUTES | 4326176 | 0
+OUTPUTMC | 1 | 0 | 4
+INPUTS | 2 | PH0  | CLKF
+INPUTMC | 1 | 0 | 13
+INPUTP | 1 | 27
+EQ | 2 | 
+   clk_divider<1>.T = PH0;
+   clk_divider<1>.CLK = CLKF;
+
+MACROCELL | 1 | 10 | nMRD_OBUF
 ATTRIBUTES | 264962 | 0
-INPUTS | 1 | E_CPU
-INPUTP | 1 | 87
+INPUTS | 3 | VMA  | E_CPU  | RnW
+INPUTP | 3 | 11 | 9 | 7
 EQ | 1 | 
-   PHI2 = E_CPU;
+   !nMRD = VMA & E_CPU & RnW;
 
-MACROCELL | 0 | 14 | RnWout_OBUF$BUF0
+MACROCELL | 1 | 8 | nMWR_OBUF
 ATTRIBUTES | 264962 | 0
-INPUTS | 1 | RnW
-INPUTP | 1 | 72
+INPUTS | 3 | VMA  | E_CPU  | RnW
+INPUTP | 3 | 11 | 9 | 7
 EQ | 1 | 
-   RnWout = RnW;
+   !nMWR = VMA & E_CPU & !RnW;
 
-MACROCELL | 3 | 10 | RnWout_OBUF$BUF1
+MACROCELL | 1 | 5 | nDOE_OBUF
 ATTRIBUTES | 264962 | 0
-INPUTS | 1 | RnW
-INPUTP | 1 | 72
-EQ | 1 | 
-   DDIR = RnW;
+INPUTS | 4 | E_CPU  | nRST  | RES0  | RES1
+INPUTMC | 2 | 0 | 4 | 0 | 5
+INPUTP | 2 | 9 | 21
+EQ | 2 | 
+   !nDOE = E_CPU & nRST
+	# !RES0 & nRST & !RES1;
 
-MACROCELL | 3 | 14 | nDOE_OBUF
+MACROCELL | 1 | 7 | nDOE_OBUF$BUF0
 ATTRIBUTES | 264962 | 0
-INPUTS | 0
-EQ | 1 | 
-   nDOE = Gnd;
+INPUTS | 4 | E_CPU  | nRST  | RES0  | RES1
+INPUTMC | 2 | 0 | 4 | 0 | 5
+INPUTP | 2 | 9 | 21
+EQ | 2 | 
+   !nAOE = E_CPU & nRST
+	# !RES0 & nRST & !RES1;
 
-MACROCELL | 3 | 16 | nDOE_OBUF$BUF0
-ATTRIBUTES | 264962 | 0
-INPUTS | 0
-EQ | 1 | 
-   nAOE = Gnd;
+MACROCELL | 0 | 14 | nPH0_OBUF
+ATTRIBUTES | 8651558 | 0
+INPUTS | 2 | PH0  | CLKF
+INPUTMC | 1 | 0 | 13
+INPUTP | 1 | 27
+EQ | 2 | 
+   nPH0.D = PH0;
+   nPH0.CLK = CLKF;
 
-MACROCELL | 0 | 10 | nDOE_OBUF$BUF1
-ATTRIBUTES | 264962 | 0
-INPUTS | 0
-EQ | 1 | 
-   PHI1 = Gnd;
-
-PIN | DOT_CLK | 64 | 0 | N/A | 9 | 1 | 1 | 10
-PIN | VMA | 64 | 0 | N/A | 7 | 2 | 0 | 7 | 0 | 5
-PIN | RnW | 64 | 0 | N/A | 72 | 4 | 0 | 7 | 0 | 5 | 0 | 14 | 3 | 10
-PIN | E_CPU | 64 | 0 | N/A | 87 | 1 | 0 | 13
-PIN | PHI0CPU | 536871040 | 0 | N/A | 3
-PIN | nMRD | 536871040 | 0 | N/A | 15
-PIN | nMWR | 536871040 | 0 | N/A | 13
-PIN | PHI2 | 536871040 | 0 | N/A | 24
-PIN | RnWout | 536871040 | 0 | N/A | 26
-PIN | DDIR | 536871040 | 0 | N/A | 68
-PIN | nDOE | 536871040 | 0 | N/A | 82
-PIN | nAOE | 536871040 | 0 | N/A | 83
-PIN | PHI1 | 536871040 | 0 | N/A | 21
+PIN | CLKF | 64 | 0 | N/A | 27 | 5 | 0 | 13 | 0 | 4 | 0 | 5 | 2 | 17 | 0 | 14
+PIN | VMA | 64 | 0 | N/A | 11 | 3 | 2 | 1 | 1 | 10 | 1 | 8
+PIN | E_CPU | 64 | 0 | N/A | 9 | 6 | 2 | 1 | 0 | 8 | 1 | 10 | 1 | 8 | 1 | 5 | 1 | 7
+PIN | nRST | 64 | 0 | N/A | 21 | 3 | 0 | 8 | 1 | 5 | 1 | 7
+PIN | RnW | 64 | 0 | N/A | 7 | 2 | 1 | 10 | 1 | 8
+PIN | PH0 | 536871040 | 0 | N/A | 24
+PIN | RES0 | 536871040 | 0 | N/A | 12
+PIN | PHI2 | 536871040 | 0 | N/A | 29
+PIN | nBUSFREE | 536871040 | 0 | N/A | 20
+PIN | RES1 | 536871040 | 0 | N/A | 13
+PIN | nMRD | 536871040 | 0 | N/A | 3
+PIN | nMWR | 536871040 | 0 | N/A | 92
+PIN | nDOE | 536871040 | 0 | N/A | 89
+PIN | nAOE | 536871040 | 0 | N/A | 90
+PIN | nPH0 | 536871040 | 0 | N/A | 26

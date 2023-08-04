@@ -43,20 +43,20 @@ Optimization Effort                : 1
 =========================================================================
 *                          HDL Compilation                              *
 =========================================================================
-Compiling vhdl file "/home/rob/Data/rob/Projects/unicomp/6502 Board/cpld firmware 6802/board_6802.vhd" in Library work.
+Compiling vhdl file "/home/rob/Data/rob/Projects/Unicomp2/6502_6802 Board v2/cpld firmware 6802/board_6802.vhd" in Library work.
 Entity <board_6802> compiled.
-Entity <board_6802> (Architecture <Behavioral>) compiled.
+Entity <board_6802> (Architecture <behavioral>) compiled.
 
 =========================================================================
 *                     Design Hierarchy Analysis                         *
 =========================================================================
-Analyzing hierarchy for entity <board_6802> in library <work> (architecture <Behavioral>).
+Analyzing hierarchy for entity <board_6802> in library <work> (architecture <behavioral>).
 
 
 =========================================================================
 *                            HDL Analysis                               *
 =========================================================================
-Analyzing Entity <board_6802> in library <work> (Architecture <Behavioral>).
+Analyzing Entity <board_6802> in library <work> (Architecture <behavioral>).
 Entity <board_6802> analyzed. Unit <board_6802> generated.
 
 
@@ -67,23 +67,15 @@ Entity <board_6802> analyzed. Unit <board_6802> generated.
 Performing bidirectional port resolution...
 
 Synthesizing Unit <board_6802>.
-    Related source file is "/home/rob/Data/rob/Projects/unicomp/6502 Board/cpld firmware 6802/board_6802.vhd".
-WARNING:Xst:647 - Input <CLK_in> is never used. This port will be preserved and left unconnected if it belongs to a top-level block or it belongs to a sub-block and the hierarchy of this sub-block is preserved.
-WARNING:Xst:647 - Input <CS> is never used. This port will be preserved and left unconnected if it belongs to a top-level block or it belongs to a sub-block and the hierarchy of this sub-block is preserved.
-WARNING:Xst:1306 - Output <nRAMWE> is never assigned.
-WARNING:Xst:647 - Input <nHLT> is never used. This port will be preserved and left unconnected if it belongs to a top-level block or it belongs to a sub-block and the hierarchy of this sub-block is preserved.
+    Related source file is "/home/rob/Data/rob/Projects/Unicomp2/6502_6802 Board v2/cpld firmware 6802/board_6802.vhd".
+WARNING:Xst:1306 - Output <PHI1> is never assigned.
 WARNING:Xst:647 - Input <A> is never used. This port will be preserved and left unconnected if it belongs to a top-level block or it belongs to a sub-block and the hierarchy of this sub-block is preserved.
-WARNING:Xst:1306 - Output <MR> is never assigned.
+WARNING:Xst:647 - Input <RES2> is never used. This port will be preserved and left unconnected if it belongs to a top-level block or it belongs to a sub-block and the hierarchy of this sub-block is preserved.
+WARNING:Xst:647 - Input <nMR> is never used. This port will be preserved and left unconnected if it belongs to a top-level block or it belongs to a sub-block and the hierarchy of this sub-block is preserved.
 WARNING:Xst:647 - Input <MOSI> is never used. This port will be preserved and left unconnected if it belongs to a top-level block or it belongs to a sub-block and the hierarchy of this sub-block is preserved.
-WARNING:Xst:1306 - Output <nRAMCE> is never assigned.
 WARNING:Xst:647 - Input <SCK> is never used. This port will be preserved and left unconnected if it belongs to a top-level block or it belongs to a sub-block and the hierarchy of this sub-block is preserved.
-WARNING:Xst:647 - Input <CON0> is never used. This port will be preserved and left unconnected if it belongs to a top-level block or it belongs to a sub-block and the hierarchy of this sub-block is preserved.
-WARNING:Xst:647 - Input <CON1> is never used. This port will be preserved and left unconnected if it belongs to a top-level block or it belongs to a sub-block and the hierarchy of this sub-block is preserved.
-WARNING:Xst:647 - Input <CON2> is never used. This port will be preserved and left unconnected if it belongs to a top-level block or it belongs to a sub-block and the hierarchy of this sub-block is preserved.
-WARNING:Xst:1780 - Signal <w_n_ROMCS> is never used or assigned. This unconnected signal will be trimmed during the optimization process.
-WARNING:Xst:1780 - Signal <w_n_RAMCS> is never used or assigned. This unconnected signal will be trimmed during the optimization process.
-WARNING:Xst:1780 - Signal <w_cpuClk> is never used or assigned. This unconnected signal will be trimmed during the optimization process.
     Found 4-bit up counter for signal <clk_divider>.
+    Found 1-bit register for signal <s_BCLKWS>.
     Summary:
 	inferred   1 Counter(s).
 Unit <board_6802> synthesized.
@@ -95,6 +87,8 @@ HDL Synthesis Report
 Macro Statistics
 # Counters                                             : 1
  4-bit up counter                                      : 1
+# Registers                                            : 1
+ 1-bit register                                        : 1
 
 =========================================================================
 
@@ -115,11 +109,10 @@ Macro Statistics
 =========================================================================
 *                         Low Level Synthesis                           *
 =========================================================================
-WARNING:Xst:2677 - Node <clk_divider_1> of sequential type is unconnected in block <board_6802>.
-WARNING:Xst:2677 - Node <clk_divider_2> of sequential type is unconnected in block <board_6802>.
 WARNING:Xst:2677 - Node <clk_divider_3> of sequential type is unconnected in block <board_6802>.
 
 Optimizing unit <board_6802> ...
+  implementation constraint: INIT=s	 : s_BCLKWS
 
 =========================================================================
 *                           Partition Report                            *
@@ -143,30 +136,31 @@ Keep Hierarchy                     : no
 Target Technology                  : XC9572XL-10-VQ44
 
 Design Statistics
-# IOs                              : 32
+# IOs                              : 36
 
 Cell Usage :
-# BELS                             : 7
-#      GND                         : 1
-#      INV                         : 4
-#      OR2                         : 2
-# FlipFlops/Latches                : 1
-#      FD                          : 1
-# IO Buffers                       : 13
-#      IBUF                        : 4
-#      OBUF                        : 9
+# BELS                             : 16
+#      AND2                        : 4
+#      INV                         : 7
+#      OR2                         : 3
+#      XOR2                        : 2
+# FlipFlops/Latches                : 4
+#      FD                          : 4
+# IO Buffers                       : 15
+#      IBUF                        : 5
+#      OBUF                        : 10
 =========================================================================
 
 
 Total REAL time to Xst completion: 2.00 secs
-Total CPU time to Xst completion: 2.26 secs
+Total CPU time to Xst completion: 2.29 secs
  
 --> 
 
 
-Total memory usage is 494908 kilobytes
+Total memory usage is 495080 kilobytes
 
 Number of errors   :    0 (   0 filtered)
-Number of warnings :   19 (   0 filtered)
+Number of warnings :    8 (   0 filtered)
 Number of infos    :    0 (   0 filtered)
 

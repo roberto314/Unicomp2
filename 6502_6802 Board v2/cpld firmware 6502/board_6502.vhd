@@ -41,25 +41,11 @@ begin
 s_nMRD <= NOT(RnW AND PHI2CPU);       -- thats how it is usually done.
 s_nMWR <= NOT((NOT RnW) AND PHI2CPU); -- thats how it is usually done.
 
---nAOE <= '0'; --NOT(PHI2CPU);
---nAOE <= PHI1CPU;
---nAOE <= NOT(clk_divider(2)); --test -works
 -- nAOE <= '0'; -- works (2MHz possible)
-s_BUS <= nRST AND (s_BUSCLK OR PHI2CPU);
+s_BUS <= nRST AND (s_BUSCLK OR PHI2CPU); -- Reset must release bus bc. of STM32!
 
 nAOE <= NOT(s_BUS); -- test -works
-
--- For nDOE:
--- NOT(PHI2CPU); does not work
--- NOT(PHI1CPU); does not work
--- PHI1CPU; does not work
--- PHI2CPU; does not work
--- clk_divider(1); does not work
-
--- NOT(clk_divider(1)); does work!
-
---nDOE <= NOT(clk_divider(2)); 
-nDOE <= NOT(s_BUS); -- test
+nDOE <= NOT(s_BUS); -- test -works
 nBUSFREE <= s_BUS;
 -------------------- external RD and WR Signals ---------------
 nMRD <= s_nMRD;
@@ -75,7 +61,7 @@ process (CLKF)
     nPH0 <= NOT(s_BUSCLK);
     PH0 <= s_BUSCLK;
 
-process (CLKF, s_BUSCLK) --this delays the PHI0 to the CPU for half period of CLKF (8MHz)
+process (CLKF, s_BUSCLK) --this delays the PHI0 to the CPU for half period of CLKF (8MHz) -not needed!
     begin
         if falling_edge(CLKF) then
             --if s_BUSCLK = '1' then
