@@ -3,16 +3,16 @@
 A modular 8-bit Computer able to recreate (nearly) every microcomputer of the mid 70s to early 80s 
 in Hardware without FPGAs (although an FPGA can be added). Can also be used as a teaching tool for:
 
-    - VHDL or Verilog
-    - C
-    - RTOS (STM32F401 runs ChibiOS Link: https://www.chibios.org)
-    - Python
-    - bash and linux in general (Olimex board runs linux with fbterm and tmux)
-    - Harwaredesign
-    - Timing of CPUs
-    - maybe Assembler
-    - SPI and I2C Interfaces
-    - CPLDs and FPGAs
+* VHDL or Verilog
+* C
+* RTOS (STM32F401 runs ChibiOS Link: https://www.chibios.org)
+* Python
+* bash and linux in general (Olimex board runs linux with fbterm and tmux)
+* Harwaredesign
+* Timing of CPUs
+* maybe Assembler
+* SPI and I2C Interfaces
+* CPLDs and FPGAs
 
 It is different from other designs because of these points:
 
