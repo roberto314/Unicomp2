@@ -19,7 +19,7 @@ NET "A[15]"  LOC = "p7"  ;
 
 NET "RES0"  LOC = "p40"  ;
 NET "RES1"  LOC = "p41"  ;
-NET "RES2"  LOC = "p42"  ;
+NET "BA"    LOC = "p42"  ;
 
 NET "VMA"      LOC = "p39"  ;
 NET "nBUSFREE" LOC = "p43"  ;

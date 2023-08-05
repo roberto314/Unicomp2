@@ -68,9 +68,9 @@ Performing bidirectional port resolution...
 
 Synthesizing Unit <board_6802>.
     Related source file is "/home/rob/Data/rob/Projects/Unicomp2/6502_6802 Board v2/cpld firmware 6802/board_6802.vhd".
+WARNING:Xst:647 - Input <BA> is never used. This port will be preserved and left unconnected if it belongs to a top-level block or it belongs to a sub-block and the hierarchy of this sub-block is preserved.
 WARNING:Xst:1306 - Output <PHI1> is never assigned.
 WARNING:Xst:647 - Input <A> is never used. This port will be preserved and left unconnected if it belongs to a top-level block or it belongs to a sub-block and the hierarchy of this sub-block is preserved.
-WARNING:Xst:647 - Input <RES2> is never used. This port will be preserved and left unconnected if it belongs to a top-level block or it belongs to a sub-block and the hierarchy of this sub-block is preserved.
 WARNING:Xst:647 - Input <nMR> is never used. This port will be preserved and left unconnected if it belongs to a top-level block or it belongs to a sub-block and the hierarchy of this sub-block is preserved.
 WARNING:Xst:647 - Input <MOSI> is never used. This port will be preserved and left unconnected if it belongs to a top-level block or it belongs to a sub-block and the hierarchy of this sub-block is preserved.
 WARNING:Xst:647 - Input <SCK> is never used. This port will be preserved and left unconnected if it belongs to a top-level block or it belongs to a sub-block and the hierarchy of this sub-block is preserved.
@@ -140,8 +140,8 @@ Design Statistics
 
 Cell Usage :
 # BELS                             : 14
-#      AND2                        : 5
-#      INV                         : 5
+#      AND2                        : 4
+#      INV                         : 6
 #      OR2                         : 2
 #      XOR2                        : 2
 # FlipFlops/Latches                : 4
@@ -152,13 +152,13 @@ Cell Usage :
 =========================================================================
 
 
-Total REAL time to Xst completion: 2.00 secs
-Total CPU time to Xst completion: 2.41 secs
+Total REAL time to Xst completion: 3.00 secs
+Total CPU time to Xst completion: 2.24 secs
  
 --> 
 
 
-Total memory usage is 495072 kilobytes
+Total memory usage is 495088 kilobytes
 
 Number of errors   :    0 (   0 filtered)
 Number of warnings :    8 (   0 filtered)

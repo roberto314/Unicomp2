@@ -79,8 +79,9 @@ void cmd_br(BaseSequentialStream *chp, int argc, char *argv[]){
   (void)* argv;
   (void)argc;
   int32_t address, acnt, lcnt;
-  uint8_t d, line=0;
+  uint8_t d, ccnt=0;
   uint8_t data[256];
+  uint8_t ascii[8], i=0, j;
   const char * const usage = "Usage: br count address \r\n";
   chprintf(chp, "Prints block of bytes from address\r\n");
   if (argc != 2) {
@@ -99,14 +100,23 @@ void cmd_br(BaseSequentialStream *chp, int argc, char *argv[]){
 
   for (acnt = 0; acnt < lcnt; acnt ++){
     d=data[acnt];
+    ascii[i++] = d;
     chprintf(chp, "%02x, ", d);
-    line++;
-    if (line % 8 == 0){
+    ccnt++;
+    if (ccnt % 8 == 0){
+      // dump ascii
+      for (j = 0; j<8; j++){
+        if ((ascii[j] > 0x1F) && (ascii[j] < 0x80)){
+          chprintf(chp, "%c", ascii[j]);
+        }
+        else chprintf(chp, " ");
+      }
+      i = 0;
       chprintf(chp, "\r\n");
     }
-    if (line % 32 == 0){
+    if (ccnt % 32 == 0){
       chprintf(chp, "Address now: %08x\r\n", address+acnt+1);
-      line = 0;
+      ccnt = 0;
     }
   }
 }

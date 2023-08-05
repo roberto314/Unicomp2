@@ -40,7 +40,8 @@ static SPIConfig spi_cfg_8 = { //Config for 8bits
 static void gptcb(GPTDriver *drv){
   (void)drv;
   BUS_in_use = 0;
-  palToggleLine(DEBUG);
+  DEBUG_HI;
+  //palToggleLine(DEBUG);
   //gptStopTimerI(drv);
 }
 /*
@@ -174,6 +175,7 @@ static void increment_address(void){
   CNT_ACTIVE;
   __NOP();
   CNT_INACTIVE;
+  __NOP();
 }
 
 void increment_address8(void){
@@ -197,17 +199,26 @@ void setup_address(int32_t address){
 
 static void latch_data_in(void){
   WE_ACTIVE;
-//  __NOP();
   __NOP();
+//  __NOP();
   WE_INACTIVE;
 }
 
 static void check_BUS(void){
-  /* Check if BUS is used at all. If not there is a timer callback after 10us
+  /* Check if BUS is used at all. If not there is a timer callback after 1ms
       which sets the variable BUS_in_use to 0 . */
+  DEBUG_LOW;
   BUS_in_use = 1;
-  gptStartContinuous(&GPTD5, 10U);
+  gptStartContinuous(&GPTD5, 1000U);
   while ((palReadLine(BUSFREE) == PAL_LOW) && BUS_in_use == 1);
+  if (DEBUGLEVEL >= 1){
+      if (BUS_in_use == 0){
+        chprintf(dbg, "BUSFREE is staying Low.\r\n");
+      }
+      else {
+        chprintf(dbg, "BUSFREE is changing.\r\n");
+      }
+  }
   gptStopTimer(&GPTD5);
 }
 
@@ -224,29 +235,37 @@ static void write_byte(uint8_t data){
   buf[0] = data;
   spiSend(SPI_DRIVER, 1, buf);
   latch_address();
+  chSysLock();
   wait_for_busfree(); // this adds about 130ns after falling edge of BUSFREE
   CNTOE_ACTIVE;
   __NOP();
   latch_data_in();
   CNTOE_INACTIVE;
+  chSysUnlock();
 }
 
 static uint8_t read_byte(void){
   uint8_t ret;
   latch_address();
 //  DEBUG_LOW;
+  chSysLock();
   wait_for_busfree(); // this adds about 130ns after falling edge of BUSFREE
 //  DEBUG_HI;
   CNTOE_ACTIVE;
   __NOP();
   __NOP();
   RAMOE_ACTIVE;
+//  __NOP();
   __NOP();
+  __NOP();
+//  __NOP();
   PLD_LOAD;
+//  __NOP();
   __NOP();
   PLD_IDLE;
   RAMOE_INACTIVE;
   CNTOE_INACTIVE;
+  chSysUnlock();
   spiReceive(SPI_DRIVER, 1, &ret);
   return ret;
 }
@@ -260,8 +279,10 @@ void write_single_byte(uint8_t data, int32_t address, uint8_t reset){
     BUS_in_use = 0;
   }
   write_byte(data);
-  TRESET_INACTIVE;
-  BUS_in_use = 1;
+  if (reset){
+    TRESET_INACTIVE;
+    BUS_in_use = 1;
+  }
 }
 
 uint8_t read_single_byte(int32_t address, uint8_t reset){
@@ -273,20 +294,24 @@ uint8_t read_single_byte(int32_t address, uint8_t reset){
     BUS_in_use = 0;
   }
   data = read_byte();
-  TRESET_INACTIVE;
-  BUS_in_use = 1;
+  if (reset){
+    TRESET_INACTIVE;
+    BUS_in_use = 1;
+  }
   return data;
 }
 
 uint8_t read_next_byte(void){
   uint8_t data = 0;
   increment_address();
+  __NOP();
   data = read_byte();
   return data;
 }
 
 void write_next_byte(uint8_t data){
   increment_address();
+  __NOP();
   write_byte(data);
 }
 
@@ -302,8 +327,10 @@ void read_block(int32_t address, int32_t len, uint8_t * data, uint8_t reset){
     *data++ = read_byte();
     increment_address();
   }
-  TRESET_INACTIVE;
-  BUS_in_use = 0;
+  if (reset){
+    TRESET_INACTIVE;
+    BUS_in_use = 1;
+  }
 }
 
 void write_block(int32_t address, int32_t len, uint8_t * data, uint8_t reset){
@@ -315,12 +342,16 @@ void write_block(int32_t address, int32_t len, uint8_t * data, uint8_t reset){
     TRESET_ACTIVE;
     BUS_in_use = 0;
   }
+  write_byte(*data++);
+  l--;
   while(l--){
-    write_byte(*data++);
     increment_address();
+    write_byte(*data++);
   }
-  TRESET_INACTIVE;
-  BUS_in_use = 1;
+  if (reset){
+    TRESET_INACTIVE;
+    BUS_in_use = 1;
+  }
 }
 
 void fill_struct(uint8_t* in, st_configdata_t* out){

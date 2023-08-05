@@ -37,7 +37,7 @@
 #define DEBUGPORT                   SD2
 #define OSTRICHPORT                 SDU1
 #define OSTRICHUSB                  TRUE
-#define DEBUGLEVEL                  3  // can go up to 3
+#define DEBUGLEVEL                  1  // can go up to 3
 //#define PORTAB_BLINK_LED1           PAL_LINE(GPIOF, 9U)// LINE_LED
 //#define PORTAB_BLINK_LED1           LINE_LED
 

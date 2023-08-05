@@ -363,6 +363,9 @@ static THD_FUNCTION(CharacterInputThread, arg) {
           debug_print_state("Got Checksum: ", state);
           debug_print_val1("Checksum: ", cs);
           if (c == cs){
+            if (DEBUGLEVEL >= 1){
+              chprintf(dbg, "Read (R): Addr.: %6X, count: 0x%04x\r\n", address+0x10000*bankrw, count);
+            }
             //streamWrite(ost, (const unsigned char *)buffer, count);
             checksum = 0;
             read_block(address+0x10000*bankrw, count, tbuf, 0);
@@ -442,7 +445,7 @@ static THD_FUNCTION(CharacterInputThread, arg) {
             debug_print_val1("Checksum: ", cs);
             if (c == cs){
               if (DEBUGLEVEL >= 1){
-                chprintf(dbg, "Bulk Write (ZW): %6X, cnt: %03d, data: %02X %02X %02X %02X\r\n", address, count, tbuf[0], tbuf[1], tbuf[2], tbuf[3]);
+                chprintf(dbg, "Bulk Write (ZW): %6X, cnt: %03d, data: %02X %02X %02X %02X ... %02X %02X\r\n", address, count, tbuf[0], tbuf[1], tbuf[2], tbuf[3], tbuf[254], tbuf[255]);
               }
               write_block(address, count, tbuf, 0);
               chprintf(ost, "O");            }
@@ -484,20 +487,34 @@ static THD_FUNCTION(CharacterInputThread, arg) {
             state = IDLE;
             debug_print_state("Got Checksum: ", state);
             debug_print_val1("Checksum: ", cs);
+// 1            if (c == cs){
+// 1              if (DEBUGLEVEL >= 1){
+// 1                chprintf(dbg, "Bulk Read (ZR): Addr.: %6X, blocks: 0x%04x\r\n", address, count);
+// 1              }
+// 1              checksum = 0;
+// 1
+// 1              while (count){ //Blocks of 256 Bytes
+// 1                read_block(address, 256, tbuf, 0);
+// 1                for (i=0; i<256; i++){
+// 1                  checksum += tbuf[i];
+// 1                  streamPut(ost, tbuf[i]);
+// 1                }
+// 1                address += 256;
+// 1                count--;
+// 1              }
+// 1              streamPut(ost, checksum);
+// 1              //chprintf(dbg, "Bulk Read: Checksum: %u\r\n", checksum);
+// 1            }
             if (c == cs){
               if (DEBUGLEVEL >= 1){
                 chprintf(dbg, "Bulk Read (ZR): Addr.: %6X, blocks: 0x%04x\r\n", address, count);
               }
-              //streamWrite(ost, (const unsigned char *)buffer, count);
               checksum = read_single_byte(address++, 0);
               streamPut(ost, checksum);
               count *= 256;
               count --;
 
               while (count){ //Blocks of 256 Bytes
-                //chprintf(dbg, "Count: %u\r\n", i);
-                //read_block(address+256*i, 256, tbuf);
-                //tbuf[0] = read_single_byte(address++, 0);
                 tbuf[0] = read_next_byte();
                 address++;
                 checksum += tbuf[0];
@@ -505,7 +522,6 @@ static THD_FUNCTION(CharacterInputThread, arg) {
                 count--;
               }
               streamPut(ost, checksum);
-              //chprintf(dbg, "Bulk Read: Checksum: %u\r\n", checksum);
             }
             else{
               chprintf(dbg, "Checksum ERROR\r\n");

@@ -7,7 +7,7 @@ entity board_6802 is
         A        : in std_logic_vector(15 downto 0);
         RES0     : out std_logic;
         RES1     : out std_logic;
-        RES2     : in std_logic;
+        BA       : in std_logic;
         MOSI     : in  STD_LOGIC; -- SPI Interface
         SCK      : in  STD_LOGIC; -- SPI Interface
         nDOE     : out STD_LOGIC := '1'; -- Data Buffer Enable
@@ -38,6 +38,7 @@ architecture Behavioral of board_6802 is
     signal s_BCLKWS     : std_logic :='1';
     signal s_CPUCLK     : std_logic :='1';
     signal s_EVMA       : std_logic :='1';
+    signal s_BUSTEMP    : std_logic :='1';
 
 begin
 s_EVMA <= E_CPU AND VMA;
@@ -47,7 +48,8 @@ s_nMRD <= NOT(RnW AND s_EVMA);
 s_nMWR <= NOT((NOT RnW) AND s_EVMA);
 
 --s_BUS <= nRST AND (NOT(s_BUSCLK OR s_BCLKWS) OR E_CPU); -- Reset must release bus bc. of STM32!
-s_BUS <= nRST AND (VMA); --low if reset == 0 OR BA == 0 (only VMA here so we take this)
+s_BUS <= nRST AND NOT s_BUSTEMP; --Test
+--s_BUS <= nRST AND NOT(BA); --low if reset == 0 OR BA == 1
 
 nAOE <= NOT(s_BUS); 
 nDOE <= NOT(s_BUS); 
@@ -55,6 +57,7 @@ nDOE <= NOT(s_BUS);
 nBUSFREE <= s_BUS;
 RES0 <= s_BUSCLK;
 RES1 <= s_BCLKWS;
+s_BUSTEMP <= (NOT s_EVMA) OR s_BCLKWS;
 -------------------- external RD and WR Signals ---------------
 nMRD <= s_nMRD;
 nMWR <= s_nMWR;
