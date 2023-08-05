@@ -67,6 +67,7 @@ def read_file(fn):
 	try:
 		with open(fn, "rb") as f:
 			img = f.read()
+			print(f'File {fn} read.')
 			return img
 	except Exception as e:
 		print(f'File {fn} not found!')
@@ -80,15 +81,15 @@ def upload_image(dir, cf, i):
 		imgnumber = dir + '/' + cf[name]['file']
 		size = imgend - imgstart + 1
 		#print(f'Image {i}: {imgstart:04X} to {imgend:04X} (size: {size} bytes) file: {imgnumber}')
-		print(f'{bcolors.OKGREEN}------------ trying to upload {name} from: {imgstart:04X} to {imgend:04X} --------------{bcolors.ENDC}')
+		print(f'{bcolors.OKGREEN}------------ trying to upload {imgnumber} from: {imgstart:04X} to {imgend:04X} {bcolors.ENDC}')
 		img = read_file(imgnumber)
 		if len(img) != size:
-			print(f'{bcolors.FAIL}          ###### Size is too big! ######{bcolors.ENDC}')
+			print(f'{bcolors.FAIL}      ###### Size is wrong! (Image: 0x{len(img):04X} Space: 0x{size:04X}) ######{bcolors.ENDC}')
 			exit()
 		fr.main('write', img, imgstart)
 		return 0
 	except Exception as e:
-		print(f'Error {e}!')
+		print(f'Error in upload_image: {e}!')
 		return 1
 
 def make_bytes(val):
@@ -576,6 +577,11 @@ def main(dir, cf, norom):
 			print(f'{bcolors.FAIL}        ###### actually NOT uploading rom image! ######{bcolors.ENDC}')
 			break
 		i += 1
+		try:
+			img = cf['img'+str(i)]
+		except Exception as e:
+			print(f'No more Images. {e}')
+			break
 
 	print(f'{bcolors.OKGREEN}-------------------------- Reset inactive --------------------------{bcolors.ENDC}')
 	s_rst.main(1)  # Reset inactive - Run

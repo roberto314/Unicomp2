@@ -19,6 +19,13 @@ EQ | 2 |
    RES0.T = PH0 & clk_divider<1>;
    RES0.CLK = CLKF;
 
+MACROCELL | 0 | 8 | nBUSFREE_OBUF
+ATTRIBUTES | 264962 | 0
+INPUTS | 2 | nRST  | VMA
+INPUTP | 2 | 21 | 11
+EQ | 1 | 
+   nBUSFREE = nRST & VMA;
+
 MACROCELL | 2 | 17 | clk_divider<1>
 ATTRIBUTES | 4326176 | 0
 OUTPUTMC | 1 | 0 | 4
@@ -59,12 +66,19 @@ INPUTP | 2 | 11 | 9
 EQ | 1 | 
    PHI2 = VMA & E_CPU;
 
-MACROCELL | 0 | 8 | nBUSFREE_OBUF
+MACROCELL | 1 | 5 | nDOE_OBUF
 ATTRIBUTES | 264962 | 0
-INPUTS | 2 | VMA  | nRST
-INPUTP | 2 | 11 | 21
+INPUTS | 2 | nRST  | VMA
+INPUTP | 2 | 21 | 11
 EQ | 1 | 
-   nBUSFREE = VMA & nRST;
+   !nDOE = nRST & VMA;
+
+MACROCELL | 1 | 7 | nDOE_OBUF$BUF0
+ATTRIBUTES | 264962 | 0
+INPUTS | 2 | nRST  | VMA
+INPUTP | 2 | 21 | 11
+EQ | 1 | 
+   !nAOE = nRST & VMA;
 
 MACROCELL | 0 | 14 | nPH0_OBUF
 ATTRIBUTES | 8651558 | 0
@@ -75,30 +89,18 @@ EQ | 2 |
    nPH0.D = PH0;
    nPH0.CLK = CLKF;
 
-MACROCELL | 1 | 5 | nDOE_OBUF
-ATTRIBUTES | 264962 | 0
-INPUTS | 0
-EQ | 1 | 
-   nDOE = Gnd;
-
-MACROCELL | 1 | 7 | nDOE_OBUF$BUF0
-ATTRIBUTES | 264962 | 0
-INPUTS | 0
-EQ | 1 | 
-   nAOE = Gnd;
-
 PIN | CLKF | 64 | 0 | N/A | 27 | 5 | 0 | 13 | 0 | 4 | 2 | 17 | 0 | 5 | 0 | 14
-PIN | VMA | 64 | 0 | N/A | 11 | 4 | 1 | 10 | 1 | 8 | 2 | 1 | 0 | 8
+PIN | nRST | 64 | 0 | N/A | 21 | 3 | 0 | 8 | 1 | 5 | 1 | 7
+PIN | VMA | 64 | 0 | N/A | 11 | 6 | 0 | 8 | 1 | 10 | 1 | 8 | 2 | 1 | 1 | 5 | 1 | 7
 PIN | E_CPU | 64 | 0 | N/A | 9 | 3 | 1 | 10 | 1 | 8 | 2 | 1
 PIN | RnW | 64 | 0 | N/A | 7 | 2 | 1 | 10 | 1 | 8
-PIN | nRST | 64 | 0 | N/A | 21 | 1 | 0 | 8
 PIN | PH0 | 536871040 | 0 | N/A | 24
 PIN | RES0 | 536871040 | 0 | N/A | 12
+PIN | nBUSFREE | 536871040 | 0 | N/A | 20
 PIN | RES1 | 536871040 | 0 | N/A | 13
 PIN | nMRD | 536871040 | 0 | N/A | 3
 PIN | nMWR | 536871040 | 0 | N/A | 92
 PIN | PHI2 | 536871040 | 0 | N/A | 29
-PIN | nBUSFREE | 536871040 | 0 | N/A | 20
-PIN | nPH0 | 536871040 | 0 | N/A | 26
 PIN | nDOE | 536871040 | 0 | N/A | 89
 PIN | nAOE | 536871040 | 0 | N/A | 90
+PIN | nPH0 | 536871040 | 0 | N/A | 26

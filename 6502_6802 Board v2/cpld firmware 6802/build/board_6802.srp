@@ -141,8 +141,7 @@ Design Statistics
 Cell Usage :
 # BELS                             : 14
 #      AND2                        : 5
-#      GND                         : 1
-#      INV                         : 4
+#      INV                         : 5
 #      OR2                         : 2
 #      XOR2                        : 2
 # FlipFlops/Latches                : 4
@@ -154,7 +153,7 @@ Cell Usage :
 
 
 Total REAL time to Xst completion: 2.00 secs
-Total CPU time to Xst completion: 2.30 secs
+Total CPU time to Xst completion: 2.41 secs
  
 --> 
 

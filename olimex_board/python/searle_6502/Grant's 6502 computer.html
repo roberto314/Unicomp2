@@ -1,0 +1,466 @@
+<html><head><script type="text/javascript">
+    (function() {
+      var container = document.querySelector('#_tcx-m82nzag80f');
+      if (!container) {
+        return;
+      }
+
+      function addToContainer(url, text) {
+        const wrapper = document.createElement('div');
+        wrapper.setAttribute('data-tcx-url', url);
+        wrapper.innerText = text;
+        container.appendChild(wrapper);
+      }
+
+      const fetch = window.fetch
+      window.fetch = function() {
+        return Promise.resolve(fetch.apply(window, arguments))
+            .then(async response => {
+              if (response.ok) {
+                try {
+                  const clone = response.clone();
+                  const json = await clone.json();
+                  addToContainer(clone.url, JSON.stringify(json));
+                } catch (err) {}
+              }
+              return response;
+            });
+      };
+
+      var XHR = XMLHttpRequest.prototype;
+      var send = XHR.send;
+      var open = XHR.open;
+      XHR.open = function(method, url) {
+        this.url = url;
+        return open.apply(this, arguments);
+      };
+      XHR.send = function() {
+        this.addEventListener('load', function() {
+          try {
+            const response = this.response;
+            if (response && response.length) {
+              const firstChar = response[0];
+              if (firstChar === '[' || firstChar === '{') {
+                addToContainer(this.url, response);
+              }
+            }
+          } catch (err) {
+            // No-op.
+          }
+        });
+        return send.apply(this, arguments);
+      };
+    })();
+  </script>
+<meta http-equiv="Content-Language" content="en-gb">
+<meta name="GENERATOR" content="Microsoft FrontPage 5.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="-1">
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<title>Grant's 6502 computer</title>
+<script charset="utf-8" src="Grant's%206502%20computer_files/button.e7f9415a2e000feaab02c86dd5802747.js"></script></head>
+
+<body>
+
+<p><img src="Grant's%206502%20computer_files/6502cpu.jpg" width="600" height="178" border="0"></p>
+<p><b><font size="7" face="Arial">Grant's 8-chip (or 7-chip) 6502 computer<br>
+</font><i><font size="4" face="Arial">(only 7 or 6 chips if using a USB to TTL 
+serial cable)</font></i></b></p>
+<p><b><font size="4" face="Arial">- a fully operational 6502 computer running BASIC 
+can't get simpler than this!</font></b></p>
+
+<p><font face="Arial">by Grant Searle</font></p>
+
+<font face="Arial"><font color="#0000FF">For news and updates, follow me on 
+Twitter:</font><br>
+</font>
+<iframe id="twitter-widget-0" scrolling="no" allowtransparency="true" allowfullscreen="true" class="twitter-follow-button twitter-follow-button-rendered" style="position: static; visibility: visible; width: 84px; height: 28px;" title="Twitter Follow Button" src="Grant's%206502%20computer_files/follow_button.html" data-screen-name="zx80nut" frameborder="0"></iframe>
+<script id="twitter-wjs" src="Grant's%206502%20computer_files/widgets.js"></script><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+
+<p><font face="Arial"><i>Last update: 4th February 2014</i></font></p>
+
+<p><i><font face="Arial"><a href="http://searle.x10host.com/z80/SimpleZ80.html">[FOR A <b>Z80</b> 
+VERSION OF THE MINIMAL COMPUTER, CLICK HERE]</a></font></i><font face="Arial"><br>
+</font>
+<i><font face="Arial"><a href="http://searle.x10host.com/6809/Simple6809.html">[FOR A <b>6809</b> 
+VERSION OF THE MINIMAL COMPUTER, CLICK HERE]</a></font></i></p>
+
+<p><b><i><font face="Arial"><a href="http://searle.x10host.com/Multicomp/index.html">[FOR A VERSION ON 
+A LOW-COST FPGA BOARD CLICK HERE]</a></font></i></b></p>
+
+<p><i><font size="4" face="Arial" color="#800000"><b>Please 
+note that you are NOT allowed to reproduce <u>any</u> of this page elsewhere on 
+the Web without my permission.<br>
+</b></font></i><b><font face="Arial" color="#800000">WORK IN PROGRESS - REGULARLY UPDATED - 
+PLEASE CHECK BACK IN A DAY OR TWO AND ENSURE YOU REFRESH YOUR BROWSER PAGE TO 
+PICK UP LATEST VERSION.  Thanks.</font></b></p><hr>
+<p><b><font size="5" face="Arial">Specification</font></b></p>
+<p><font face="Arial">16K ROM<br>
+32K RAM<br>
+6502 Processor with a 1.8432MHz crystal (0.9216MHz or 1.8432MHz clock)<br>
+115200 Baud serial interface, RS232 specification voltage levels<br>
+Hardware serial handshaking ensures characters not lost when transferring 
+programs from the PC to this board<br>
+Power consumption - 160mA<br>
+Microsoft BASIC<br>
+Minimal possible component count - 8 (or 7 if running the CPU at 1.8MHz) ICs and a small number of discrete 
+components<br>
+&nbsp;</font></p>
+<hr>
+<p><font face="Arial"><b><font size="5">Memory Map</font></b></font></p>
+<p><font face="Arial">0000-7FFF 32K RAM<br>
+8000-9FFF FREE SPACE (8K)<br>
+A000-BFFF SERIAL INTERFACE (minimally decoded)<br>
+C000-FFFF 16K ROM (BASIC from C000 TO DED3, serial routines FF00 to 
+FFFF, so a large amount of free space suitable for a monitor 
+etc)</font></p>
+<hr>
+<p><b><font size="5" face="Arial">Circuit diagram</font></b></p>
+<p><font face="Arial">The purpose of this computer is to create the simplest 
+possible machine with a high speed interface, good amount of RAM and also a good 
+implementation of BASIC.<br>
+The design that I produced is shown here, and is probably the simplest 6502 
+circuit that can be done to fulfil what I need. This can be used as the basis of 
+more complex machines.<br>
+The ACIA is very minimally decoded. If a more refined decoding is needed then it 
+is straightforward to add additional gates or a 74LS138 decoder. However, even 
+with this simple arrangement, there is still 8K of address space free for 
+interfacing as needed.</font></p>
+<p><font face="Arial">Data I/O is high speed at 115200 baud, and if data 
+transfer between the PC and this board is not controlled then characters will be 
+lost. To ensure data transfer is stopped when the 6502 is not ready for it (ie. 
+the previous byte hasn't been read) the 6850 receive interrupt is enabled. As 
+soon as a character is received, the IRQ on this chip will go low. This is 
+connected, via an inverter, to the /RTS serial connection. The /RTS will 
+therefore go high as soon as a character is received. It will remain high until 
+the character is read (a read of the data resets the IRQ status). Once it has 
+been read, the /IRQ will go high, so the /RTS will go low, allowing the PC to 
+resume transfer. This is repeated as each character is received, controlling the 
+data transfer until the 6502 is ready for it.</font></p>
+<p><i><b><font face="Arial">NOTE: 8 Chips are needed if you want to run on a 
+1MHz CPU (0.9216MHz clock). However, only 7 chips are needed if using a 2MHz CPU 
+(1.8432MHz clock).<br>
+I have found that ALL my 6502 1MHz chips will run at the 1.8432MHz speed, so U8 
+is not needed and the 7 chip design works.<br>
+Additionally, all of the standard 6850 chips that I have worked perfectly at the 
+speeds required for this circuit even though the circuit requirement is faster 
+than their specification. Therefore, you are unlikely to have any issues. 
+However, I would recommend you buy the "B" speed grade ACIA ie. 68B50 if 
+possible.</font></b></i></p>
+<p><font face="Arial">Power supply pins and any (optional) decoupling capacitors are <u>not</u> shown and need to be 
+connected to the appropriate power rails.</font></p>
+<p><img src="Grant's%206502%20computer_files/6502SbcSchematic%201.1.gif" width="1000" height="678" border="0"></p>
+<p>&nbsp;</p>
+<p><font face="Arial">A MAX202 could be used instead of the MAX232, in which case C1-C5 
+should be 0.1uF.</font></p>
+<p><b><font size="4" face="Arial">Alternative serial (and power) connection</font></b></p>
+<p><font face="Arial">The circuit assumes a connection to a standard RS232 port. 
+However, this could also be connected to a USB to TTL (5V) serial cable instead. 
+If doing this, the MAX232, capacitors C1 to C5 and the serial connector are not 
+needed. This therefore reduces the chip count by 1.</font></p>
+<p><img src="Grant's%206502%20computer_files/FTDI_Cable.gif" width="650" height="243" border="0"></p>
+<p><font face="Arial">By using a USB to serial cable the board can also be 
+powered from the USB port down the same cable (a powered hub could be used if 
+higher current needed), eliminating the need for a separate power supply for 
+this board. Just connect the +5V out on the cable to the Vcc supply on the 
+board, as shown on the dotted line.<br>
+<font color="#FF0000"><b>IMPORTANT</b> - only connect Vcc to the USB cable if 
+there is no other power supplied to the board.</font><br>
+The 2k7 resistors are present in the diagram because the board may be powered 
+but not plugged in to the USB cable, or the USB cable could be plugged in and 
+active without power to the board. These limit the current to 
+avoid power being drawn through the interface pins. If always powering the board 
+via the cable then no resistors are necessary.</font></p>
+<hr>
+<p><font face="Arial"><b><font size="5">Prototypes</font></b></font></p>
+<p><font face="Arial">The circuit shown on this page is built here. As you can 
+see, I have attached labels (download <a href="http://searle.x10host.com/labels/index.html">HERE</a>) to the chips to allow the wiring to be very 
+straightforward and error-free. Orange wiring is the address lines, green is the 
+data lines, red and black are power lines and yellow, white and pink are the other connections.</font></p>
+<p><font face="Arial">7 chip version (CPU running at 1.8432MHz):<br>
+<img src="Grant's%206502%20computer_files/prototype7chip.jpg" width="600" height="336" border="0"></font></p>
+<p><font face="Arial">
+8 chip version (CPU running at 0.9216MHz):<br>
+<img src="Grant's%206502%20computer_files/prototype.jpg" width="600" height="336" border="0"></font></p>
+<hr>
+<p><font face="Arial"><b><font size="5">ROM BASIC assembly listing and ROM HEX 
+file</font></b></font></p>
+<p><font face="Arial">
+Taken from the "pagetable.com" site (http://www.pagetable.com/?p=46), I modified 
+the listings to remove the "SEGMENT" style coding and returned it to using ORG 
+statements. The segment coding would not show a proper "listing" file (address 
+spaces and jump locations were not set). Using ORGs, the listing then became a 
+useable file. I also brought all of the core BASIC code back into one file so 
+that I can see it and maintain it properly.</font></p>
+<p><font face="Arial">
+The BASIC is (<i>currently - may change</i>) Microsoft BASIC for the OSI computer, relocated to $C000, with the 
+serial I/O and control-C routines modified to point to my serial handler 
+routines.</font></p>
+<p><font face="Arial">
+I wrote the serial handler to control the text I/O, along with suitable Control-C 
+break handling.</font></p>
+<p><b><font size="2" face="Arial">Update 4th February 2014 : Fixed delete key to 
+use normal delete instead of "_" character (OSI BASIC)</font></b></p>
+<p><font face="Arial">The <a href="http://searle.x10host.com/6502/osi_bas.zip">attached ZIP</a> file contains 
+the following:</font></p>
+<p><font face="Arial"><u>Source code</u><br>
+<b>osi_bas.s</b> &lt;== the Microsoft OSI BASIC and I/O routines SOURCE all in a 
+single file. My I/O routines are at the end of it.</font></p>
+<p><font face="Arial"><u>Files to allow the source to be assembled on a Windows 
+based machine</u><br>
+<b>assemble.bat</b> &lt;== double click to assemble osi_bas.s and link to binary 
+file "osi_bas.bin". This should be exactly 16K<br>
+<b>osi_bas.cfg</b> &lt;== configuration file for the linker (ensure ORG and entries 
+in this file match if you change any)<br>
+<b>ca65.exe</b> &lt;== the assembler from the cc65 package. Use this. The new 
+version on the cc65 site crashes!<br>
+<b>ld65.exe</b> &lt;== linker from the cc65 package</font></p>
+<p><font face="Arial"><u>Output files</u><br>
+<b>osi_bas.bin</b> &lt;== the ROM fine in pure binary<br>
+<b>osi_bas.lst</b> &lt;== Assembly listing file<br>
+<b>rom.hex</b> &lt;== the ROM fine in standard INTEL-HEX format</font></p>
+<p><font face="Arial">To allow simple re-assembly, extract all files to the same 
+folder. Freeware utilities are available to convert the "bin" file to HEX or s19 
+(etc) - use your internet search tool to find. </font></p>
+<p><font face="Arial">All source code, assembler binaries and the HEX dump of the ROM is
+<a href="http://searle.x10host.com/6502/osi_bas.zip">here</a>. 
+It is in standard INTEL-HEX format for uploading to a suitable programmer.</font></p>
+<p><font face="Arial"><u><b>Acknowledgements<br>
+</b></u>All work done by original authors are respectfully recognised.<br>
+Original split source code from <a href="http://www.pagetable.com/?p=46">http://www.pagetable.com/?p=46</a><br>
+Assembler and linker from <a href="http://www.cc65.org/">http://www.cc65.org/</a> 
+(older version - cc65-win32-2.13.3-1</font>)</p>
+<hr>
+<p><b><font size="5" face="Arial">ROM BASIC - details of what has been 
+included/excluded</font></b></p>
+<p><font face="Arial"><b>INCLUDED TOKENS</b></font></p>
+<p><font face="Arial">END, FOR, NEXT, DATA, INPUT, DIM, READ, LET, GOTO, RUN, 
+IF, RESTORE, GOSUB, RETURN, REM, STOP, ON, NULL, WAIT, DEF, POKE, PRINT, CONT, 
+LIST, CLEAR, NEW, TAB(, TO, FN, SPC(, THEN, NOT, STEP</font></p>
+<p><font face="Arial">SGN, INT, ABS, USR, FRE, POS, SQR, RND, LOG, EXP, COS, 
+SIN, TAN, ATN, PEEK, LEN, STR$, VAL, ASC, CHR$, LEFT$, RIGHT$, MID$</font></p>
+<p><font face="Arial">+, -, *, /, ^, AND, OR, &gt;, +, &lt;</font></p>
+<p><b><font face="Arial">UNPROGRAMMED TOKENS</font></b></p>
+<p><font face="Arial">LOAD, SAVE</font></p>
+<hr>
+<p><font face="Arial"><b><font size="5">Powering-up</font></b></font></p>
+<p><font face="Arial">You will need a suitable connection to a PC or other 
+terminal display. You will probably need a null-modem cable to connect this to a 
+PC serial port. Here is my recommended wiring.</font></p>
+<p><font face="Arial"><img src="Grant's%206502%20computer_files/NullModem.jpg" width="500" height="241" border="0"></font></p>
+<p><font face="Arial">Connect to a PC or similar terminal, with <b>115200 baud, 8 
+bits, hardware handshake, no parity, 1 stop bit.</b></font></p>
+<p><font face="Arial">Power on the board and press the RESET button. You will 
+see the following message on the terminal:</font></p>
+<p><font face="Courier New"><b>Cold [C] or warm [W] start?</b></font></p>
+<p><font face="Arial">Press C.The following will then be displayed:</font></p>
+<p><font face="Courier New"><b>MEMORY SIZE?</b></font></p>
+<p><font face="Arial">Press the [Enter] key to use all available.
+After a few seconds (memory test) the following will appear on the terminal:</font></p>
+<p><font face="Courier New"><b>TERMINAL WIDTH?</b></font></p>
+<p><font face="Arial">Press the [Enter] key to use the default. You will then be 
+presented with the BASIC startup message:</font></p>
+<p><font face="Courier New"><b>&nbsp;32255 BYTES FREE<br>
+<br>
+OSI 6502 BASIC VERSION 1.0 REV 3.2<br>
+COPYRIGHT 1977 BY MICROSOFT CO.<br>
+<br>
+OK</b></font><font face="Arial"><br>
+<br>
+<br>
+The machine is now ready to use.</font></p>
+<p><font face="Arial">Typing</font></p>
+<p><font face="Courier New">
+<b>PRINT FRE(0)</b></font></p>
+<p><font face="Arial">will give (current ROM version, may be slightly different with future 
+releases)...</font></p>
+<p><font face="Courier New"><b>32253</b></font></p>
+<p><font face="Courier New"><b>OK</b></font></p>
+<p><font face="Arial">This shows that the 32K RAM has been recognised correctly.<br>
+<br>
+...the rest is up to you.<br>
+&nbsp;</font></p>
+<p><font face="Arial">Startup sequence and a simple program entered and run on 
+the terminal is shown here...</font></p>
+<table style="border-collapse: collapse" id="AutoNumber1" width="600" cellspacing="0" cellpadding="0" bordercolor="#111111" border="1">
+  <tbody><tr>
+    <td width="100%" bgcolor="#000000">
+    <font size="2" face="Courier New" color="#00FF00">Cold [C] or warm [W] 
+    start?<br>
+    <br>
+    MEMORY SIZE?<br>
+    TERMINAL WIDTH?<br>
+    <br>
+    &nbsp;32255 BYTES FREE<br>
+    <br>
+    OSI 6502 BASIC VERSION 1.0 REV 3.2<br>
+    COPYRIGHT 1977 BY MICROSOFT CO.<br>
+    <br>
+    OK<br>
+    10 FOR A=0 TO 6.2 STEP 0.2<br>
+    20 PRINT TAB(40+SIN(A)*20);"*"<br>
+    30 NEXT A<br>
+    RUN<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+ 
+    *<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+ 
+    *<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+ 
+    *<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+ 
+    *<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+ 
+    *<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+ 
+    *<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+ 
+    *<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+ 
+    *<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+ 
+    *<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+ 
+    *<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+ 
+    *<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+ 
+    *<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+ 
+    *<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+ 
+    *<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+ 
+    *<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+ 
+    *<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+ 
+    *<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+ 
+    *<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+ 
+    *<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+ 
+    *<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+ 
+    *<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+    *<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+    *<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+    *<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+    *<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+    *<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+    *<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+ 
+    *<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+ 
+    *<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+ 
+    *<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+ 
+    *<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+ 
+    *<br>
+    <br>
+    OK<br>
+&nbsp;</font></td>
+  </tr>
+</tbody></table>
+<p>&nbsp;</p>
+
+
+
+<hr>
+
+<p><b><font size="5" face="Arial">Loading and saving</font></b></p>
+
+<p><font face="Arial"><b>Save</b><br>
+Type LIST but don't press enter.<br>
+In your terminal window on the PC, or whatever you are using to operate this 
+board, enable the capture to a text file.<br>
+Press ENTER.<br>
+The listing will then be spooled to the text file on your PC.<br>
+Once the listing is complete, end the capture. The contents of the program will 
+then be on the PC for later use.</font></p>
+
+<p><font face="Arial"><b>Load<br>
+</b>Most terminal programs have a method to pass a text file to the destination.<br>
+Ensure the board is ready to receive characters and then transfer the text 
+file from the PC to the board using the terminal.<br>
+The data transfer is automatically suspended if the 6502 board is not ready, so 
+no characters are lost providing hardware (CTS/RTS) handshaking is enabled on 
+the PC.</font></p>
+
+<hr>
+
+<p><b><font size="5" face="Arial">Using a keyboard and monitor instead of the PC 
+interface</font></b></p>
+<p><font face="Arial">This board, as for my other boards, can use my monitor and 
+keyboard interface <a href="http://searle.x10host.com/MonitorKeyboard/index.html">here</a></font></p>
+<p><a href="http://searle.x10host.com/MonitorKeyboard/index.html">
+<img src="Grant's%206502%20computer_files/ATMega328Video_S.jpg" width="450" height="215" border="0"></a></p>
+<hr>
+
+<p><b><font size="5" face="Arial">Links</font></b></p>
+
+<p><font face="Arial">The following links were very useful to me...</font></p>
+
+<p><font face="Arial">pagetable.com - BASIC assembly code -
+<a href="http://www.pagetable.com/?p=46">http://www.pagetable.com/?p=46</a></font></p>
+
+<hr>
+
+<p><b><font size="5" face="Arial">My other pages</font></b></p>
+
+<p><font face="Arial"><a href="http://searle.x10host.com/index.html">CLICK HERE TO GO TO MY MAIN PAGE 
+FOR MY OTHER PROJECTS</a></font></p>
+
+<hr>
+
+<p><font face="Arial"><i>I hope this page has been useful.</i> </font> </p>
+
+<p><font face="Arial"><i>Grant.</i> </font> </p>
+
+<p><font face="Arial">To contact me, my current eMail address can be found
+<a href="http://searle.x10host.com/index.html">here</a>. Please note that 
+this address may change to avoid spam.</font></p>
+
+<p><font face="Arial"><font size="2" color="#0000FF"><i>Note: All information shown
+here is supplied "as is" with no warranty whatsoever, however, please 
+let me know if there are any errors.
+All copyrights recognised.</i></font> </font> </p>
+
+
+
+<iframe scrolling="no" allowtransparency="true" src="Grant's%206502%20computer_files/widget_iframe.html" title="Twitter settings iframe" style="display: none;" frameborder="0"></iframe><iframe id="rufous-sandbox" scrolling="no" allowtransparency="true" allowfullscreen="true" style="position: absolute; visibility: hidden; display: none; width: 0px; height: 0px; padding: 0px; border: medium none;" title="Twitter analytics iframe" frameborder="0"></iframe></body></html>
