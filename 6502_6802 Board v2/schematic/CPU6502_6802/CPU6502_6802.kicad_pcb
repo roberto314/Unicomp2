@@ -803,7 +803,7 @@
         (effects (font (size 1 1) (thickness 0.15)))
       (tstamp e81382b8-241e-4ff6-aa16-4803d29c8f25)
     )
-    (fp_text value "SN74LVC245ANSR" (at 0 7.25 90) (layer "F.Fab")
+    (fp_text value "SN74LVC245ANSR" (at 0 7.25 90) (layer "F.Fab") hide
         (effects (font (size 1 1) (thickness 0.15)))
       (tstamp 64eff9f7-fb77-46c0-ad16-6aa466d16d4a)
     )
@@ -1225,7 +1225,7 @@
         (effects (font (size 1 1) (thickness 0.15)))
       (tstamp 9f4f7e50-04d6-4909-a8f8-ca2a59d7f3cc)
     )
-    (fp_text value "SN74LVC245ANSR" (at 0 7.25 90) (layer "F.Fab")
+    (fp_text value "SN74LVC245ANSR" (at 0 7.25 90) (layer "F.Fab") hide
         (effects (font (size 1 1) (thickness 0.15)))
       (tstamp 4dfa7efd-a0b5-42f7-89f3-ebafe30ea68f)
     )
@@ -1321,7 +1321,7 @@
         (effects (font (size 1 1) (thickness 0.15)))
       (tstamp 133703b3-7974-467d-8d43-7e58ae7aedea)
     )
-    (fp_text value "SN74LVCC3245ANSR" (at 0 8.45 90) (layer "F.Fab")
+    (fp_text value "SN74LVCC3245ANSR" (at 0 8.45 90) (layer "F.Fab") hide
         (effects (font (size 1 1) (thickness 0.15)))
       (tstamp 4f9ba8c5-764e-43a5-9108-dc66dc245be3)
     )
@@ -2472,7 +2472,7 @@
         (effects (font (size 1 1) (thickness 0.15)))
       (tstamp 0afd653f-7f00-4171-9108-7e58c0abf101)
     )
-    (fp_text value "Conn_01x01" (at 0 1.695) (layer "F.Fab")
+    (fp_text value "Conn_01x01" (at 0 1.695) (layer "F.Fab") hide
         (effects (font (size 1 1) (thickness 0.15)))
       (tstamp 61005386-1956-4510-bb66-6265d41ecc23)
     )
@@ -3090,7 +3090,7 @@
         (effects (font (size 1 1) (thickness 0.15)))
       (tstamp f3b4f695-8da9-4037-a378-e2a5527ccdca)
     )
-    (fp_text value "Conn_01x01" (at 0 1.695) (layer "F.Fab")
+    (fp_text value "Conn_01x01" (at 0 1.695) (layer "F.Fab") hide
         (effects (font (size 1 1) (thickness 0.15)))
       (tstamp 156006c1-8db0-4a6a-ade6-7384a5046a3f)
     )
@@ -3446,7 +3446,7 @@
         (effects (font (size 1 1) (thickness 0.15)))
       (tstamp f3547e28-c20d-497b-afce-33961efb1014)
     )
-    (fp_text value "SN74LVC125AD" (at 0 5.28 90) (layer "F.Fab")
+    (fp_text value "SN74LVC125AD" (at 0 5.28 90) (layer "F.Fab") hide
         (effects (font (size 1 1) (thickness 0.15)))
       (tstamp e9348b88-8a9a-438a-817c-eb4ee2c8af9d)
     )
@@ -3530,7 +3530,7 @@
         (effects (font (size 1 1) (thickness 0.15)))
       (tstamp f8a6bba1-3a9c-423d-98de-2c3dec00ca10)
     )
-    (fp_text value "Conn_01x01" (at 0 1.695) (layer "F.Fab")
+    (fp_text value "Conn_01x01" (at 0 1.695) (layer "F.Fab") hide
         (effects (font (size 1 1) (thickness 0.15)))
       (tstamp 518bae45-5804-4b8a-b9e6-ffd0fb3c9705)
     )
@@ -3915,7 +3915,7 @@
         (effects (font (size 1 1) (thickness 0.15)))
       (tstamp 18872deb-84a4-46d4-98e2-459bdde95bd3)
     )
-    (fp_text value "SN74LVC125AD" (at 0 5.28 90) (layer "F.Fab")
+    (fp_text value "SN74LVC125AD" (at 0 5.28 90) (layer "F.Fab") hide
         (effects (font (size 1 1) (thickness 0.15)))
       (tstamp 763eb0ed-3b45-46ab-81b2-77b31f1e8970)
     )
@@ -4075,7 +4075,7 @@
         (effects (font (size 1 1) (thickness 0.15)))
       (tstamp 7564d8b9-7705-4fb9-9874-2b2bec7b8e30)
     )
-    (fp_text value "Conn_01x01" (at 0 1.695) (layer "F.Fab")
+    (fp_text value "Conn_01x01" (at 0 1.695) (layer "F.Fab") hide
         (effects (font (size 1 1) (thickness 0.15)))
       (tstamp 7f4523d4-956d-4dba-8139-51c15da32144)
     )

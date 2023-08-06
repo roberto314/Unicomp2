@@ -9,8 +9,9 @@
     (date "2023-07-06")
     (rev "v1.3")
     (company "100% Offner")
-    (comment 2 "v1.2: WP doesnt work, changed to OR-Gate U3.")
-    (comment 3 "v1.3: U21C wrong, ~{CSRAM} directly to U1, ~{RAMCSOR} new, Clock chip added")
+    (comment 2 "      WP doesnt work, changed to OR-Gate U3, U21C wrong,  ")
+    (comment 3 "      ~{CSRAM} directly to U1,  ~{RAMCSOR} new, Clock chip added")
+    (comment 4 "v1.3: Buffer for SCK and MOSI placed at output, internal signals directly to STM32")
   )
 
   (lib_symbols

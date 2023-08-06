@@ -484,7 +484,7 @@ if __name__ == '__main__':
 		'file',
 		#nargs = '?',
 		#default = sys.stdin.buffer,
-		help = 'input filename or data in HEX (ex.: UC_fill.py write 0xF000 :aa,0b,cc,...) with no spaces!')
+		help = 'input filename or data in HEX (ex.: UC_fill.py write :aa,0b,cc,... 0xF000) with no spaces!')
 	subparser.add_argument(
 		'start',
 		nargs = '?',
@@ -557,8 +557,17 @@ if __name__ == '__main__':
 		main('config', img)
 
 	elif args.command == 'write':
-		if args.file[0] == ':': # Number of bytes received
-			mylist = [int(e, 16) if e.isalnum() else e for e in (args.file[1:-1]).split(',')]
+		if args.file[0] == ':': # Some bytes received
+			#mylist = [int(e, 16) if e.isalnum() else e for e in (args.file[1:]).split(',')]
+			mylist = []
+			for b in (args.file[1:]).split(','):
+				if b.isalnum():
+					n = int(b, 16)
+					print(f'Received: {b} interpreted as: {n:02X}')
+					mylist.append(n)
+				else:
+					print(f'couldnt interpret: {b}')
+
 			img = bytes(mylist)
 			start = int(args.start, 0) & RAMMAX
 			end = start + len(img) - 1
@@ -566,7 +575,7 @@ if __name__ == '__main__':
 				print(f'Write goes beyond 0x7FFF! (size: 0x{len(img):04X})')
 				exit()
 			main('write', img, start)
-		else:                  # real file received
+		else:                   # real file received
 			print(f'real file received {args.file}')
 			img = read_file(args.file)
 			ext = args.file.split(".")[-1] # check extension

@@ -74,10 +74,14 @@ WARNING:Xst:647 - Input <A> is never used. This port will be preserved and left 
 WARNING:Xst:647 - Input <nMR> is never used. This port will be preserved and left unconnected if it belongs to a top-level block or it belongs to a sub-block and the hierarchy of this sub-block is preserved.
 WARNING:Xst:647 - Input <MOSI> is never used. This port will be preserved and left unconnected if it belongs to a top-level block or it belongs to a sub-block and the hierarchy of this sub-block is preserved.
 WARNING:Xst:647 - Input <SCK> is never used. This port will be preserved and left unconnected if it belongs to a top-level block or it belongs to a sub-block and the hierarchy of this sub-block is preserved.
+WARNING:Xst:646 - Signal <s_BUSTEMP> is assigned but never used. This unconnected signal will be trimmed during the optimization process.
     Found 4-bit up counter for signal <clk_divider>.
+    Found 4-bit comparator less for signal <clk_divider$cmp_lt0000> created at line 70.
     Found 1-bit register for signal <s_BCLKWS>.
     Summary:
 	inferred   1 Counter(s).
+	inferred   1 D-type flip-flop(s).
+	inferred   1 Comparator(s).
 Unit <board_6802> synthesized.
 
 
@@ -89,6 +93,8 @@ Macro Statistics
  4-bit up counter                                      : 1
 # Registers                                            : 1
  1-bit register                                        : 1
+# Comparators                                          : 1
+ 4-bit comparator less                                 : 1
 
 =========================================================================
 
@@ -103,13 +109,14 @@ Advanced HDL Synthesis Report
 Macro Statistics
 # Counters                                             : 1
  4-bit up counter                                      : 1
+# Registers                                            : 1
+ Flip-Flops                                            : 1
 
 =========================================================================
 
 =========================================================================
 *                         Low Level Synthesis                           *
 =========================================================================
-WARNING:Xst:2677 - Node <clk_divider_3> of sequential type is unconnected in block <board_6802>.
 
 Optimizing unit <board_6802> ...
   implementation constraint: INIT=s	 : s_BCLKWS
@@ -139,26 +146,28 @@ Design Statistics
 # IOs                              : 36
 
 Cell Usage :
-# BELS                             : 14
-#      AND2                        : 4
-#      INV                         : 6
-#      OR2                         : 2
-#      XOR2                        : 2
-# FlipFlops/Latches                : 4
-#      FD                          : 4
+# BELS                             : 37
+#      AND2                        : 11
+#      AND3                        : 1
+#      AND4                        : 1
+#      INV                         : 16
+#      OR2                         : 5
+#      XOR2                        : 3
+# FlipFlops/Latches                : 5
+#      FD                          : 5
 # IO Buffers                       : 15
 #      IBUF                        : 5
 #      OBUF                        : 10
 =========================================================================
 
 
-Total REAL time to Xst completion: 3.00 secs
-Total CPU time to Xst completion: 2.24 secs
+Total REAL time to Xst completion: 2.00 secs
+Total CPU time to Xst completion: 2.43 secs
  
 --> 
 
 
-Total memory usage is 495088 kilobytes
+Total memory usage is 495184 kilobytes
 
 Number of errors   :    0 (   0 filtered)
 Number of warnings :    8 (   0 filtered)

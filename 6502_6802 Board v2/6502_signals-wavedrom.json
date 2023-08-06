@@ -1,0 +1,27 @@
+{signal: [
+  {name: 'clk8',        wave: 'l.H.l.H.l.H.l.H.l.H.l.H.l.H.l.H.l'},
+  {name: 'clk4',        wave: 'l.h...l...h...l...H...l...h...l..'},
+  {name: 'clk2',        wave: 'l.h.......l.......H.......l......'},
+  {name: 'phi0',        wave: 'h.l...............H..............', node: '..a'},
+  {name: 'phi1',        wave: 'l..1...............0.............', node: '...b'},
+  {name: 'phi2',        wave: 'h..0...............1.............', node: '...c...............e'},
+  {name: 'what happens',wave: 'x.6.x.............6.x............', data: ['(c) Data RD', '(e) Addr RD'] },
+  {name: 'addr',        wave: '4...x...4........................', data: ['ad + R/W valid'], node: '........d'},
+  {name: 'wdata',       wave: '3...x.....................3......', data: ['wdata valid'], node: '..........................f'},
+  {name: 'rdata',       wave: '5...x...........................5', data: ['rdata valid'], node: '................................g'},
+  {name: '/245En',      wave: '0..1..............0..............'},
+  {name: '/BUSFREE',    wave: '1..0..............1..............'},  
+],
+  edge: ['a-~>b [60n]', 'a~>c [50n]', 'c~>d [Addr Setup 200n]', 'e~>f [Data Setup 150n]', 'd~>g [650n]'],
+ head: {text:
+  ['tspan',
+    ['tspan', {class:'info h3'}, '6502 waveforms '],
+  ]
+},
+ foot: {text:
+  ['tspan',
+    ['tspan', 'Unicomp Projekt (Robert Offner MSc. 2023) '],
+  ]
+},
+ 
+}

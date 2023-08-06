@@ -34,7 +34,7 @@ architecture Behavioral of board_6502 is
     signal s_nMRD       : std_logic :='1';
     signal s_nMWR       : std_logic :='1';
     signal s_BUS        : std_logic :='1';
-    signal s_BUSCLK     : std_logic :='1';
+    signal s_PH0     : std_logic :='1';
 
 begin
 
@@ -42,7 +42,7 @@ s_nMRD <= NOT(RnW AND PHI2CPU);       -- thats how it is usually done.
 s_nMWR <= NOT((NOT RnW) AND PHI2CPU); -- thats how it is usually done.
 
 -- nAOE <= '0'; -- works (2MHz possible)
-s_BUS <= nRST AND (s_BUSCLK OR PHI2CPU); -- Reset must release bus bc. of STM32!
+s_BUS <= nRST AND (s_PH0 OR PHI2CPU); -- Reset must release bus bc. of STM32!
 
 nAOE <= NOT(s_BUS); -- test -works
 nDOE <= NOT(s_BUS); -- test -works
@@ -57,16 +57,16 @@ process (CLKF)
             clk_divider   <= clk_divider + 1;
         end if;
     end process;
-    s_BUSCLK <= clk_divider(2);
-    nPH0 <= NOT(s_BUSCLK);
-    PH0 <= s_BUSCLK;
+    s_PH0 <= clk_divider(2);
+    nPH0 <= NOT(s_PH0);
+    PH0 <= s_PH0;
 
-process (CLKF, s_BUSCLK) --this delays the PHI0 to the CPU for half period of CLKF (8MHz) -not needed!
+process (CLKF, s_PH0) --this delays the PHI0 to the CPU for half period of CLKF (8MHz) -not needed!
     begin
         if falling_edge(CLKF) then
-            --if s_BUSCLK = '1' then
-                --nPH0 <= NOT(s_BUSCLK);
-                --PH0 <= s_BUSCLK;
+            --if s_PH0 = '1' then
+                --nPH0 <= NOT(s_PH0);
+                --PH0 <= s_PH0;
             --end if;
         end if;
     end process;

@@ -155,6 +155,7 @@ tmux serial window:
 	- writes the .jed file to the selected devices
 	- Example: sudo UC_write_cpld 0 filename.jed - writes .jed file to cpld zero
 
+
 ### CPLD programming ###
 
 * compiling the vhdl (or verilog) code must be done on a computer with the Xilinx ISE 14.7 toolchain installed.
@@ -165,3 +166,17 @@ tmux serial window:
 * a simple **make** will compile the firmware and a **make transfer** will transfer the file to the sbc (if you changed the ip address to your address inside the makefile and the path inside project.cfg)
 
 * on the sbc in the work folder one can find the .jed file. For programming type: **UC_write_cpld [JTAG-position] [filename.jed]**
+
+
+### Used Software and OS ###
+
+* Linux Mint (20.3 cinnamon) (Link: https://linuxmint.com/)
+* Sublime Text 4 (Link: https://www.sublimetext.com/)
+* Chibi Studio 20 (IDE for ChibiOS) (Link: https://www.chibios.org/dokuwiki/doku.php?id=chibios:products:chibistudio:start)
+* Wavedrom (2.9.1) (Link: https://wavedrom.com/)
+* Pulseview (0.5.0-nightly Appimaage) (Part of sigrok) (Link: https://sigrok.org/wiki/PulseView)
+
+### Used Hardware ###
+
+* Oscilloscope: Rigol DS1054Z (4 channel)
+* Logic Analyzer: Hantek 4032L (32 channel)
