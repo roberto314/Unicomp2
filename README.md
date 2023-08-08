@@ -104,14 +104,16 @@ A simple configuration block looks líke this:
 
 ### Working Recreations of old computers ###
 
-| Name                     | prim. IO    | chips used         | os                    | weblink                                                             |
-|--------------------------|-------------|--------------------|-----------------------|---------------------------------------------------------------------|
-| Grant Searle 6502 board  | serial      | MOS6502, MC6850    | OSI Basic             |Link: http://searle.x10host.com/6502/Simple6502.html                 |
-| Daryl Rictor 6502 board  | serial      | MOS6502, R6551     | SBC-2 (monitor only)  |Link: https://sbc.rictor.org/info2.html                              |
-| Daryl Rictor 6502 board  | serial      | MOS6502, MC6850    | SBC-2 (monitor only)  |Link: https://sbc.rictor.org/info2.html                              |
-| SYM1                     | serial      | MOS6502, UM6532    | SYM1 ( +BASIC +RAE)   |Link: http://retro.hansotten.nl/6502-sbc/synertek-sym-ktm/sym-1/     |
-| KIM1                     | serial      | MOS6502, UM6532    | KIM1                  |Link: http://retro.hansotten.nl/6502-sbc/kim-1-manuals-and-software/ |
-| Apple I                  | serial      | MOS6502, MĆ6821    | Wozmon + BASIC        |Link: http://retro.hansotten.nl/6502-sbc/apple-1/                    |
+| Name                     | prim. IO    | chips used         | os                             | weblink                                                             |
+|--------------------------|-------------|--------------------|--------------------------------|---------------------------------------------------------------------|
+| Grant Searle 6502 board  | serial      | MOS6502, MC6850    | OSI Basic                      |Link: http://searle.x10host.com/6502/Simple6502.html                 |
+| Daryl Rictor 6502 board  | serial      | MOS6502, R6551     | SBC-2 (monitor only)           |Link: https://sbc.rictor.org/info2.html                              |
+| Daryl Rictor 6502 board  | serial      | MOS6502, MC6850    | SBC-2 (monitor only)           |Link: https://sbc.rictor.org/info2.html                              |
+| SYM1                     | serial      | MOS6502, UM6532    | SYM1 ( +BASIC +RAE)            |Link: http://retro.hansotten.nl/6502-sbc/synertek-sym-ktm/sym-1/     |
+| KIM1                     | serial      | MOS6502, UM6532    | KIM1                           |Link: http://retro.hansotten.nl/6502-sbc/kim-1-manuals-and-software/ |
+| Apple I                  | serial      | MOS6502, MĆ6821    | Wozmon + BASIC                 |Link: http://retro.hansotten.nl/6502-sbc/apple-1/                    |
+| Motorola MEK D2          | serial      | MC6802, MĆ6850     | newbug, xswtbug, mondeb        |Link: https://www.retrotechnology.com/restore/smithbug.html          |
+| Heathkit ET3400          | serial      | MC6802, MĆ6850     | MITS BASIC, TSC MicroBASIC,... |Link: https://github.com/jefftranter                                 |
 
 ### linux single board computer (SBC) ###
 
@@ -171,7 +173,8 @@ tmux serial window:
 ### Used Software and OS ###
 
 * Linux Mint (20.3 cinnamon) (Link: https://linuxmint.com/)
-* Sublime Text 4 (Link: https://www.sublimetext.com/)
+* Sublime Text 3 (Link: https://www.sublimetext.com/)
+* 010 Editor (Hex Editor) (Link: https://www.sweetscape.com/010editor/)
 * Chibi Studio 20 (IDE for ChibiOS) (Link: https://www.chibios.org/dokuwiki/doku.php?id=chibios:products:chibistudio:start)
 * Wavedrom (2.9.1) (Link: https://wavedrom.com/)
 * Pulseview (0.5.0-nightly Appimaage) (Part of sigrok) (Link: https://sigrok.org/wiki/PulseView)

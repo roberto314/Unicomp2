@@ -557,7 +557,7 @@ if __name__ == '__main__':
 		main('config', img)
 
 	elif args.command == 'write':
-		if args.file[0] == ':': # Some bytes received
+		if args.file[0] == ':':    # Some bytes received (format :yy,xx,zz)
 			#mylist = [int(e, 16) if e.isalnum() else e for e in (args.file[1:]).split(',')]
 			mylist = []
 			for b in (args.file[1:]).split(','):

@@ -17,8 +17,8 @@ NET "A[13]"  LOC = "p12"  ;
 NET "A[14]"  LOC = "p8"  ;
 NET "A[15]"  LOC = "p7"  ;
 
-NET "RES0"  LOC = "p40"  ;
-NET "RES1"  LOC = "p41"  ;
+NET "E_Out" LOC = "p40"  ;
+NET "IO2"  LOC = "p41"  ;
 NET "BA"    LOC = "p42"  ;
 
 NET "VMA"      LOC = "p39"  ;

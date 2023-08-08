@@ -1,7 +1,7 @@
 Release 8.1i - Fit P.20131013
 Copyright(c) 1995-2003 Xilinx Inc. All rights reserved
 
- 8- 5-2023  9:58PM
+ 8- 8-2023  6:19PM
 
 NOTE: This file is designed to be imported into a spreadsheet program
 such as Microsoft Excel for viewing, printing and sorting. The comma ','
@@ -22,7 +22,7 @@ P1,PH0,O,I/O/GCK3,OUTPUT,,,,,,,,,
 P2,nPH0,O,I/O,OUTPUT,,,,,,,,,
 P3,CLKF,I,I/O,INPUT,,,,,,,,,
 P4,GND,,GND,,,,,,,,,,
-P5,PHI2,O,I/O,OUTPUT,,,,,,,,,
+P5,TIE,,I/O,,,,,,,,,,
 P6,TIE,,I/O,,,,,,,,,,
 P7,TIE,,I/O,,,,,,,,,,
 P8,TIE,,I/O,,,,,,,,,,
@@ -57,8 +57,8 @@ P36,RnW,I,I/O/GTS1,INPUT,,,,,,,,,
 P37,E_CPU,I,I/O,INPUT,,,,,,,,,
 P38,TIE,,I/O,,,,,,,,,,
 P39,VMA,I,I/O,INPUT,,,,,,,,,
-P40,RES0,O,I/O,OUTPUT,,,,,,,,,
-P41,RES1,O,I/O,OUTPUT,,,,,,,,,
+P40,E_Out,O,I/O,OUTPUT,,,,,,,,,
+P41,IO2,O,I/O,OUTPUT,,,,,,,,,
 P42,TIE,,I/O,,,,,,,,,,
 P43,nBUSFREE,O,I/O/GCK1,OUTPUT,,,,,,,,,
 P44,nRST,I,I/O/GCK2,INPUT,,,,,,,,,

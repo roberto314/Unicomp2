@@ -1,0 +1,24 @@
+{signal: [
+  {name: 'clk8',        wave: 'l.H.l.H.l.H.l.H.l.H.l.H.l.H.l.H.l', node: '...4...5...6...7...8...1...2...3'},
+  {name: 'phi0(6802)',  wave: 'h.l...h...l...h...l...h...l...h..'},
+  {name: 'phi2/E',      wave: 'h.0...............1..............', node: '..c...............e'},
+  {name: 'what happens',wave: 'x6.x.............6.x.............', data: ['(c) Data RD', '(e) Addr RD'] },
+  {name: 'addr',        wave: '4.x...4..........................', data: ['ad + R/W valid'], node: '......d'},
+  {name: 'wdata',       wave: '3.x.................3............', data: ['wdata valid'], node: '....................f'},
+  {name: 'rdata',       wave: '5.x.....5........................', data: ['rdata valid'], node: '........g'},
+  {name: '/245En',      wave: '0...1...........0................'},
+  {name: '/BUSFREE',    wave: '1...0...........1................'},  
+],
+  edge: ['b~>c [9n]', 'c~>d [Addr Setup ~100n]', 'e~>f [Data Setup ~60n]', 'd~>g [~20n]'],
+ head: {text:
+  ['tspan',
+    ['tspan', {class:'info h3'}, '6800 (6802) waveforms '],
+  ]
+},
+ foot: {text:
+  ['tspan',
+    ['tspan', 'Unicomp Projekt (Robert Offner MSc. 2023) '],
+  ]
+},
+ 
+}

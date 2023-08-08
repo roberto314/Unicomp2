@@ -39,9 +39,14 @@ def dump_events(data):
 		idx -= width
 		print(f'\r{bcolors.ENDC}')
 
-def dump_data(data):
-	width = 5
+def dump_list(data):
 	idx = len(data)
+	width = idx
+	if width == 0:
+		return
+	for w in range(width):
+		print (f'  {w:02} ', end = '')
+	print(f'')
 	for i in range(0, len(data), width):
 		#print(f'idx: {idx}')
 		if idx < width:
@@ -49,9 +54,35 @@ def dump_data(data):
 		else:
 			stop = width
 		for j in range(0,stop):
-			print(f'{bcolors.OKCYAN}0x{data[i+j]:02X}, ', end = '')
+			v = data[i+j]
+			if v == 0xFF:
+				print(f'{bcolors.WARNING}0x{v:02X} ', end = '')
+			elif v == 0xF0:
+				print(f'{bcolors.OKBLUE}0x{v:02X} ', end = '')
+			elif v == 0x0F:
+				print(f'{bcolors.OKGREEN}0x{v:02X} ', end = '')
+			else:
+				print(f'{bcolors.OKCYAN}0x{v:02X} ', end = '')
 		idx -= width
-		print(f'\r{bcolors.ENDC}')
+		#print(f'{bcolors.ENDC} - {(i+7):>2} ({(i+7):02X})\r')
+		print(f'{bcolors.ENDC}\r')
+#----------------------------------
+def dump_data(data, width):
+	idx = len(data)
+	for w in range(width):
+		print (f'  {w}  ', end = '')
+	print(f'')
+	for i in range(0, len(data), width):
+		#print(f'idx: {idx}')
+		if idx < width:
+			stop = idx
+		else:
+			stop = width
+		for j in range(0,stop):
+			print(f'{bcolors.OKCYAN}0x{data[i+j]:02X} ', end = '')
+		idx -= width
+		print(f'{bcolors.ENDC} - {(i+width):>2} ({(i+width):02X})\r')
+		#print(f'{bcolors.ENDC}\r')
 #----------------------------------
 def write_file(data, fn):
 	if fn == '':
@@ -70,18 +101,18 @@ def read_file(fn):
 			print(f'File {fn} read.')
 			return img
 	except Exception as e:
-		print(f'File {fn} not found!')
+		print(f'{bcolors.FAIL}---- File {fn} not found!{bcolors.ENDC}')
 		exit()
 
-def upload_image(dir, cf, i):
+def upload_image(dir, cf, key):
 	try:
-		name = 'img'+str(i)
+		name = key
 		imgstart = int(cf[name]['start'], 0)
 		imgend  = int(cf[name]['end'] , 0)
 		imgnumber = dir + '/' + cf[name]['file']
 		size = imgend - imgstart + 1
 		#print(f'Image {i}: {imgstart:04X} to {imgend:04X} (size: {size} bytes) file: {imgnumber}')
-		print(f'{bcolors.OKGREEN}------------ trying to upload {imgnumber} from: {imgstart:04X} to {imgend:04X} {bcolors.ENDC}')
+		print(f'{bcolors.OKGREEN}trying to upload {imgnumber} from: {imgstart:04X} to {imgend:04X} {bcolors.ENDC}')
 		img = read_file(imgnumber)
 		if len(img) != size:
 			print(f'{bcolors.FAIL}      ###### Size is wrong! (Image: 0x{len(img):04X} Space: 0x{size:04X}) ######{bcolors.ENDC}')
@@ -92,316 +123,146 @@ def upload_image(dir, cf, i):
 		print(f'Error in upload_image: {e}!')
 		return 1
 
+def upload_patch(cf, key):
+	try:
+		name = key
+		imgstart = int(cf[name]['address'], 0)
+		datalist = cf[name]['data']
+		datastr = ','.join(datalist)
+		mylist = []
+		print(f'read {key}: Address: 0x{imgstart:04X} Data: {datastr}')
+		for b in datastr.split(','):
+			if b.isalnum():
+				n = int(b, 16)
+				#print(f'Received: {b} interpreted as: {n:02X}')
+				mylist.append(n)
+			else:
+				print(f'couldnt interpret: {b}')
+		img = bytes(mylist)
+		fr.main('write', img, imgstart)
+		return 0
+	except Exception as e:
+		print(f'Error in upload_image: {e}!')
+		return 1
+
 def make_bytes(val):
 	val = (val & 0x00FFFFF8)
 	return val.to_bytes(3, 'big')
 
-def find_key(d, val): # finds the key of one value in dictionary
-	keys = []
-	for i in d:
-		keys.append(i)
-		#print(f'key {i}')
+def my_append(addr, val, hl): # adds a new peripheral and makes the lists same size
+	if len(addr) <= val:
+		#print(f'Size is smaller or equal than position. Val: {val} Length: {len(addr)}')
+		if (val%2) == 1: # endaddress
+			#print(f'Got End @ {val}, remove last item (end marker)')
+			del addr[-1]	# remove the last 'end' marker
+			while len(addr) <= val:
 
-	for i in range(len(d)):
-		#print(f'index {i}')
-		if val in d[keys[i]]: # if we get an empty list
-			return keys[i]
+				addr.append(hl)
+		else:            # startaddress
+			#print(f'New start @ {val}')
+			while len(addr) < val:
+				addr.append(0xFF)
+			addr.append(hl)
+		addr.append(0xFF) # append an 'end' marker
+	else:
+		#print(f'Size is bigger. ')
+		if (val%2) == 1: # endaddress
+			#print(f'Got End @ {val}')
+			i = val
+			while ((addr[i] != hl) and (i > 0)):
+				addr[i] = hl
+				i -= 1
+			#while len(addr) <= val:
+			#	addr.append(0)
+		else:            # startaddress
+			#print(f'New start2 @ {val}')
+			addr[val] = hl
+	#print(f'Size now: {len(addr)}')
+	return addr
 
-	return ''
+def merge_ram_rom(ba, v):
+	errval = 0
+	cs14 = ba[14]
+	bl = len(cs14)
+	vl = len(v)
 
-def find_border_key(peripheral, val):
-	for i in (peripheral):
-		#print(f'Key: {i}')
-		if i != '0xFFN':
-			for j in peripheral[i]:
-				if j%2 == 0:
-					start = j
-				else:
-					end = j
-					bs = (start&0xFFFF8)
-					be = ((end&0xFFFF8)+7)
-					#print(f'Window: {start:04X} - {end:04X} masked: {bs:04X} - {be:04X}')
-					if ((val >= start) and (val <= end)):
-						#print(f'found key: {i} for {val:04X}')
-						return i
-	return ''
+	#print(f'Got length: {bl}, {vl}')
+	if bl == 0:
+		#print(f'adding new values {v}')
+		ba[14] = v
+	else:
+		#print(f'Merging values.')
+		while len(cs14) < vl:
+			cs14.append(0xFF)
+		for x in range(len(v)):
+			listval = cs14[x]
+			newval = v[x]
+			#print(f'Val: {newval} list: {listval}')
+			if ((listval != 0xFF) and (newval != 0xFF)):
+				print(f'{bcolors.FAIL}Overlap in RAM/ROM detected at address: {x:05x}{bcolors.ENDC}')
+				errval += 1
+			cs14[x] = (listval & newval)%(2**8)
+		ba[14] = cs14
+	return ba, errval
 
-def check_before_adding_to_hole(per, value):
-	vlist = per['0xFFN']
-	for p in per:
-		if p != '0xFFN':
-			#print(f'p: {p}')
-			for a in per[p]:
-				start = (a & 0x000FFFF8)
-				end = (a & 0x000FFFF8)+7
-				#print(f'a: {a:04X}, {start:04X} - {end:04X}')
-				if ((value >= start) and (value <= end)):					
-					#print(f'Found value, not appending.')
-					return
-	#print(f'appending.')
-	vlist.append(value)
-	per['0xFFN'] = vlist
-	return
+def collapse_lists(ba): # collapses all 15 lists into one eventlist and does errorcheck
+	errval = 0 
+	new_list = []
+	ll = len(ba)
+	if ll != 15:
+		print(f'{bcolors.FAIL}Did you forget RAM or ROM?{bcolors.ENDC}')
+		exit()
+	#print(f'Lists: {ll}')
+	biggestlen = 0
+	actual_lists = 0
+	for l in ba:
+		tl = len(l)
+		if tl > 0:
+			actual_lists += 1
+		if tl > biggestlen:
+			biggestlen = tl
+	#print(f'max len: {biggestlen}, Lists: {actual_lists}')
+	count = 0
+	for idx in range(biggestlen):   # Errorcheck (overlaps)
+		chip = 0xFF
+		for l in range(15):
+			if ba[l] == []:
+				continue
+			#print(f'chip {l}, Address: {idx}')
+			if len(ba[l]) <= idx:
+				#print(f'List too small {l}')
+				(ba[l]).append(0xFF)
+			val = ba[l][idx]
+			if val == 0xF0:
+				chip = l         # chipselect 0..14 for low 
+			elif val == 0x0F:
+				chip = (16 + l)  # and 16..30 for high
 
-def add_key(peripheral, address, addr):
+			if val != 0xFF:
+				count += 1
 
-	key = find_key(peripheral, address)
-	#print(f'2key {key}')
+ #		print(f'Address: {idx}, count {count}')
+		if (count > 1):
+			print(f'{bcolors.FAIL}More than one event @ address: {idx:06x} {bcolors.ENDC}')
+			errval += 1
+		count = 0
 
-	#print(f'{bcolors.OKGREEN}Coming in with: {address:04X} {bcolors.ENDC}')
-	lower_inner = (address & 0x000FFFF8)
-	upper_inner = lower_inner + 7
-	upper_outer = lower_inner + 8
-	lower_outer = lower_inner - 1
-	#print(f'{bcolors.OKGREEN}checking borders: {lower_outer:04X}, {lower_inner:04X}, {upper_inner:04X}, {upper_outer:04X} {bcolors.ENDC}')
+		#print(f'chip: {chip}')
+		if chip >= 32:
+			chip = 0xFF
+		new_list.append(chip)
+
+ #	print(f'length new_list: {len(new_list)}')
+	if ((new_list[-1] != 0xFF) or (len(new_list)%8 != 0)):
+		while len(new_list)%8 != 0:
+			new_list.append(0xFF)  #get to full 8 bytes
+
+	new_list.append(0xFF)  #make endmarker
+	while len(new_list)%8 != 0:
+		new_list.append(0xFF) 
 	
-	val = ''
-	if key != '':
-		val = peripheral[key]
-	if val == '':
-		print(f'Shit happened.')
-
-	if ((lower_outer not in addr) and (lower_outer > 0)):
-		addr.append(lower_outer)
-		key = find_border_key(peripheral, lower_outer)
-		if key != '':
-			#print(f'1Appending to {key}')
-			val = peripheral[key]
-			val.append(lower_outer)
-			peripheral[key]=val
-		else:
-			#print(f'1Appending {lower_outer:04X} to hole?')
-			check_before_adding_to_hole(peripheral, lower_outer)
-			
-
-	if (lower_inner not in addr):
-		addr.append(lower_inner)
-		key = find_border_key(peripheral, lower_inner)
-		if key != '':
-			#print(f'2Appending to {key}')
-			val = peripheral[key]
-			val.append(lower_inner)
-			peripheral[key]=val
-		else:
-			#print(f'2Appending {lower_inner:04X} to hole?')
-			check_before_adding_to_hole(peripheral, lower_inner)
-	
-
-	if (upper_inner not in addr):
-		addr.append(upper_inner)
-		key = find_border_key(peripheral, upper_inner)
-		if key != '':
-			#print(f'3Appending to {key}')
-			val = peripheral[key]
-			val.append(upper_inner)
-			peripheral[key]=val
-		else:
-			#print(f'3Appending {upper_inner:04X} to hole?')
-			check_before_adding_to_hole(peripheral, upper_inner)
-
-	if (upper_outer not in addr):
-		addr.append(upper_outer)
-		key = find_border_key(peripheral, upper_outer)
-		if key != '':
-			#print(f'4Appending to {key}')
-			val = peripheral[key]
-			val.append(upper_outer)
-			peripheral[key]=val
-		else:
-			#print(f'4Appending {upper_outer:04X} to hole?')
-			check_before_adding_to_hole(peripheral, upper_outer)
-
-
-	#exit()
-	return peripheral, addr
-
-def fix_hole(peripheral, addr):
-	print(f'----- fixing Holes...')
-	idx = 0
-	if not peripheral['0xFFN']: # check if list is empty
-		return
-	for v in peripheral['0xFFN']:
-		
-		if ((idx%2 == 0) and (v%2 == 0)):
-			print(f'Start - ok {v:04X}')
-		elif ((idx%2 == 1) and (v%2 == 1)):
-			print(f'End - ok {v:04X}')
-		else:
-			print(f'problem : {v:04X}')
-		idx += 1
-	v = peripheral['0xFFN'][-1]
-	if idx%2 == 1:
-		print(f'problem 2: {v:04X}')
-		for address in addr:
-			if address > v:
-				print(f'found: {address:04X}')
-				check_before_adding_to_hole(peripheral, address-1)
-				return
-
-
-def make_dict_per(cf):
-	try:
-		peripheral = {}
-		peripheral['0xFFN'] = []
-		keys = len(cf['peripherals'].keys())
-		print(f'{bcolors.OKGREEN}--------------------- Configure Peripherals ------------------------{bcolors.ENDC}')
-		#print(f'found {keys} keys.')
-		for i in range(keys):
-			name = cf['peripherals'].keys()[i]
-			print(f'Found: {name}')
-			sublen = len(cf['peripherals'][name])
-			#print(f'found {sublen} values in {name}')
-			cs_number = ''
-			valtemp = ''
-			valH = []
-			valL = []
-			for j in range(sublen):
-				valname = cf['peripherals'][name].keys()[j]
-				value = int(cf['peripherals'][name][valname], 0)
-				if (('start' in valname) and ((value % 2) == 1)):
-					print(f'{bcolors.FAIL} Startvalue must be even! ({valname} = 0x{value:04X}){bcolors.ENDC}')
-					exit()
-				if (('end' in valname) and ((value % 2) == 0)):
-					print(f'{bcolors.FAIL} Endvalue must be odd! ({valname} = 0x{value:04X}){bcolors.ENDC}')
-					exit()
-
-				if ('cs' in valname): # Use the cs value as name for all peripherals
-					peripheral[str(value)+'H'] = valH
-					peripheral[str(value)+'L'] = valL
-				else:
-					if name != 'ram' and name != 'rom': # here we are in any other per. than ram or rom
-						if (('hstart' in valname) or ('hend' in valname)):
-							valH.append((value))
-							print(f'Got HI {valname} in {name} with {value:04X}')
-						else:
-							valL.append((value))
-							print(f'Got LO {valname} in {name} with {value:04X}')
-
-				if 'ram' in name:
-					valL.append((value))
-					peripheral['14A'] = valL
-				elif 'rom' in name:
-					valH.append((value))
-					peripheral['14O'] = valH
-		keys = []
-		addr = []
-		for i in (peripheral):
-			#print(f'Key: {i}')
-			keys.append(i)
-			for j in peripheral[i]:
-				#print(f'Value: {j:04X}')
-				addr.append(j)
-
-		addr.sort()
-		dup = {x for x in addr if addr.count(x) > 1}
-		if len(dup):
-			for y in dup:
-				print(f'{bcolors.FAIL}Found duplicates. Please fix! (0x{y:04X}) {bcolors.ENDC}')
-			exit()
-
-		for k in range(len(addr)):
-			val = addr[k] # the indices should be start,end,start,end,....
-			oe = 'start'   # so start are at even index and end at odd index.
-			if k%2 == 1:
-				oe = 'end'
-			#print(f'Address: {val} index: {oe}')
-			for i in range(len(peripheral)):
-				if val in peripheral[keys[i]]: # if we get an empty list
-					idx2 = peripheral[keys[i]].index(val)
-					oe2 = 'start'
-					if idx2%2 == 1:
-						oe2 = 'end'
-					if oe != oe2:   # if the indices are not equal (as in odd or even) there is an overlap!
-						print(f'{bcolors.FAIL}Found overlap at index: {idx2} in {keys[i]} Value: 0x{peripheral[keys[i]][idx2]:04X}{bcolors.ENDC}')
-		for address in addr:
-			#print(f'1Value: {address:04X}')
-			if address % 2: # Endaddresses
-				if (address & 7) != 7:
-					#print(f'End NOT on 8 byte border {address:06X}')
-					peripheral, addr = add_key(peripheral, address, addr)
-
-			else:        # Startaddress
-				if (address & 7) != 0:
-					#print(f'Start NOT on 8 byte border {address:06X}')
-					peripheral, addr = add_key(peripheral, address, addr)
-
-		fix_hole(peripheral, addr)
-		
-		addr = []  # make new addr array with all the addresses
-		print(f'---------------- DUMP ------------------')
-		cnt = 0
-		for i in (peripheral):
-#			print(f'Key: {i}')
-			for j in peripheral[i]:
-#				print(f'Value: {j:04X}')
-				addr.append(j)
-				cnt += 1
-#		print(f'Total number of events: {cnt}')
-		addr.sort()             # sort it again
-
-		for i in addr:
-			if i % 2 == 0:
-				key = find_key(peripheral, i)
-				print(f'{bcolors.OKGREEN}{key} ', end = '\t')
-				print(f'Start addr: {i:04X}', end = '')
-			else:		
-				print(f'  End addr: {i:04X}{bcolors.ENDC}')
-
-		return peripheral, addr
-	except Exception as e:
-		print(f'Error: {e}')
-		#raise
-
-
-
-def get_bitmask(start, finish, tp):
-	sz = finish - start
-	beg = (start & 0x00000007) # mask out all addresses over 8
-	end = 7 - (finish & 0x00000007)
-	next_address = (finish & 0xFFFF8) + 8
-	#next_address = (finish & 0xFFFF0)+(finish & 0x000008)
-	print(f'Size: {sz+1}, Begin: {start:06X} from border: {beg:02X}, End: {finish:06X} to border: {end:02X} next event: {next_address:06X} func: {tp} ')
-
-	if beg == 0:     # on 8 byte border (0,8)
-		soff = 0xF0
-	elif beg == 2:   # on 2 or A
-		soff = 0xFD
-	elif beg == 4:   # on 4 or C
-		soff = 0xFB
-	elif beg == 6:   # on 6 or E
-		soff = 0xF7
-
-	if end == 0:     # on 8 byte border (7,F)
-		eoff = 0xF0
-	elif end == 2:   # two before 8 byte border (5,D)
-		eoff = 0xF8
-	elif end == 4:   # four before 8 byte border (3,B)
-		eoff = 0xFC
-	elif end == 6:   # six before 8 byte border (7,F)
-		eoff = 0xFE
-
-	temp = (soff | eoff)%(2**8)
-	
-	if tp == 'A': # RAM - low nibble (WP) 0, Low and high nibble same
-		retval = ((temp * 16) + (temp)%(2**4))%(2**8)
-	elif tp == 'O': # ROM - low nibble (WP) F, low nibble is NOT high nibble
-		retval = (((temp * 16) + (~temp))%(2**4))%(2**8)
-	elif tp == 'L': # second output - low nibble 0-F
-		retval = (temp)%(2**8)
-	elif tp == 'H': # first output - high nibble 0-F
-		retval = (temp * 16 + 0x0F)%(2**8)
-	elif tp == 'N': # nothing selected
-		retval = ((~temp * 16))%(2**8) + (~temp)%(2**4)
-	
-	print(f'eoff: {eoff:02X} soff: {soff:02X} temp:{temp:02X} retval: {retval:02X}')
-	return retval, next_address
-
-def find_indices(list_to_check, item_to_find):
-    indices = []
-    for idx, value in enumerate(list_to_check):
-        if value == item_to_find:
-            indices.append(idx)
-    return indices
+ #	print(f'length padded to: {len(new_list)}')
+	return new_list, errval
 
 def make_bytearray(clist):
 	retval = bytearray()
@@ -415,138 +276,225 @@ def make_bytearray(clist):
 		#print(f'Address: {addr:04x}, cs: {chip:02X}, mask: {mask:02X}')
 	return retval
 
-def config_per(cf): 
-	try:
-		peripheral = {}
-		addr = []
-		oldkeyn = 0xFF
-		oldaddress = 0xFFFFFFFF
-		oldstart = old_next_address = next_address = oldend = 0xFFFFFFFF
-		new_file = bytearray()
-		configfile = bytearray()
-		peripheral, addr = make_dict_per(cf)
-		#print(f'{peripheral}, {addr}')
-#		for i in addr:
-#			print(f'addr: {i:04X}')
-		print(f'----------------- Begin ----------------')
-		events_done = []
-		for address in addr:
-			if address % 2: # Endaddresses
-				#print(f'End @ {address:04X} Oldstart: {oldstart:06X}')
-				key = find_key(peripheral, oldstart)  # Whats the chipselect of that value
-				if (address > (oldstart + 7)):
-					print(f'{bcolors.HEADER}big block {oldstart:04X} - {address:04X} with key: {key}{bcolors.ENDC}')
-					mask,next_address = get_bitmask(oldstart, address, key[-1:])# get the bitmask for the next 8 addresses
-					events_done.append(oldstart)
-					events_done.append(int(key[:-1] , 0))
-					events_done.append(mask)
-					old_next_address = next_address
+def remove_unnecessary_events(el):
+	retlist = []
+	ll = len(el)
+ #	print(f' Length before: {ll}')
+	old_address = 0xFFFFFF
+	old_chip = 0xFF
+	old_mask = 0xFF
+	for i in range(0, len(el), 3):
+		address = el[i]
+		chip = el[i+1]
+		mask = el[i+2]
+		if ((chip == old_chip) and (address == old_address + 8) and (mask == old_mask)):
+			#print(f'Duplicate found at:  {address:06X}')
+			pass
+		else:
+			retlist.append(address)
+			retlist.append(chip)
+			retlist.append(mask)
+
+		old_address = address
+		old_chip = chip
+		old_mask = mask
+ #		print(f'Address: {address:06X} chip: {chip:02X}, mask {mask:02X}')
+	
+ #	print(f' Length after: {len(retlist)}')
+	return retlist
+
+def distill_list(ad): # looks at 8 addresses in a row and maps it to bits
+	el = []
+	ll = len(ad)
+	last_byteval = 0
+	last_chip = 0
+	for i in range(0, ll, 8): # here we go through all the addresses in 8 step
+		chips = []
+		temp = 0
+		for b in range(0, 7, 2): # here we go through the 8 addresses in 2 step
+			#print(f'pos: {b}')
+			if (i+b) >= ll:
+				print(f'{bcolors.FAIL}List ends not on 8 byte border!{bcolors.ENDC}')
+				ad.append(0xFF)
+			val = ad[i+b]
+			if val != temp:
+				if val not in chips:
+					chips.append(val)
+ #				if val == 0x1E: # this is RAM
+ #					print(f'RAM from: {(i+b):06X}')
+ #				elif val == 0xFF: # this is nothing
+ #					print(f'hole from: {(i+b):06X}')
+ #				elif val == 0x0E: # this is ROM
+ #					print(f'ROM from: {(i+b):06X}')
+ #				elif val < 16:
+ #					print(f'Peripheral with chipselect {val} on low output from: {(i+b):06X}')
+ #				else:
+ #					print(f'Peripheral with chipselect {val-16} on high output from: {(i+b):06X}')
+			temp = val
+		#print(f'Found {len(chips)} chips in the 8 byte range {i} - {i+7}.')
+		chips.sort()
+		last_i = 0xFFFFFFF
+ #		print(f'--------------- working on address: {i:06x} ------------------------')
+		for c in range(len(chips)): # here we go through all the chips which have an event in the 8 block
+			chip = chips[c]
+			byteval = 0xFF
+			#print(f'chip: {chip}')
+			for b in range(0, 7, 2): # here we go through the 8 addresses in 2 step again
+				val = ad[i+b]
+				power = (2**int(b/2))%(2**8)
+				if val == chip:
+					byteval -= power
+					#print(f'found it. power: {power}, byteval: {byteval:02X} chip: {val}')
 				else:
-					print(f'{bcolors.HEADER}small block {oldstart:04X} - {address:04X} with key: {key}{bcolors.ENDC}')
-					if (oldstart-1) in addr:
-						print(f'{bcolors.OKBLUE}no hole @ {oldstart:04X}{bcolors.ENDC}')
+					#print(f'nothing pos: {power}, val: {val}')
+					pass
+
+			if chip < 0x0E:              # Peripheral on low output
+				chiptw = chip
+				bytevaltw = byteval
+			elif chip == 0x0E:           # RAM
+				chiptw = chip
+				bytevaltw = ((byteval*16)+(byteval%16))%(2**8) # for ram we don't set the low nibble (Writeprotect)
+			elif ((chip > 0x0F) and (chip <  0x1E)): # Per. on high output
+				chiptw = chip - 16
+				bytevaltw = (byteval*16)%(2**8)+0x0F
+			elif (chip == 0x1E):          # ROM
+				chiptw = chip - 16
+				bytevaltw = (byteval*16)%(2**8)+0x0F
+			else:                         # Hole
+				chiptw = 0xFF
+				bytevaltw = 0xFF
+
+ #			print(f'--------------- adding: address: {i:06x} - {last_i:06x} chip: {chip} - {last_chip}, byteval {byteval:02X} - {last_byteval:02X}')
+			if chip%16 == 0x0E:
+ #				print(f'RAM or ROM found        {i:06x} - {last_i:06x} chip: {chip} - {last_chip}, byteval {byteval:02X} - {bytevaltw:02X}')
+				if (i == last_i):           # same address,
+					if (chip != last_chip): # different RAM/ROM chip
+ #						print(f'switched from ROM -> RAM')
+						el.append(i) # address
+						el.append(chiptw)
+						el.append(bytevaltw)
+					else:                   #  same address, same chip: logical AND
+ #						print(f'same address, same chip')
+						bv = (el[-1]) & bytevaltw
+						el[-1] = bv
+				else: 
+ #					print(f'different address')
+					el.append(i) # address
+					el.append(chiptw)
+					el.append(bytevaltw)
+
+			else:
+ #				print(f'normal peripheral found {i:06x} - {last_i:06x} chip: {chip} - {last_chip}, byteval {byteval:02X} - {last_byteval:02X}')
+				if (i == last_i):           # same address,
+					if (chip%16 != last_chip%16): # different per. chip
+ #						print(f'same address, different chip')
+						el.append(i) # address
+						el.append(chiptw)
+						el.append(bytevaltw)
+					else:                   # same address, same chip: logical AND
+ #						print(f'same address, smae chip')
+						bv = (el[-1]) & bytevaltw
+						el[-1] = bv
+
+				else:
+ #					print(f'different address {i:06x} - {last_i:06x} chip: {chip} - {last_chip}, byteval {byteval:02X} - {last_byteval:02X}')
+					el.append(i) # address
+					el.append(chiptw)
+					el.append(bytevaltw)
+					#pass
+
+			last_i = i
+			last_chip = chip
+			last_byteval = byteval
+
+		chips = []
+	el = remove_unnecessary_events(el)
+	return el
+
+def config_per(cf): 
+	err = 0
+	errval = 0
+	try:
+		ba = [] # ba is a list of lists. 15 lists for 15 chipselect lines
+		keys = len(cf['peripherals'].keys())
+		print(f'{bcolors.OKGREEN}--------------------- Configure Peripherals ------------------------{bcolors.ENDC}')
+		#print(f'found {keys} keys.')
+		for i in range(keys):           # go through keys (like [[ram]])
+			name = cf['peripherals'].keys()[i]
+			print(f'Found peripheral: {name}')
+			addr = []
+			if ((name in 'ram') or (name in 'rom')):
+				#print(f'ram or rom found, adding cs at 14')
+				cs = 14
+			for sk in cf['peripherals'][name]:
+				if sk[0] == 'l':
+					hl = 0xF0
+				elif sk[0] == 'h':
+					hl = 0x0F
+				elif 'cs' == sk:
+					pass
+				else:
+					if 'ram' in name:
+						hl = 0xF0
+					elif 'rom' in name:
+						hl = 0x0F
 					else:
-						print(f'{bcolors.OKBLUE}hole @ {(oldend+1):04X} - {(oldstart-1):04X} old next Adress: {old_next_address:04X}{bcolors.ENDC}')
+						print(f'{bcolors.FAIL}Keynames don\'t start with \'h\' or \'l\' at key: {sk}{bcolors.ENDC}')
+				val = int(cf['peripherals'][name][sk],0)
+ #				print(f'Key: {sk} with value: {val:04X} found', end = '')
+				
+				if (('end' in sk) and ((val % 2) == 1)):        # test value (must be odd)
+ #					print(f' - OK.')
+					addr = my_append(addr, val, hl)
+ #					dump_list(addr)
+				elif (('start' in sk) and ((val % 2) == 0)):    # test value (must be even) 
+ #					print(f' - OK.')
+					addr = my_append(addr, val, hl)
+ #					dump_list(addr)
+				elif ('cs' in sk):
+ #					print(f' - OK.')
+					cs = val
+				else:
+					print(f'{bcolors.FAIL}found wrong address (odd/even) at: {val:05X}{bcolors.ENDC}')
+					exit()
+ #			print(f'-------------------cs: {cs} len: {len(ba)}')
 
-					if (oldstart & 0xFFFFF8) in events_done:
-						#idx = events_done.index((oldstart & 0xFFFFF8))
-						lidx = find_indices(events_done, (oldstart & 0xFFFFF8))
+			while len(ba) <= cs: # make a new list in the right place
+				ba.append([])
 
-						print(f'{bcolors.OKGREEN}already done! @ {lidx} {bcolors.ENDC}')
-						mask,next_address = get_bitmask(oldstart, address, key[-1:])# get the bitmask for the next 8 addresses
-						if (len(lidx) == 1):
-							idx = lidx[0] # only one event
-						else:
-							idx = 0
-							for i in lidx:
-								if int(key[:-1]) == events_done[i+1]:
-									print(f'{bcolors.OKGREEN} Found Key {i} {bcolors.ENDC}')
-									idx = i
+			if cs == 14:
+				ba, err = merge_ram_rom(ba, addr) # the ram and rom list are merged int one, format like the others
+ #				print(f'Err: {err}')
+				errval += err
+			else:
+				ba[cs] = addr		
+ #			print(f'List: {ba} len: {len(ba)}')
 
-						if int(key[:-1]) == events_done[idx+1]:
-							print(f'{bcolors.OKGREEN} Keys are the same {bcolors.ENDC}')
-							val = events_done[idx+2]
-							newval = val & mask
-							events_done[idx+2] = newval
-							old_next_address = next_address
-						else:
-							print(f'{bcolors.FAIL} Keys are different!{bcolors.ENDC}')
-							events_done.append((oldstart & 0xFFFFF8))
-							events_done.append(int(key[:-1] , 0))
-							events_done.append(mask)
-							old_next_address = next_address
-					else:
-						print(f'{bcolors.OKGREEN}new event!{bcolors.ENDC}')
-						mask,next_address = get_bitmask(oldstart, address, key[-1:])# get the bitmask for the next 8 addresses
-						events_done.append((oldstart & 0xFFFFF8))
-						events_done.append(int(key[:-1] , 0))
-						events_done.append(mask)
-						old_next_address = next_address
+ #		l = []
+ #		for li in range(len(ba)):
+ #			l = ba[li]
+ #			if len(l) > 0:
+ #				print(f'Chipselect: {li}')
+ #			dump_list(l)
 
-				oldend = address
-				#write_file(configfile, '')
-				dump_events(events_done)
+		addresdata , err= collapse_lists(ba) # collapses all 15 lists into one eventlist
+		errval += err
+ #		dump_list(addresdata)
+		el = distill_list(addresdata) # maps it into bits
+ #		dump_data(el, 3)
 
-			else:           # Startaddresses
-				print(f'Start @ {address:06X} Oldnext: {old_next_address:06X}')
-				#if (address) > (next_address+7):
-				#	print(f'gap found @ {next_address:04X} - {old_next_address:04X}')
-				#	configfile += make_bytes(next_address)   # Convert address to three bytes
-				#	configfile += keyn.to_bytes(1,'big')  # send cs
-				#	mask,next_address = get_bitmask(next_address, old_next_address, key[-1:])# get the bitmask for the next 8 addresses
-				#	configfile += mask.to_bytes(1,'big')  # and send mask
-
-
-				#if oldstart > address:
-				#	print(f'Begin....')
-				oldstart = address
-
-
-
-#		for i in range(0, len(addr)-1, 2):
-#			if (addr[i] != 0):
-#				#print(f'---here: {addr[i-1]:04X} - {addr[i]:04X}')
-#				if (addr[i-1]+1 != addr[i]): # Compare last end to this start
-#					print(f'Hole here: {addr[i-1]+1:04X} - {addr[i]-1:04X}')
-#
-#				if ((addr[i-1] & 0x07) != 7):
-#					new_file += make_bytes(addr[i-1]&0xFFFF8)     # Convert address to three bytes
-#					print(f'End not on a 8byte border!')
-#					mask,next_address = get_bitmask((addr[i-1]&0xFFFF8), addr[i-1], key[-1:])# get the bitmask for the next 8 addresses
-#					print(f'Index: {i} Key: {key} old adr.: {oldaddress:04X} addr.: {addr[i]:04X} next addr.:  {addr[i+1]:04x} Mask: {mask:02X}')
-#					new_file += keyn.to_bytes(1,'big')  # send cs
-#					new_file += mask.to_bytes(1,'big') # and send mask
-#
-#				else:
-#					print(f'End -is- on a 8byte border!')
-#					new_file += b'\xFF\xFF'                 # no select there
-#			key = find_key(peripheral, addr[i]) # Whats the chipselect of that value
-#			keyn = int(key[:-1])                # convert to number only
-#			mask,next_address = get_bitmask(addr[i], addr[i+1], key[-1:])# get the bitmask for the next 8 addresses
-#			print(f'Index: {i} Key: {key} old adr.: {oldaddress:04X} addr.: {addr[i]:04X} next addr.:  {addr[i+1]:04x} Mask: {mask:02X}')
-#			if ((oldkeyn == keyn) and ((oldaddress+8) > addr[i])):
-#				print(f'Sepcial case, same address different mask!') # Address and cs are already in bytearray, only the mask needs to be adjusted
-#				new_file[-1] = (oldmask & mask) # overwrite last byte
-#			else:
-#				new_file += make_bytes(addr[i])     # Convert address to three bytes
-#				new_file += keyn.to_bytes(1,'big')  # send cs
-#				new_file += mask.to_bytes(1,'big') # and send mask
-#			oldkeyn = keyn
-#			oldmask = mask
-#			oldaddress = addr[i]
-
-
-		#new_file = bytearray()
-		new_file = make_bytearray(events_done)
-		new_file += make_bytes(addr[-1]+1)  # Convert last end address + 1 to three bytes
-		new_file += b'\xFF\xFF'             # no select there
+ #		print(f'Errval: {errval}')
+		new_file = make_bytearray(el)
 		new_file += b'\x00\x00\x00\x00\x00' # this marks is the end (Address = 0)
 		write_file(new_file, 'configdata.uc')
-		dump_data(new_file)
-		fr.main('config', new_file)
+		dump_data(new_file, 5)
+		if errval == 0:
+			fr.main('config', new_file)
+		return errval
 	except Exception as e:
 		print(f'Error: {e}')
-
+		#raise
 
 def main(dir, cf, norom):
 	appname = cf['app']['name']
@@ -564,24 +512,27 @@ def main(dir, cf, norom):
 	print(f'{bcolors.OKGREEN}------------------------- Configure Clock --------------------------{bcolors.ENDC}')
 	sf.main(clockfreqf*8, clockfreqs)  # configure Clock
 
-	config_per(cf) # configure peripherals
+	if (config_per(cf)): # configure peripherals
+		exit()
 	
-	i=0
-	while 1:
-		if norom == 'false':
-			if (upload_image(dir, cf, i)):
-				print(f'{bcolors.FAIL}Problem uploading Image!{bcolors.ENDC}')
-				break
+	
+	for k in cf.keys():
+		if 'img' in k:
+			if norom == 'false':
+				if (upload_image(dir, cf, k)):
+					print(f'{bcolors.FAIL}Problem uploading Image!{bcolors.ENDC}')
+			else:
+				print(f'{bcolors.FAIL}        ###### actually NOT uploading Image! ######{bcolors.ENDC}')
+
+	for k in cf.keys():
+		if 'patch' in k:
+			if norom == 'false':
+				if (upload_patch(cf, k)):
+					print(f'{bcolors.FAIL}Problem uploading Patch!{bcolors.ENDC}')
+					break
+			else:
+				print(f'{bcolors.FAIL}        ###### actually NOT applying patch! ######{bcolors.ENDC}')
 			
-		else:
-			print(f'{bcolors.FAIL}        ###### actually NOT uploading rom image! ######{bcolors.ENDC}')
-			break
-		i += 1
-		try:
-			img = cf['img'+str(i)]
-		except Exception as e:
-			print(f'No more Images. {e}')
-			break
 
 	print(f'{bcolors.OKGREEN}-------------------------- Reset inactive --------------------------{bcolors.ENDC}')
 	s_rst.main(1)  # Reset inactive - Run
