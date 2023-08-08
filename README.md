@@ -30,7 +30,7 @@ It is different from other designs because of these points:
 Version 2.00
 
 Unicomp plus Logic Analyzer:
-![Unicomp plus Logic analyzer](pictures/unicomp_stack1.jpg)
+![Unicomp plus Logic analyzer](pictures/6502_board.jpg)
 
 
 ### Unicomp modules ###
@@ -43,6 +43,9 @@ Unicomp plus Logic Analyzer:
 * CPU board:
 	- can be any 8-bit CPU (6502, 6802, 6809, 68008, 6803, 8051,...)
 	- a CPLD (XC9572) for clock generation and glue logic
+
+6502 Board:
+![6502 Board](pictures/unicomp_stack1.jpg)
 
 * Multi Serial boaŕd:
 	- suggested chip select #0
