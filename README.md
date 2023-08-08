@@ -53,6 +53,9 @@ Unicomp plus Logic Analyzer:
 	- can be used with the following serial interface chips: MC6850, MOS6551, MOS6552 or pin compatible
 	- RAM for address decoding
 
+Multi Serial Board:
+![Multi Serial Board](pictures/serial_board.jpg)
+
 * Multi Parallel boaŕd:
 	- suggested chip select #1
 	- two chip selects on board
