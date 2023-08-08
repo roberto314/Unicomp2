@@ -29,6 +29,10 @@ It is different from other designs because of these points:
 
 Version 2.00
 
+Unicomp plus Logic Analyzer:
+![Unicomp plus Logic analyzer](pictures/unicomp_stack1.jpg)
+
+
 ### Unicomp modules ###
 
 * Input board:
