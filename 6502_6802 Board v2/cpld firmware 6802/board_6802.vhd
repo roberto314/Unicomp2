@@ -4,8 +4,9 @@ use IEEE.numeric_std.all;
 
 entity board_6802 is
     Port ( 
-        A        : in std_logic_vector(15 downto 0);
-        IO2     : out std_logic;  -- Reserve
+        A        : in std_logic_vector(15 downto 1);
+        nHALT_in : in std_logic;  -- HALT Input
+        nHALT    : out std_logic;  -- HALT to CPU
         BA       : in std_logic;  -- Bus Accsess (needed for /HALT)
         MOSI     : in  STD_LOGIC; -- SPI Interface
         SCK      : in  STD_LOGIC; -- SPI Interface
@@ -55,7 +56,7 @@ s_nMWR <= NOT((NOT RnW) AND s_EVMA); --works better!
 
 --s_BUS <= nRST; --works fine
 --s_BUS <= nRST AND s_BCLKWS; -- works badly
-s_BUS <= nRST AND VMA; --works fine
+s_BUS <= nRST AND VMA AND NOT BA; --works fine
 
 nBUSFREE <= s_BUS;
 nAOE <= NOT(s_BUS); 
@@ -98,7 +99,16 @@ s_CPUCLK <= clk_divider(0); -- MC6802 has 4MHz oscillator for 1MHz operation
 nPH0 <= NOT(s_CPUCLK);
 PH0 <= s_CPUCLK;
 
-
+process (E_CPU)
+    begin
+        if rising_edge(E_CPU) then
+            if nHALT_in = '1' then
+                nHALT <= '1';
+            else
+                nHALT <= '0';
+            end if;
+        end if;
+end process;
 
 process (CLKF, clk_divider)
     begin
@@ -114,6 +124,5 @@ process (CLKF, clk_divider)
             end if;
         end if;
 end process;
-IO2 <= s_BCLKWS;
 
 end Behavioral;

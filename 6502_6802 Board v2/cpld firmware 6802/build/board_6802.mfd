@@ -1,8 +1,8 @@
 MDF Database:  version 1.0
 MDF_INFO | board_6802 | XC9572XL-10-VQ44
-MACROCELL | 1 | 17 | s_ELEVEL
+MACROCELL | 2 | 17 | s_ELEVEL
 ATTRIBUTES | 8520484 | 0
-OUTPUTMC | 5 | 0 | 13 | 2 | 17 | 2 | 16 | 2 | 15 | 0 | 14
+OUTPUTMC | 2 | 0 | 13 | 0 | 14
 INPUTS | 2 | E_CPU  | CLKF
 INPUTP | 2 | 9 | 27
 EQ | 2 | 
@@ -11,9 +11,9 @@ EQ | 2 |
 
 MACROCELL | 0 | 13 | clk_divider<0>
 ATTRIBUTES | 4588322 | 0
-OUTPUTMC | 6 | 0 | 13 | 0 | 5 | 2 | 17 | 2 | 16 | 2 | 15 | 0 | 14
+OUTPUTMC | 2 | 0 | 13 | 0 | 14
 INPUTS | 4 | s_ELEVEL  | PH0  | E_CPU  | CLKF
-INPUTMC | 2 | 1 | 17 | 0 | 13
+INPUTMC | 2 | 2 | 17 | 0 | 13
 INPUTP | 2 | 9 | 27
 EQ | 2 | 
    !PH0.T = !s_ELEVEL & PH0 & E_CPU;
@@ -21,23 +21,10 @@ EQ | 2 |
 
 MACROCELL | 0 | 8 | nBUSFREE_OBUF
 ATTRIBUTES | 264962 | 0
-INPUTS | 2 | nRST  | VMA
-INPUTP | 2 | 21 | 11
+INPUTS | 3 | BA  | VMA  | nRST
+INPUTP | 3 | 15 | 11 | 21
 EQ | 1 | 
-   nBUSFREE = nRST & VMA;
-
-MACROCELL | 0 | 5 | s_BCLKWS
-ATTRIBUTES | 4588326 | 0
-OUTPUTMC | 1 | 0 | 5
-INPUTS | 6 | PH0  | IO2  | clk_divider<1>  | clk_divider<2>  | clk_divider<3>  | CLKF
-INPUTMC | 5 | 0 | 13 | 0 | 5 | 2 | 17 | 2 | 16 | 2 | 15
-INPUTP | 1 | 27
-EQ | 5 | 
-   IO2.T = PH0 & !IO2 & clk_divider<1> & clk_divider<2> & 
-	!clk_divider<3>
-	# !PH0 & IO2 & !clk_divider<1> & clk_divider<2> & 
-	!clk_divider<3>;
-   IO2.CLK = !CLKF;
+   nBUSFREE = !BA & VMA & nRST;
 
 MACROCELL | 0 | 4 | E_Out_OBUF
 ATTRIBUTES | 264962 | 0
@@ -46,42 +33,13 @@ INPUTP | 2 | 11 | 9
 EQ | 1 | 
    E_Out = VMA & E_CPU;
 
-MACROCELL | 2 | 17 | clk_divider<1>
-ATTRIBUTES | 8520480 | 0
-OUTPUTMC | 4 | 0 | 5 | 2 | 17 | 2 | 16 | 2 | 15
-INPUTS | 5 | PH0  | clk_divider<1>  | s_ELEVEL  | E_CPU  | CLKF
-INPUTMC | 3 | 0 | 13 | 2 | 17 | 1 | 17
-INPUTP | 2 | 9 | 27
-EQ | 4 | 
-   !clk_divider<1>.D = !s_ELEVEL & E_CPU
-	# PH0 & clk_divider<1>
-	# !PH0 & !clk_divider<1>;
-   clk_divider<1>.CLK = CLKF;
-
-MACROCELL | 2 | 16 | clk_divider<2>
-ATTRIBUTES | 4326176 | 0
-OUTPUTMC | 3 | 0 | 5 | 2 | 16 | 2 | 15
-INPUTS | 6 | s_ELEVEL  | PH0  | clk_divider<1>  | E_CPU  | clk_divider<2>  | CLKF
-INPUTMC | 4 | 1 | 17 | 0 | 13 | 2 | 17 | 2 | 16
-INPUTP | 2 | 9 | 27
-EQ | 4 | 
-   clk_divider<2>.T = s_ELEVEL & PH0 & clk_divider<1>
-	# !s_ELEVEL & E_CPU & clk_divider<2>
-	# PH0 & !E_CPU & clk_divider<1>;
-   clk_divider<2>.CLK = CLKF;
-
-MACROCELL | 2 | 15 | clk_divider<3>
-ATTRIBUTES | 4326176 | 0
-OUTPUTMC | 2 | 0 | 5 | 2 | 15
-INPUTS | 7 | s_ELEVEL  | E_CPU  | clk_divider<3>  | PH0  | clk_divider<1>  | clk_divider<2>  | CLKF
-INPUTMC | 5 | 1 | 17 | 2 | 15 | 0 | 13 | 2 | 17 | 2 | 16
-INPUTP | 2 | 9 | 27
-EQ | 5 | 
-   clk_divider<3>.T = !s_ELEVEL & E_CPU & clk_divider<3>
-	# s_ELEVEL & PH0 & clk_divider<1> & 
-	clk_divider<2>
-	# PH0 & !E_CPU & clk_divider<1> & clk_divider<2>;
-   clk_divider<3>.CLK = CLKF;
+MACROCELL | 0 | 5 | nHALT_OBUF
+ATTRIBUTES | 8651554 | 0
+INPUTS | 2 | nHALT_in  | E_CPU
+INPUTP | 2 | 88 | 9
+EQ | 2 | 
+   nHALT.D = nHALT_in;
+   nHALT.CLK = E_CPU;
 
 MACROCELL | 1 | 10 | nMRD_OBUF
 ATTRIBUTES | 264962 | 0
@@ -92,17 +50,17 @@ EQ | 1 |
 
 MACROCELL | 1 | 5 | nDOE_OBUF
 ATTRIBUTES | 264962 | 0
-INPUTS | 2 | nRST  | VMA
-INPUTP | 2 | 21 | 11
+INPUTS | 3 | BA  | VMA  | nRST
+INPUTP | 3 | 15 | 11 | 21
 EQ | 1 | 
-   !nDOE = nRST & VMA;
+   !nDOE = !BA & VMA & nRST;
 
 MACROCELL | 1 | 7 | nDOE_OBUF$BUF0
 ATTRIBUTES | 264962 | 0
-INPUTS | 2 | nRST  | VMA
-INPUTP | 2 | 21 | 11
+INPUTS | 3 | BA  | VMA  | nRST
+INPUTP | 3 | 15 | 11 | 21
 EQ | 1 | 
-   !nAOE = nRST & VMA;
+   !nAOE = !BA & VMA & nRST;
 
 MACROCELL | 1 | 8 | nMWR_OBUF
 ATTRIBUTES | 264962 | 0
@@ -114,22 +72,24 @@ EQ | 1 |
 MACROCELL | 0 | 14 | nPH0_OBUF
 ATTRIBUTES | 8651558 | 0
 INPUTS | 4 | PH0  | s_ELEVEL  | E_CPU  | CLKF
-INPUTMC | 2 | 0 | 13 | 1 | 17
+INPUTMC | 2 | 0 | 13 | 2 | 17
 INPUTP | 2 | 9 | 27
 EQ | 3 | 
    !nPH0.D = !PH0
 	# !s_ELEVEL & E_CPU;
    nPH0.CLK = CLKF;
 
-PIN | CLKF | 64 | 0 | N/A | 27 | 7 | 1 | 17 | 0 | 13 | 0 | 5 | 2 | 17 | 2 | 16 | 2 | 15 | 0 | 14
-PIN | E_CPU | 64 | 0 | N/A | 9 | 8 | 1 | 17 | 0 | 13 | 0 | 4 | 2 | 17 | 2 | 16 | 2 | 15 | 1 | 8 | 0 | 14
-PIN | nRST | 64 | 0 | N/A | 21 | 3 | 0 | 8 | 1 | 5 | 1 | 7
+PIN | CLKF | 64 | 0 | N/A | 27 | 3 | 2 | 17 | 0 | 13 | 0 | 14
+PIN | E_CPU | 64 | 0 | N/A | 9 | 6 | 2 | 17 | 0 | 13 | 0 | 4 | 0 | 5 | 1 | 8 | 0 | 14
+PIN | BA | 64 | 0 | N/A | 15 | 3 | 0 | 8 | 1 | 5 | 1 | 7
 PIN | VMA | 64 | 0 | N/A | 11 | 6 | 0 | 8 | 0 | 4 | 1 | 10 | 1 | 5 | 1 | 7 | 1 | 8
+PIN | nRST | 64 | 0 | N/A | 21 | 3 | 0 | 8 | 1 | 5 | 1 | 7
+PIN | nHALT_in | 64 | 0 | N/A | 88 | 1 | 0 | 5
 PIN | RnW | 64 | 0 | N/A | 7 | 2 | 1 | 10 | 1 | 8
 PIN | PH0 | 536871040 | 0 | N/A | 24
 PIN | nBUSFREE | 536871040 | 0 | N/A | 20
-PIN | IO2 | 536871040 | 0 | N/A | 13
 PIN | E_Out | 536871040 | 0 | N/A | 12
+PIN | nHALT | 536871040 | 0 | N/A | 13
 PIN | nMRD | 536871040 | 0 | N/A | 3
 PIN | nDOE | 536871040 | 0 | N/A | 89
 PIN | nAOE | 536871040 | 0 | N/A | 90

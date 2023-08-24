@@ -1,6 +1,6 @@
 NET "MOSI"  LOC = "p5"  ;
 NET "SCK"   LOC = "p6"  ;
-NET "A[0]"   LOC = "p30"  ;
+NET "nHALT_in"   LOC = "p30"  ;
 NET "A[1]"   LOC = "p29"  ;
 NET "A[2]"  LOC = "p28"  ;
 NET "A[3]"  LOC = "p27"  ;
@@ -18,7 +18,7 @@ NET "A[14]"  LOC = "p8"  ;
 NET "A[15]"  LOC = "p7"  ;
 
 NET "E_Out" LOC = "p40"  ;
-NET "IO2"  LOC = "p41"  ;
+NET "nHALT"  LOC = "p41"  ;
 NET "BA"    LOC = "p42"  ;
 
 NET "VMA"      LOC = "p39"  ;

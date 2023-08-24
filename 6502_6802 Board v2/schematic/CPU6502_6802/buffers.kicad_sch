@@ -7,7 +7,7 @@
   (title_block
     (title "Unicomp v2 - 6502 6802 Board")
     (date "2023-07-06")
-    (rev "v1")
+    (rev "v1.1")
     (company "100% Offner")
     (comment 1 "v1: Initial")
   )

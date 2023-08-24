@@ -1,7 +1,7 @@
 Release 8.1i - Fit P.20131013
 Copyright(c) 1995-2003 Xilinx Inc. All rights reserved
 
- 8- 8-2023  6:19PM
+ 8-23-2023  9:17PM
 
 NOTE: This file is designed to be imported into a spreadsheet program
 such as Microsoft Excel for viewing, printing and sorting. The pipe '|'
@@ -47,7 +47,7 @@ P26|VCC||VCCIO||||||||||
 P27|TIE||I/O||||||||||
 P28|TIE||I/O||||||||||
 P29|TIE||I/O||||||||||
-P30|TIE||I/O||||||||||
+P30|nHALT_in|I|I/O|INPUT|||||||||
 P31|nDOE|O|I/O|OUTPUT|||||||||
 P32|nAOE|O|I/O|OUTPUT|||||||||
 P33|nMWR|O|I/O/GSR|OUTPUT|||||||||
@@ -58,8 +58,8 @@ P37|E_CPU|I|I/O|INPUT|||||||||
 P38|TIE||I/O||||||||||
 P39|VMA|I|I/O|INPUT|||||||||
 P40|E_Out|O|I/O|OUTPUT|||||||||
-P41|IO2|O|I/O|OUTPUT|||||||||
-P42|TIE||I/O||||||||||
+P41|nHALT|O|I/O|OUTPUT|||||||||
+P42|BA|I|I/O|INPUT|||||||||
 P43|nBUSFREE|O|I/O/GCK1|OUTPUT|||||||||
 P44|nRST|I|I/O/GCK2|INPUT|||||||||
 
