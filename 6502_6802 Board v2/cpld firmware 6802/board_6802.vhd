@@ -56,7 +56,7 @@ s_nMWR <= NOT((NOT RnW) AND s_EVMA); --works better!
 
 --s_BUS <= nRST; --works fine
 --s_BUS <= nRST AND s_BCLKWS; -- works badly
-s_BUS <= nRST AND VMA AND NOT BA; --works fine
+s_BUS <= nRST AND VMA; --works fine
 
 nBUSFREE <= s_BUS;
 nAOE <= NOT(s_BUS); 

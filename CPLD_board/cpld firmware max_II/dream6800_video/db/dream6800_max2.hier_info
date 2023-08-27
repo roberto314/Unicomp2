@@ -1,6 +1,19 @@
 |dream6800_video
 clk50 => ~NO_FANOUT~
-clk4 => Load.CLK
+clk4 => vSyncOut.CLK
+clk4 => vDiv[0].CLK
+clk4 => vDiv[1].CLK
+clk4 => vDiv[2].CLK
+clk4 => vDiv[3].CLK
+clk4 => vDiv[4].CLK
+clk4 => vDiv[5].CLK
+clk4 => vDiv[6].CLK
+clk4 => vDiv[7].CLK
+clk4 => vDiv[8].CLK
+clk4 => vDiv[9].CLK
+clk4 => vDiv[10].CLK
+clk4 => vCntEn.CLK
+clk4 => SRLoad.CLK
 clk4 => loaddlytim[0].CLK
 clk4 => loaddlytim[1].CLK
 clk4 => loaddlytim[2].CLK
@@ -8,27 +21,6 @@ clk4 => loaddlytim[3].CLK
 clk4 => loaddlytim[4].CLK
 clk4 => loaddlytim[5].CLK
 clk4 => loaddlytim[6].CLK
-clk4 => H64Dly.CLK
-clk4 => hsynctim[0].CLK
-clk4 => hsynctim[1].CLK
-clk4 => hsynctim[2].CLK
-clk4 => hsynctim[3].CLK
-clk4 => hsynctim[4].CLK
-clk4 => hsynctim[5].CLK
-clk4 => hsynctim[6].CLK
-clk4 => vSyncOut.CLK
-clk4 => vSyncOutEn.CLK
-clk4 => vtim[0].CLK
-clk4 => vtim[1].CLK
-clk4 => vtim[2].CLK
-clk4 => vtim[3].CLK
-clk4 => vtim[4].CLK
-clk4 => vtim[5].CLK
-clk4 => vtim[6].CLK
-clk4 => vtim[7].CLK
-clk4 => vtim[8].CLK
-clk4 => vtim[9].CLK
-clk4 => vtim[10].CLK
 clk4 => hDiv[0].CLK
 clk4 => hDiv[1].CLK
 clk4 => hDiv[2].CLK
@@ -38,14 +30,156 @@ clk4 => hDiv[5].CLK
 clk4 => hDiv[6].CLK
 clk4 => hDiv[7].CLK
 DMAEN => VertEn.IN1
+BA => A[0].OE
+BA => A[1].OE
+BA => A[2].OE
+BA => A[3].OE
+BA => A[4].OE
+BA => A[5].OE
+BA => A[6].OE
+BA => A[7].OE
+BA => A[8].OE
+BA => A[9].OE
+BA => A[10].OE
+BA => A[11].OE
+BA => A[12].OE
+BA => A[13].OE
+BA => A[14].OE
+BA => A[15].OE
+A[0] <= A[0].DB_MAX_OUTPUT_PORT_TYPE
+A[1] <= A[1].DB_MAX_OUTPUT_PORT_TYPE
+A[2] <= A[2].DB_MAX_OUTPUT_PORT_TYPE
+A[3] <= A[3].DB_MAX_OUTPUT_PORT_TYPE
+A[4] <= A[4].DB_MAX_OUTPUT_PORT_TYPE
+A[5] <= A[5].DB_MAX_OUTPUT_PORT_TYPE
+A[6] <= A[6].DB_MAX_OUTPUT_PORT_TYPE
+A[7] <= A[7].DB_MAX_OUTPUT_PORT_TYPE
+A[8] <= A[8].DB_MAX_OUTPUT_PORT_TYPE
+A[9] <= A[9].DB_MAX_OUTPUT_PORT_TYPE
+A[10] <= A[10].DB_MAX_OUTPUT_PORT_TYPE
+A[11] <= A[11].DB_MAX_OUTPUT_PORT_TYPE
+A[12] <= A[12].DB_MAX_OUTPUT_PORT_TYPE
+A[13] <= A[13].DB_MAX_OUTPUT_PORT_TYPE
+A[14] <= A[14].DB_MAX_OUTPUT_PORT_TYPE
+A[15] <= A[15].DB_MAX_OUTPUT_PORT_TYPE
+D_in[0] => cd4014:SR.D[0]
+D_in[1] => cd4014:SR.D[1]
+D_in[2] => cd4014:SR.D[2]
+D_in[3] => cd4014:SR.D[3]
+D_in[4] => cd4014:SR.D[4]
+D_in[5] => cd4014:SR.D[5]
+D_in[6] => cd4014:SR.D[6]
+D_in[7] => cd4014:SR.D[7]
 nHALT <= VertEn.DB_MAX_OUTPUT_PORT_TYPE
 led <= comb.DB_MAX_OUTPUT_PORT_TYPE
-pin_1 <= hDiv[7].DB_MAX_OUTPUT_PORT_TYPE
-pin_2 <= SRLoad.DB_MAX_OUTPUT_PORT_TYPE
+pin_1 <= VertEn.DB_MAX_OUTPUT_PORT_TYPE
+pin_2 <= vSyncOut.DB_MAX_OUTPUT_PORT_TYPE
 pin_3 <= hDiv[3].DB_MAX_OUTPUT_PORT_TYPE
 pin_4 <= nHsync.DB_MAX_OUTPUT_PORT_TYPE
-pin_5 <= vSync.DB_MAX_OUTPUT_PORT_TYPE
+pin_5 <= VidOut.DB_MAX_OUTPUT_PORT_TYPE
 pin_6 <= vSyncOut.DB_MAX_OUTPUT_PORT_TYPE
-pin_7 <= H64Dly.DB_MAX_OUTPUT_PORT_TYPE
+pin_7 <= vDiv[2].DB_MAX_OUTPUT_PORT_TYPE
+pin_8 <= hDiv[7].DB_MAX_OUTPUT_PORT_TYPE
+pin_53 <= SRLoad.DB_MAX_OUTPUT_PORT_TYPE
+
+
+|dream6800_video|CD4014:SR
+D[0] => comb.IN0
+D[1] => ShiftLoad.IN0
+D[2] => ShiftLoad.IN0
+D[3] => ShiftLoad.IN0
+D[4] => ShiftLoad.IN0
+D[5] => ShiftLoad.IN0
+D[6] => ShiftLoad.IN0
+D[7] => ShiftLoad.IN0
+SHLD => ShiftLoad.IN1
+SHLD => ShiftLoad.IN1
+SHLD => ShiftLoad.IN1
+SHLD => ShiftLoad.IN1
+SHLD => ShiftLoad.IN1
+SHLD => ShiftLoad.IN1
+SHLD => ShiftLoad.IN1
+SHLD => ShiftLoad.IN1
+SHLD => ShiftLoad.IN1
+SHLD => ShiftLoad.IN1
+SHLD => ShiftLoad.IN1
+SHLD => ShiftLoad.IN1
+SHLD => ShiftLoad.IN1
+SHLD => ShiftLoad.IN1
+SHLD => comb.IN1
+clk => dff1:FF0.Clock
+clk => dff1:FF1.Clock
+clk => dff1:FF2.Clock
+clk => dff1:FF3.Clock
+clk => dff1:FF4.Clock
+clk => dff1:FF5.Clock
+clk => dff1:FF6.Clock
+clk => dff1:FF7.Clock
+Q <> dff1:FF7.Q
+QNot <> QNot
+
+
+|dream6800_video|CD4014:SR|dff1:FF0
+D => Q.DATAB
+Clock => Q~reg0.CLK
+Pre => Q.OUTPUTSELECT
+Clr => Q.OUTPUTSELECT
+Q <> Q~reg0
+
+
+|dream6800_video|CD4014:SR|dff1:FF1
+D => Q.DATAB
+Clock => Q~reg0.CLK
+Pre => Q.OUTPUTSELECT
+Clr => Q.OUTPUTSELECT
+Q <> Q~reg0
+
+
+|dream6800_video|CD4014:SR|dff1:FF2
+D => Q.DATAB
+Clock => Q~reg0.CLK
+Pre => Q.OUTPUTSELECT
+Clr => Q.OUTPUTSELECT
+Q <> Q~reg0
+
+
+|dream6800_video|CD4014:SR|dff1:FF3
+D => Q.DATAB
+Clock => Q~reg0.CLK
+Pre => Q.OUTPUTSELECT
+Clr => Q.OUTPUTSELECT
+Q <> Q~reg0
+
+
+|dream6800_video|CD4014:SR|dff1:FF4
+D => Q.DATAB
+Clock => Q~reg0.CLK
+Pre => Q.OUTPUTSELECT
+Clr => Q.OUTPUTSELECT
+Q <> Q~reg0
+
+
+|dream6800_video|CD4014:SR|dff1:FF5
+D => Q.DATAB
+Clock => Q~reg0.CLK
+Pre => Q.OUTPUTSELECT
+Clr => Q.OUTPUTSELECT
+Q <> Q~reg0
+
+
+|dream6800_video|CD4014:SR|dff1:FF6
+D => Q.DATAB
+Clock => Q~reg0.CLK
+Pre => Q.OUTPUTSELECT
+Clr => Q.OUTPUTSELECT
+Q <> Q~reg0
+
+
+|dream6800_video|CD4014:SR|dff1:FF7
+D => Q.DATAB
+Clock => Q~reg0.CLK
+Pre => Q.OUTPUTSELECT
+Clr => Q.OUTPUTSELECT
+Q <> Q~reg0
 
 
