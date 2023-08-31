@@ -90,7 +90,7 @@ TDO                          : 25        : output :                   :         
 GND*                         : 26        :        :                   :         : 1         :                
 GND*                         : 27        :        :                   :         : 1         :                
 GND*                         : 28        :        :                   :         : 1         :                
-GND*                         : 29        :        :                   :         : 1         :                
+BA                           : 29        : input  : 3.3-V LVTTL       :         : 1         : Y              
 GND*                         : 30        :        :                   :         : 1         :                
 VCCIO1                       : 31        : power  :                   : 3.3V    : 1         :                
 GNDIO                        : 32        : gnd    :                   :         :           :                
@@ -160,5 +160,5 @@ D_in[3]                      : 95        : input  : 3.3-V LVTTL       :         
 D_in[4]                      : 96        : input  : 3.3-V LVTTL       :         : 2         : Y              
 D_in[1]                      : 97        : input  : 3.3-V LVTTL       :         : 2         : Y              
 D_in[2]                      : 98        : input  : 3.3-V LVTTL       :         : 2         : Y              
-BA                           : 99        : input  : 3.3-V LVTTL       :         : 2         : Y              
+GND*                         : 99        :        :                   :         : 2         :                
 D_in[0]                      : 100       : input  : 3.3-V LVTTL       :         : 2         : Y              

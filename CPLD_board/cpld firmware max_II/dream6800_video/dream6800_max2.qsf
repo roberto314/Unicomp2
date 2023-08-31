@@ -18,7 +18,7 @@
 #
 # Quartus II 64-Bit
 # Version 13.0.1 Build 232 06/12/2013 Service Pack 1 SJ Web Edition
-# Date created = 18:09:23  August 26, 2023
+# Date created = 17:31:11  August 27, 2023
 #
 # -------------------------------------------------------------------------- #
 #
@@ -40,7 +40,7 @@ set_global_assignment -name FAMILY "MAX II"
 set_global_assignment -name DEVICE EPM240T100C5
 set_global_assignment -name TOP_LEVEL_ENTITY dream6800_video
 set_global_assignment -name ORIGINAL_QUARTUS_VERSION "13.0 SP1"
-set_global_assignment -name PROJECT_CREATION_TIME_DATE "18:09:23  AUGUST 26, 2023"
+set_global_assignment -name PROJECT_CREATION_TIME_DATE "17:31:11  AUGUST 27, 2023"
 set_global_assignment -name LAST_QUARTUS_VERSION "13.0 SP1"
 set_location_assignment PIN_1   -to pin_1
 set_location_assignment PIN_2   -to pin_2
@@ -62,7 +62,7 @@ set_location_assignment PIN_21  -to pin_21
 set_location_assignment PIN_26  -to pin_26
 set_location_assignment PIN_27  -to pin_27
 set_location_assignment PIN_28  -to pin_28
-set_location_assignment PIN_29  -to pin_29
+set_location_assignment PIN_29  -to BA
 set_location_assignment PIN_30  -to pin_30
 set_location_assignment PIN_33  -to pin_33
 set_location_assignment PIN_34  -to pin_34
@@ -120,7 +120,7 @@ set_location_assignment PIN_95  -to D_in[3]
 set_location_assignment PIN_96  -to D_in[4]
 set_location_assignment PIN_97  -to D_in[1]
 set_location_assignment PIN_98  -to D_in[2]
-set_location_assignment PIN_99  -to BA
+set_location_assignment PIN_99  -to pin_99
 set_location_assignment PIN_100  -to D_in[0]
 
 set_global_assignment -name SOURCE_FILE dream6800_max2.vhd

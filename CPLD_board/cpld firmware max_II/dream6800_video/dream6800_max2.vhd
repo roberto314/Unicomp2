@@ -143,7 +143,7 @@ process (clk4)
 				if vCntEn = '0' then
 					vCntEn <= '1'; -- allow only once per falling edge
 					if vDiv >= 311 then -- 312 Lines in total
-		    				vDiv <= to_unsigned(1,11);
+		    				vDiv <= to_unsigned(0,11);
 		    				patterncnt <= to_unsigned(1,3);
 		    				--vDiv <= (others => '0');
 		    			else
@@ -173,7 +173,8 @@ process (clk4)
 end process;
 
 nHsync <= NOT(H8 AND H16 AND H64 AND NOT H32);
-VertEn <= (NOT V32 AND NOT V64 AND DMAEN);
+VertEn <= (NOT V32 AND NOT V64); -- we don't need software turn off of video
+--VertEn <= (NOT V32 AND NOT V64 AND DMAEN);
 nHALT <= NOT VertEn;
 VidOut <= not H64 AND VertEn and SRout;
 

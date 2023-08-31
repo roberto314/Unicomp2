@@ -51,7 +51,7 @@ Unicomp plus Logic Analyzer:
 	- suggested chip select #0
 	- two chip selects on board (second one not connected, but broken out)
 	- can be used with the following serial interface chips: MC6850, MOS6551, MOS6552 or pin compatible
-	- RAM for address decoding
+	- SRAM for address decoding
 
 Multi Serial Board:
 ![Multi Serial Board](pictures/serial_board.jpg)
@@ -62,7 +62,7 @@ Multi Serial Board:
 	- can be used with the following parallel interface chips: MC6820, MC6821, MOS6520, MOS6521, MOS6522, MOS6526, MOS8520, MOS6532 in the first slot
     - the first slot can additionally mimic a MOS6530
 	- the second slot can accommodate a MOS6522 or pin compatible
-    - RAM for address decoding
+    - SRAM for address decoding
 
 * RAMROM board:
 	- chip select fixed at #14 (for chipselect RAM) and #15 (rom content)
@@ -74,6 +74,10 @@ Multi Serial Board:
 * Prototype board:
 	- empty board for prototyping
 	- no CPLD
+    - SRAM for address decoding
+
+* MAX-II (EPM240) board:
+	- CPLD plus Buffers
 
 * self made module:
 	- chip select can be any non-used line in the Range from 0 to 13.
@@ -114,16 +118,20 @@ A simple configuration block looks líke this:
 
 ### Working Recreations of old computers ###
 
-| Name                     | prim. IO    | chips used         | os                             | weblink                                                             |
-|--------------------------|-------------|--------------------|--------------------------------|---------------------------------------------------------------------|
-| Grant Searle 6502 board  | serial      | MOS6502, MC6850    | OSI Basic                      |Link: http://searle.x10host.com/6502/Simple6502.html                 |
-| Daryl Rictor 6502 board  | serial      | MOS6502, R6551     | SBC-2 (monitor only)           |Link: https://sbc.rictor.org/info2.html                              |
-| Daryl Rictor 6502 board  | serial      | MOS6502, MC6850    | SBC-2 (monitor only)           |Link: https://sbc.rictor.org/info2.html                              |
-| SYM1                     | serial      | MOS6502, UM6532    | SYM1 ( +BASIC +RAE)            |Link: http://retro.hansotten.nl/6502-sbc/synertek-sym-ktm/sym-1/     |
-| KIM1                     | serial      | MOS6502, UM6532    | KIM1                           |Link: http://retro.hansotten.nl/6502-sbc/kim-1-manuals-and-software/ |
-| Apple I                  | serial      | MOS6502, MĆ6821    | Wozmon + BASIC                 |Link: http://retro.hansotten.nl/6502-sbc/apple-1/                    |
-| Motorola MEK D2          | serial      | MC6802, MĆ6850     | newbug, xswtbug, mondeb        |Link: https://www.retrotechnology.com/restore/smithbug.html          |
-| Heathkit ET3400          | serial      | MC6802, MĆ6850     | MITS BASIC, TSC MicroBASIC,... |Link: https://github.com/jefftranter                                 |
+| Name                     | prim. IO    | chips used         | os                               | weblink                                                             |
+|--------------------------|-------------|--------------------|----------------------------------|---------------------------------------------------------------------|
+| Grant Searle 6502 board  | serial      | MOS6502, MC6850    | OSI Basic                        |Link: http://searle.x10host.com/6502/Simple6502.html                 |
+| Daryl Rictor 6502 board  | serial      | MOS6502, R6551     | SBC-2 (monitor only)             |Link: https://sbc.rictor.org/info2.html                              |
+| Daryl Rictor 6502 board  | serial      | MOS6502, MC6850    | SBC-2 (monitor only)             |Link: https://sbc.rictor.org/info2.html                              |
+| SYM1                     | serial      | MOS6502, UM6532    | SYM1 ( +BASIC +RAE)              |Link: http://retro.hansotten.nl/6502-sbc/synertek-sym-ktm/sym-1/     |
+| KIM1                     | serial      | MOS6502, UM6532    | KIM1                             |Link: http://retro.hansotten.nl/6502-sbc/kim-1-manuals-and-software/ |
+| Apple I                  | serial      | MOS6502, MĆ6821    | Wozmon + BASIC                   |Link: http://retro.hansotten.nl/6502-sbc/apple-1/                    |
+| Motorola MEK D2          | serial      | MC6802, MĆ6850     | newbug, xswtbug, mondeb          |Link: https://www.retrotechnology.com/restore/smithbug.html          |
+| Motorola MEK D1          | serial      | MC6802, MĆ6821     | Mikbug (plus Arduino)            |Link: https://www.retrotechnology.com/restore/smithbug.html          |
+| Heathkit ET3400          | serial      | MC6802, MĆ6850     | MITS BASIC, TSC MicroBASIC,...   |Link: https://github.com/jefftranter                                 |
+| SWTPC 6800               | serial      | MC6802, MĆ6821     | Mikbug (plus Arduino)            |Link: https://deramp.com/swtpc.com/                                  |
+| SWTPC 6800               | serial      | MC6802, MĆ6850     | SWTBUG, SWTBUGA, Mondeb, xSWTBUG |Link: https://deramp.com/swtpc.com/                                  |
+| DREAM 6800               | BAS (Video) | MC6802, MAX-II     | DREAM operating System (Chip8)   |Link: http://www.mjbauer.biz/DREAM6800.htm                           |
 
 ### linux single board computer (SBC) ###
 
@@ -188,6 +196,9 @@ tmux serial window:
 * Chibi Studio 20 (IDE for ChibiOS) (Link: https://www.chibios.org/dokuwiki/doku.php?id=chibios:products:chibistudio:start)
 * Wavedrom (2.9.1) (Link: https://wavedrom.com/)
 * Pulseview (0.5.0-nightly Appimaage) (Part of sigrok) (Link: https://sigrok.org/wiki/PulseView)
+* Logisim-Evolution (3.8.0) (Link: https://github.com/logisim-evolution/logisim-evolution)
+* Quartus (13.0.1 Build232 Web Edition - 64 Bit) for MAX-II
+* Xilinx ISE (14.7 - 64 Bit) for XC9572
 
 ### Used Hardware ###
 

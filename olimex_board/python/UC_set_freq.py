@@ -293,7 +293,7 @@ if __name__ == '__main__':
 	def_offset = get_range()
 
 
-	if args.registers == None and args.f == None and args.k == None and args.M == None:
+	if args.registers == None and args.f == None and args.k == None and args.M == None and args.s == None:
 		print("No command")
 		exit()
 	

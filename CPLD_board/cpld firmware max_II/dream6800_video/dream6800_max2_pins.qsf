@@ -19,7 +19,7 @@ set_location_assignment PIN_21  -to pin_21
 set_location_assignment PIN_26  -to pin_26
 set_location_assignment PIN_27  -to pin_27
 set_location_assignment PIN_28  -to pin_28
-set_location_assignment PIN_29  -to pin_29
+set_location_assignment PIN_29  -to BA
 set_location_assignment PIN_30  -to pin_30
 set_location_assignment PIN_33  -to pin_33
 set_location_assignment PIN_34  -to pin_34
@@ -77,5 +77,5 @@ set_location_assignment PIN_95  -to D_in[3]
 set_location_assignment PIN_96  -to D_in[4]
 set_location_assignment PIN_97  -to D_in[1]
 set_location_assignment PIN_98  -to D_in[2]
-set_location_assignment PIN_99  -to BA
+set_location_assignment PIN_99  -to pin_99
 set_location_assignment PIN_100  -to D_in[0]
