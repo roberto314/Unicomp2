@@ -11,6 +11,23 @@ try:
 except ImportError:
 	print('UC_set_freq Running on PC')
 
+class bcolors:
+    FAIL = '\033[91m'    #red
+    OKGREEN = '\033[92m' #green
+    WARNING = '\033[93m' #yellow
+    OKBLUE = '\033[94m'  #dblue
+    HEADER = '\033[95m'  #purple
+    OKCYAN = '\033[96m'  #cyan
+    ENDC = '\033[0m'
+    BOLD = '\033[1m'
+    UNDERLINE = '\033[4m'
+#print(f'{bcolors.FAIL}{bcolors.ENDC}')
+#print(f'{bcolors.OKGREEN}{bcolors.ENDC}')
+#print(f'{bcolors.WARNING}{bcolors.ENDC}')
+#print(f'{bcolors.OKBLUE}{bcolors.ENDC}')
+#print(f'{bcolors.HEADER}{bcolors.ENDC}')
+#print(f'{bcolors.OKCYAN}{bcolors.ENDC}')
+
 DS1085_DEVADDR = 0x58
 DS1085_DAC      = 0x08
 DS1085_OFFSET   = 0x0E
@@ -210,6 +227,9 @@ def main(freq_fast, freq_slow = 1000000):
 		print(f'****************************************************************')
 	print(f"Real frequency fast: {real_freq} CPU: {real_freq/8} Hz Error: {error:.2f} ppm")
 	div1 = (round(main_clock / freq_slow)) - 2
+	if div1 > 1024:
+		print(f'{bcolors.FAIL}ATTETION DIVIDER > 1024!{bcolors.ENDC}')
+		
 	set_div(div1)
 	print(f'Got freq. slow: {freq_slow} Hz, divider: {div1}')
 	real_freq2 = main_clock / (div1 + 2)

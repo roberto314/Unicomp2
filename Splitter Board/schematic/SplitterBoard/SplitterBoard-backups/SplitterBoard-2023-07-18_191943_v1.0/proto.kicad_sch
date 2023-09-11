@@ -1,0 +1,18 @@
+(kicad_sch (version 20230121) (generator eeschema)
+
+  (uuid d4d766aa-a957-4ff8-b300-875689d24d4a)
+
+  (paper "A4")
+
+  (title_block
+    (title "Unicomp v2 - RAMROM Board")
+    (date "2023-02-03")
+    (rev "v2.0")
+    (company "100% Offner")
+    (comment 1 "v2.0: Redesign with SRAM for Address Select")
+  )
+
+  (lib_symbols
+  )
+
+)
