@@ -4,7 +4,7 @@ import logging, sys, argparse, math
 from serial import Serial
 from serial import SerialException
 
-ver = 1.21
+ver = 1.3
 
 # this is the upload script for the Unicom Project.
 # It uses the "ostrich" protocol from moates (see the file:
@@ -14,6 +14,7 @@ ver = 1.21
 # v1.0: Initial Version
 # v1.2: comments at the end are shown in the console
 # v1.21: now it is possible to enter start and end if a read is performed.
+# v1.3: Writing of Clock Register now added
 
 #port = '/dev/ttyS3'
 port = '/dev/ttyACM0'
@@ -164,8 +165,10 @@ def display_version(ser):
 		print('Product: APU1')
 	elif device_id == 'B':
 		print('Product: BURN1')
+	elif device_id == 'U':
+		print('Product: UNICOMP')
 	else:
-		print('Product not recognized!')
+		print(f'Product not recognized! Got:{(device_id)}')
 
 def get_serial(ser):
 	write_with_checksum(ser, b'NS')
@@ -367,7 +370,53 @@ def write_config(ser, data):
 	write_with_checksum(ser, message)
 	expect_ok(ser)
 
+def write_clock(ser, data):
+	print('------------------------------ Clock ------------------------------')
+	length = len(data)
+	print (f'Length of data: {length} or 0x{length:04x}')
+	if length > 256:
+		print(f'Only block <= 256 Bytes supported!')
+		exit()
+	message = bytearray(b'DW') # Clock Write
+	message += bytes((length,))
+	message += data
+	write_with_checksum(ser, message)
+	expect_ok(ser)
+
+def read_clock(ser):
+	print(f'----------------------------- Read Clock -----------------------------')
+	write_with_checksum(ser, b'DR')
+	result = read_with_checksum(ser, 11)
+	print(f'Range Register: 0x{result[0]:02X}')
+	print(f'Prescaler 0 Register: 0x{result[1]:02X}')
+	print(f'Prescaler 1 Register: 0x{result[2]:02X}')
+	print(f'Offset Register: 0x{result[3]:02X}')
+	print(f'Address Register: 0x{result[4]:02X}')
+	temp = result[6]+256*result[5]
+	print(f'MUX Register: 0x{temp:04X}')
+	temp = result[8]+256*result[7]
+	print(f'DAC Register: 0x{temp:04X}')
+	temp = result[10]+256*result[9]
+	print(f'DIV Register: 0x{temp:04X}')
+	
+	#serial_number = ','.join(hex(b)[2:] for b in result)
+	#print('%10s %s' % ('Clock Data:', serial_number))     
+
+def write_pins(ser, data):
+	print('------------------------------ Pins ------------------------------')
+	length = len(data)
+	print (f'Length of data: {length} or 0x{length:04x}')
+	if length > 256:
+		print(f'Only block <= 256 Bytes supported!')
+		exit()
+	message = bytearray(b'P') # Pins Write
+	message += bytes((length,))
+	message += data
+	write_with_checksum(ser, message)
+	expect_ok(ser)
+
 def check_bank(ser, start, end):
+	print('-------------------------- Check Bank ----------------------------')
 	bank = get_io_bank(ser)
 	banks = start // 0x10000
 	banke = end // 0x10000
@@ -449,6 +498,12 @@ def main(func, data = 0, start = 0, end = 0):
 			return read_memory(ser, start, end)
 	elif func == 'config':
 		write_config(ser, data)
+	elif func == 'clockw':
+		write_clock(ser, data)
+	elif func == 'clockr':
+		read_clock(ser)
+	elif func == 'pins':
+		write_pins(ser, data)
 
 def extract_files(img):
 	start = int.from_bytes(img[0:3], 'big', signed=False)
@@ -466,7 +521,7 @@ def extract_files(img):
 
 ############################################
 if __name__ == '__main__':
-	parser = argparse.ArgumentParser(description = 'Command line interface for the Unicomp RAMROM Board')
+	parser = argparse.ArgumentParser(description = 'Command line interface for the Unicomp RAMROM Board. Version: ' + str(ver))
 	parser.add_argument(
 		'-v', '--verbose',
 		action = 'count',
@@ -515,6 +570,22 @@ if __name__ == '__main__':
 		help = 'input filename')
 	#---------------------------------------------------------------------------------    
 	subparser = subparsers.add_parser(
+		'clock',
+		help = 'writes clock data')
+	subparser.add_argument(
+		'data',
+		nargs = '?',
+		default = '',
+		help = 'input data (comma seperated in HEX)')
+	#---------------------------------------------------------------------------------    
+	subparser = subparsers.add_parser(
+		'pins',
+		help = 'writes to digital pins (0-RST active, 1-RST inactive, 2-Clock active, 3-Clock inactive)')
+	subparser.add_argument(
+		'data',
+		help = 'input 8-bit data')
+	#---------------------------------------------------------------------------------    
+	subparser = subparsers.add_parser(
 		'setbank',
 		help = 'set bank for emulation and I/O')
 	subparser.add_argument(
@@ -556,6 +627,31 @@ if __name__ == '__main__':
 		img = read_file(args.file)
 		main('config', img)
 
+	elif args.command == 'pins':
+		mylist = []
+		b = args.data[0:]
+		n = int(b,0)
+		mylist.append(n)
+		print(f'Received: {b} interpreted as: {n:02X}')
+		main('pins', bytes(mylist))
+
+	elif args.command == 'clock':
+		mylist = []
+		if args.data == '':
+			print(f'Read Registers')
+			main('clockr')
+		else:
+			for b in (args.data).split(','):
+				if b.isalnum():
+					n = int(b, 16)
+					print(f'Received: {b} interpreted as: {n:02X}')
+					mylist.append(n)
+				else:
+					print(f'couldnt interpret: {b}')
+
+			img = bytes(mylist)
+			main('clockw', img)
+	
 	elif args.command == 'write':
 		if args.file[0] == ':':    # Some bytes received (format :yy,xx,zz)
 			#mylist = [int(e, 16) if e.isalnum() else e for e in (args.file[1:]).split(',')]

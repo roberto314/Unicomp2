@@ -23,6 +23,7 @@
 #include "chprintf.h"
 
 #include "SPI.h"
+#include "i2c.h"
 #include "usbcfg.h"
 #include "ostrich.h"
 #include "comm.h"
@@ -146,6 +147,7 @@ int main(void) {
 //  palSetPadMode(GPIOA, 3, PAL_MODE_ALTERNATE(7));
 //  #endif
   SPI_init();
+  i2c_init();
   start_ostrich_thread();
   /*
    * Shell manager initialization.

@@ -47,6 +47,15 @@ typedef enum {
   CONFIG_C,
   CONFIG_Cn,
   CONFIG_CnCs,
+  CLOCK_D,
+  CLOCK_DW,
+  //CLOCK_DR,
+  CLOCK_DRCs,
+  CLOCK_DWn,
+  CLOCK_DWnCs,
+  PINS_C,
+  PINS_Cn,
+  PINS_CnCs,
   UNHANDLED
 } char_state_t;
 

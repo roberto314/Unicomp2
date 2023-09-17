@@ -11,6 +11,7 @@
 #include "SPI.h"
 #include "ostrich.h"
 #include "portab.h"
+#include "i2c.h"
 
 extern BaseSequentialStream *const chout;
 extern st_configdata_t cfdat[20];
@@ -368,7 +369,7 @@ void fill_struct(uint8_t* in, st_configdata_t* out){
 #define CHIP (cfdat.cs)
 #define MASK (cfdat.mask)
 
-void write_config2(uint8_t* buf){
+void write_config(uint8_t* buf){
   uint8_t chip, data = 0, no_update = 0;
   uint32_t address = 0;
   st_configdata_t cfdat, nextcf;
@@ -445,52 +446,21 @@ void write_config2(uint8_t* buf){
   BUS_in_use = 1;
 }
 
-
-void write_config(st_configdata_t* cfdat){
-//  uint8_t chip, data, event = 0;
-//  uint32_t address = 0;
-//  TRESET_ACTIVE;
-//  BUS_in_use = 0;
-//  setup_address(address);
-//  latch_address();
-//  CNTOE_ACTIVE;
-//  if (DEBUGLEVEL >= 2){
-//    chprintf(dbg, "Address set to 0\r\n");
-//  }
-//  do {
-//    do {
-//      data = cfdat[event].data[0];
-//      spiSend(SPI_DRIVER, 1, &data);
-//      select_chip(0);
-//      latch_data_in();
-//      for (chip = 1; chip < 15; chip++){ // write 15 RAMs, each one byte
-//        if (data !=  cfdat[event].data[chip]){ // check if we have to change the value
-//          data = cfdat[event].data[chip];
-//          spiSend(SPI_DRIVER, 1, &data);
-//        }
-//        select_chip(chip);
-//        latch_data_in();
-//      }
-//      increment_address8();
-//      latch_address();
-//      address += 8; // CPU address is mapping ram address / 8!
-//    } while (address < cfdat[event + 1].address); // go until next event is reached
-//    event ++;
-//    if (DEBUGLEVEL >= 2){
-//      chprintf(dbg, "Next Event: %d\r\n", event);
-//      TRESET_INACTIVE;
-//      __NOP();
-//      __NOP();
-//      __NOP();
-//      __NOP();
-//      __NOP();
-//      __NOP();
-//      TRESET_ACTIVE;
-//    }
-//  } while (cfdat[event].address); // a zero at an address (other than position 0) means stop.
-//  CNTOE_INACTIVE;
-//  TRESET_INACTIVE;
-//  BUS_in_use = 1;
+void write_pins(uint8_t data){
+  switch (data){
+  case 0:
+    TRESET_ACTIVE;
+    break;
+  case 1:
+    TRESET_INACTIVE;
+    break;
+  case 2:
+    OUTPUT_ON;
+    break;
+  case 3:
+    OUTPUT_OFF;
+    break;
+  }
 }
 
 void SPI_init(void){

@@ -15,6 +15,7 @@
 #include "chprintf.h"
 #include "usbcfg.h"
 #include "SPI.h"
+#include "i2c.h"
 
 extern BaseSequentialStream *const ost;
 extern BaseSequentialStream *const dbg;
@@ -174,6 +175,42 @@ void debug_print_state(char * text, uint8_t val){
       chprintf(dbg, "%s", text);
       chprintf(dbg, "CONFIG_CnCs\r\n");
       break;
+    case CLOCK_D:
+      chprintf(dbg, "%s", text);
+      chprintf(dbg, "CLOCK_D\r\n");
+      break;
+    case CLOCK_DW:
+      chprintf(dbg, "%s", text);
+      chprintf(dbg, "CLOCK_DW\r\n");
+      break;
+//    case CLOCK_DR:
+//      chprintf(dbg, "%s", text);
+//      chprintf(dbg, "CLOCK_DR\r\n");
+//      break;
+    case CLOCK_DRCs:
+      chprintf(dbg, "%s", text);
+      chprintf(dbg, "CLOCK_DRCs\r\n");
+      break;
+    case CLOCK_DWn:
+      chprintf(dbg, "%s", text);
+      chprintf(dbg, "CLOCK_DWn\r\n");
+      break;
+    case CLOCK_DWnCs:
+      chprintf(dbg, "%s", text);
+      chprintf(dbg, "CLOCK_DWnCs\r\n");
+      break;
+    case PINS_C:
+      chprintf(dbg, "%s", text);
+      chprintf(dbg, "PINS_C\r\n");
+      break;
+    case PINS_Cn:
+      chprintf(dbg, "%s", text);
+      chprintf(dbg, "PINS_Cn\r\n");
+      break;
+    case PINS_CnCs:
+      chprintf(dbg, "%s", text);
+      chprintf(dbg, "PINS_CnCs\r\n");
+      break;
     default:
       chprintf(dbg, "%s", text);
       chprintf(dbg, "UNHANDLED\r\n");
@@ -231,35 +268,43 @@ static THD_FUNCTION(CharacterInputThread, arg) {
         switch (c){
         case 'V':
           state = VERSION;
-          debug_print_state("Header Start: ", state);
+          debug_print_state("V Header Start: ", state);
           break;
         case 'B':
           state = BANK;
-          debug_print_state("Header Start: ", state);
+          debug_print_state("B Header Start: ", state);
           break;
         case 'S':
           state = BAUD;
-          debug_print_state("Header Start: ", state);
+          debug_print_state("S Header Start: ", state);
           break;
         case 'N':
           state = SERIAL;
-          debug_print_state("Header Start: ", state);
+          debug_print_state("N Header Start: ", state);
           break;
         case 'W':
           state = WRITE;
-          debug_print_state("Header Start: ", state);
+          debug_print_state("W Header Start: ", state);
           break;
         case 'R':
           state = READ;
-          debug_print_state("Header Start: ", state);
+          debug_print_state("R Header Start: ", state);
           break;
         case 'Z':
           state = BULK;
-          debug_print_state("Header Start: ", state);
+          debug_print_state("Z Header Start: ", state);
           break;
         case 'C':
           state = CONFIG_C;
-          debug_print_state("Header Start: ", state);
+          debug_print_state("C Header Start: ", state);
+          break;
+        case 'D':
+          state = CLOCK_D;
+          debug_print_state("D Header Start: ", state);
+          break;
+        case 'P':
+          state = PINS_C;
+          debug_print_state("P Header Start: ", state);
           break;
         default:
           state = IDLE;
@@ -683,7 +728,7 @@ static THD_FUNCTION(CharacterInputThread, arg) {
         debug_print_state("Got Header: ", state);
         if (c == 'V'){
           //chnWrite(&OSTRICHPORT, (const uint8_t *)"\12\5O", 3); // in octal! \12 == 10
-          chprintf(ost, "%c%cN", VMAJOR, VMINOR);
+          chprintf(ost, "%c%cU", VMAJOR, VMINOR); // U for Unicomp, N for Nucleo NVRAM Programmer
         }
         break;
       //####################### SERIAL ##########################
@@ -752,7 +797,105 @@ static THD_FUNCTION(CharacterInputThread, arg) {
           if (DEBUGLEVEL >= 1){
             chprintf(dbg, "Config (C): cnt: %03d, data: %02X, %02X, %02X, %02X\r\n", count, tbuf[0], tbuf[1], tbuf[2], tbuf[3]);
           }
-          write_config2(tbuf);
+          write_config(tbuf);
+          chprintf(ost, "O");
+        }
+        else{
+          chprintf(dbg, "Checksum ERROR\r\n");
+        }
+        break;
+      //####################### CLOCK ##########################
+      case CLOCK_D:
+        cs += c;
+        switch (c){
+          case 'R':
+            debug_print_state("Got Header: ", state);
+            state = CLOCK_DRCs;
+            break;
+          case 'W':
+            debug_print_state("Got Header: ", state);
+            state = CLOCK_DW;
+            break;
+          default:
+            state = UNHANDLED;
+            break;
+        }
+        break;
+      case CLOCK_DW:
+        cs += c;
+        state = CLOCK_DWn;
+        count = (uint16_t)c;
+        cntdwn = 0;
+        debug_print_val1("Count: ", count);
+        break;
+      case CLOCK_DWn: //  Here are the Bytes coming
+        cs += c;
+        tbuf[cntdwn++] = c;
+        if (cntdwn == count){
+          debug_print_state("State2: ", state);
+          state = CLOCK_DWnCs;
+        }
+        break;
+//      case CLOCK_DR:
+//        cs += c;
+//        state = CLOCK_DRCs;
+//        debug_print_state("State2: ", state);
+//        break;
+      case CLOCK_DWnCs:
+        debug_print_state("State3: ", state);
+        state = IDLE;
+        if (c == cs){
+          if (DEBUGLEVEL >= 1){
+            chprintf(dbg, "Clock (C): %02d, %02X, %02X, %02X, %02X, %02X, %02X, %02X, %02X, %02X, %02X\r\n", tbuf[0], tbuf[1], tbuf[2], tbuf[3], tbuf[4], tbuf[5], tbuf[6], tbuf[7], tbuf[8], tbuf[9], tbuf[10]);
+          }
+          write_clock(tbuf);
+          chprintf(ost, "O");
+        }
+        else{
+          chprintf(dbg, "Checksum ERROR\r\n");
+        }
+        break;
+      case CLOCK_DRCs:
+        debug_print_state("State3: ", state);
+        state = IDLE;
+        if (c == cs){
+          count = read_clock(tbuf);
+          // Get Checksum of Serial Number
+          temp=0;
+          for (i=0;i<count;i++){
+            streamPut(ost, tbuf[i]);
+            temp += tbuf[i];
+          }
+          streamPut(ost, temp);
+        }
+        else{
+          chprintf(dbg, "Checksum ERROR\r\n");
+        }
+        break;
+      //####################### PINS ##########################
+      case PINS_C:
+        cs += c;
+        state = PINS_Cn;
+        count = (uint16_t)c;
+        cntdwn = 0;
+        debug_print_val1("Count: ", count);
+        break;
+      case PINS_Cn: //  Here are the Bytes coming
+        cs += c;
+        tbuf[cntdwn++] = c;
+        if (cntdwn == count){
+          debug_print_state("State2: ", state);
+          state = PINS_CnCs;
+        }
+        break;
+      case PINS_CnCs:
+        debug_print_state("State3: ", state);
+        state = IDLE;
+        if (c == cs){
+          if (DEBUGLEVEL >= 1){
+            chprintf(dbg, "Clock (C): cnt: %03d, data: %02X, %02X, %02X, %02X\r\n", count, tbuf[0], tbuf[1], tbuf[2], tbuf[3]);
+          }
+          write_pins(tbuf[0]);
           chprintf(ost, "O");
         }
         else{

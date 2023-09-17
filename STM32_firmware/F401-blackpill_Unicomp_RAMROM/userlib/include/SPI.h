@@ -88,7 +88,7 @@ uint8_t read_next_byte(void);
 void write_next_byte(uint8_t data);
 void read_block(int32_t address, int32_t len, uint8_t * data, uint8_t reset);
 void write_block(int32_t address, int32_t len, uint8_t * data, uint8_t reset);
-void write_config(st_configdata_t* cfdat);
-void write_config2(uint8_t* buf);
+void write_config(uint8_t* buf);
+void write_pins(uint8_t data);
 
 #endif /* USERLIB_INCLUDE_SPI_H_ */

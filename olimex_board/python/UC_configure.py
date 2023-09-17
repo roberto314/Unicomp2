@@ -6,7 +6,7 @@ ver = 2.00
 
 import UC_set_freq as sf
 import UC_fill_RAM as fr
-import set_reset as s_rst
+#import set_reset as s_rst
 
 class bcolors:
     FAIL = '\033[91m'    #red
@@ -506,7 +506,8 @@ def main(dir, cf, norom):
 	print(f'Appname: {appname}, Version: {version}')
 	print(f'Configure for:\n\t{computername} \n\t{clockfreqf/1E6:#.6f} MHz fast clock, \n\t{clockfreqs/1E6:#.6f} MHz slow clock.')
 	print(f'{bcolors.OKGREEN}-------------------------- Reset Unicomp ---------------------------{bcolors.ENDC}')
-	s_rst.main(0) # Reset active
+	#s_rst.main(0) # Reset active
+	fr.main('pins',bytes([0])) # Reset active
 	print(f'{bcolors.OKGREEN}-------------------------- Turn off Clock --------------------------{bcolors.ENDC}')
 	sf.main(0, 0)
 	print(f'{bcolors.OKGREEN}------------------------- Configure Clock --------------------------{bcolors.ENDC}')
@@ -535,7 +536,8 @@ def main(dir, cf, norom):
 			
 
 	print(f'{bcolors.OKGREEN}-------------------------- Reset inactive --------------------------{bcolors.ENDC}')
-	s_rst.main(1)  # Reset inactive - Run
+	#s_rst.main(1)  # Reset inactive - Run
+	fr.main('pins',bytes([1]))  # Reset inactive - Run
 	print(f'{bcolors.OKGREEN}-------------------------- Modifications  --------------------------{bcolors.ENDC}')
 	text1 = cf['modifications']['text']
 	print(f'{text1}')
