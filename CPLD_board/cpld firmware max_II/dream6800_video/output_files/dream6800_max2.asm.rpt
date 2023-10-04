@@ -1,5 +1,5 @@
 Assembler report for dream6800_max2
-Sun Aug 27 17:31:20 2023
+Thu Sep 21 20:20:08 2023
 Quartus II 64-Bit Version 13.0.1 Build 232 06/12/2013 Service Pack 1 SJ Web Edition
 
 
@@ -37,7 +37,7 @@ applicable agreement for further details.
 +---------------------------------------------------------------+
 ; Assembler Summary                                             ;
 +-----------------------+---------------------------------------+
-; Assembler Status      ; Successful - Sun Aug 27 17:31:20 2023 ;
+; Assembler Status      ; Successful - Thu Sep 21 20:20:08 2023 ;
 ; Revision Name         ; dream6800_max2                        ;
 ; Top-level Entity Name ; dream6800_video                       ;
 ; Family                ; MAX II                                ;
@@ -90,8 +90,8 @@ applicable agreement for further details.
 ; Option         ; Setting                     ;
 +----------------+-----------------------------+
 ; Device         ; EPM240T100C5                ;
-; JTAG usercode  ; 0x0018AD4A                  ;
-; Checksum       ; 0x0018B142                  ;
+; JTAG usercode  ; 0x0018B588                  ;
+; Checksum       ; 0x0018BA00                  ;
 +----------------+-----------------------------+
 
 
@@ -114,14 +114,14 @@ Info: Running Quartus II 64-Bit Assembler
     Info: programming logic devices manufactured by Altera and sold by 
     Info: Altera or its authorized distributors.  Please refer to the 
     Info: applicable agreement for further details.
-    Info: Processing started: Sun Aug 27 17:31:19 2023
+    Info: Processing started: Thu Sep 21 20:20:08 2023
 Info: Command: quartus_asm dream6800_max2
 Info (115031): Writing out detailed assembly data for power analysis
 Info (115030): Assembler is generating device programming files
 Info: Quartus II 64-Bit Assembler was successful. 0 errors, 0 warnings
     Info: Peak virtual memory: 499 megabytes
-    Info: Processing ended: Sun Aug 27 17:31:20 2023
-    Info: Elapsed time: 00:00:01
+    Info: Processing ended: Thu Sep 21 20:20:08 2023
+    Info: Elapsed time: 00:00:00
     Info: Total CPU time (on all processors): 00:00:01
 
 

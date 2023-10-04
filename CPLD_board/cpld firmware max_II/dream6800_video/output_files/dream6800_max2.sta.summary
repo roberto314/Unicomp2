@@ -2,23 +2,23 @@
 TimeQuest Timing Analyzer Summary
 ------------------------------------------------------------
 
-Type  : Setup 'clk4'
+Type  : Setup 'ph0'
 Slack : -6.758
-TNS   : -137.101
+TNS   : -159.202
 
 Type  : Setup 'hDiv[0]'
-Slack : -1.678
-TNS   : -10.953
+Slack : -1.872
+TNS   : -13.653
 
-Type  : Hold 'clk4'
-Slack : -1.380
-TNS   : -3.327
+Type  : Hold 'ph0'
+Slack : -1.935
+TNS   : -4.326
 
 Type  : Hold 'hDiv[0]'
-Slack : 0.678
+Slack : 0.878
 TNS   : 0.000
 
-Type  : Minimum Pulse Width 'clk4'
+Type  : Minimum Pulse Width 'ph0'
 Slack : -2.289
 TNS   : -2.289
 

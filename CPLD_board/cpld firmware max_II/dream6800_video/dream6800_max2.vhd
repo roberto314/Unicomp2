@@ -5,23 +5,16 @@ use ieee.numeric_std.all;
 entity dream6800_video is                                        
      Port
      (
-          clk50: in  std_logic;
-          clk4:  in  std_logic;
-          DMAEN: in  std_logic;
-          BA:    in  std_logic;
-          A      : out std_logic_vector(15 downto 0) := (others=>'Z');
-          D_in   : in std_logic_vector(7 downto 0);
-          nHALT: out std_logic;
-          led:   out std_logic;
-          pin_1: out std_logic;
-          pin_2: out std_logic;
-          pin_3: out std_logic;
-          pin_4: out std_logic;
-          pin_5: out std_logic;
-          pin_6: out std_logic;
-          pin_7: out std_logic;
-          pin_8: out std_logic;
-          pin_53: out std_logic
+          clk50   : in  std_logic;
+          ph0     : in  std_logic;
+          --DMAEN: in  std_logic;
+          --BA:    in  std_logic;
+          As      : out std_logic_vector(19 downto 0) := (others=>'Z');
+          D_in    : in std_logic_vector(7 downto 0);
+          HSYNC   : out std_logic;
+          VSYNC   : out std_logic;
+          SBLU    : out std_logic
+          --nHALT: out std_logic;
      );     
 end dream6800_video;
                                               
@@ -68,15 +61,15 @@ begin
 			--D   => pattern,
 			D   => D_in,
 			clk => not hDiv(0), --Low-Res
-			--clk => not clk4, --Hi-Res
+			--clk => not ph0, --Hi-Res
 			Q   => SRout,
 			SHLD => not SRLoad
 			--ds  => '0'
 		);
 
-process (clk4)
+process (ph0)
 	begin
-		if falling_edge(clk4) then -- one tic is 1/4MHz = 250ns
+		if falling_edge(ph0) then -- one tic is 1/4MHz = 250ns
     			hDiv <= hDiv + 1;
 
                --  Low-Res Load
@@ -136,9 +129,9 @@ process (clk4)
      	end if;
 end process;
 
-process (clk4)
+process (ph0)
 	begin
-		if rising_edge(clk4) then --maybe slightly better than on falling edge?
+		if rising_edge(ph0) then --maybe slightly better than on falling edge?
 			if nHsync = '0' then
 				if vCntEn = '0' then
 					vCntEn <= '1'; -- allow only once per falling edge
@@ -175,7 +168,7 @@ end process;
 nHsync <= NOT(H8 AND H16 AND H64 AND NOT H32);
 VertEn <= (NOT V32 AND NOT V64); -- we don't need software turn off of video
 --VertEn <= (NOT V32 AND NOT V64 AND DMAEN);
-nHALT <= NOT VertEn;
+--nHALT <= NOT VertEn;
 VidOut <= not H64 AND VertEn and SRout;
 
 --            Low-Res Address Mapping
@@ -215,18 +208,18 @@ A_int(15) <= '0'; -- Mapping Counter Out to Address
 --A_int(15) <= '0'; -- Mapping Counter Out to Address
 
 -- Address Output
-A <= A_int when BA = '1' else (others => 'Z');
+--As <= A_int when BA = '1' else (others => 'Z');
 
 --pin_1 <= NOT SRLoad;   --/MRD --does not work
 --pin_1 <= NOT (SRLoad AND VertEn);   --/MRD --works ok
-pin_1 <= NOT VertEn;   --/MRD --works maybe a little better
+As(19) <= NOT VertEn;   --/MRD --works maybe a little better
 
-pin_2 <= NOT vSyncOut; --RTC
-pin_3 <= H4;
-pin_4 <= NOT nHsync;
-pin_5 <= VidOut;
-pin_6 <= NOT vSyncOut;
-pin_7 <= V1;
-pin_8 <= H64;
-pin_53 <= SRLoad;
+As(18) <= NOT vSyncOut; --RTC
+--pin_3 <= H4;
+HSYNC <= NOT nHsync;
+SBLU <= VidOut;       -- SBLU is EGA Pin 7 and MDA Video
+VSYNC <= NOT vSyncOut;
+--pin_7 <= V1;
+--pin_8 <= H64;
+--pin_53 <= SRLoad;
 end Behavioral;

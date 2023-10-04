@@ -2,9 +2,9 @@
 import sys, os
 from configobj import ConfigObj
 
-ver = 2.00
+ver = 2.10
 
-import UC_set_freq as sf
+import UC_set_freq_stm32 as sf
 import UC_fill_RAM as fr
 #import set_reset as s_rst
 
@@ -509,9 +509,9 @@ def main(dir, cf, norom):
 	#s_rst.main(0) # Reset active
 	fr.main('pins',bytes([0])) # Reset active
 	print(f'{bcolors.OKGREEN}-------------------------- Turn off Clock --------------------------{bcolors.ENDC}')
-	sf.main(0, 0)
+	fr.main('pins',bytes([3])) # Clock Off
 	print(f'{bcolors.OKGREEN}------------------------- Configure Clock --------------------------{bcolors.ENDC}')
-	sf.main(clockfreqf*8, clockfreqs)  # configure Clock
+	clockreg = sf.find_registers(clockfreqf*8, clockfreqs)  # configure Clock
 
 	if (config_per(cf)): # configure peripherals
 		exit()
@@ -535,6 +535,7 @@ def main(dir, cf, norom):
 				print(f'{bcolors.FAIL}        ###### actually NOT applying patch! ######{bcolors.ENDC}')
 			
 
+	fr.main('pins',bytes([2])) # Clock On
 	print(f'{bcolors.OKGREEN}-------------------------- Reset inactive --------------------------{bcolors.ENDC}')
 	#s_rst.main(1)  # Reset inactive - Run
 	fr.main('pins',bytes([1]))  # Reset inactive - Run

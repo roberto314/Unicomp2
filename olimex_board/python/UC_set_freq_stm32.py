@@ -39,21 +39,18 @@ def dump_registers(result):
 	if result[0] != None:
 		print(f'-- Range Register: {result[0]}')
 	if result[1] != None:
-		print(f'-- Prescaler 0 Register: {result[1]}')
+		print(f'-- Offset Register: {result[1]}')
 	if result[2] != None:
-		print(f'-- Prescaler 1 Register: {result[2]}')
-	if result[3] != None:
-		print(f'-- Offset Register: {result[3]}')
-	if result[4] != None:
-		print(f'-- Address Register: 0x{result[4]:02X}')
+		print(f'-- Address Register: 0x{result[2]:02X}')
+	if ((result[3] != None) and (result[4] != None)):
+		temp = result[4]+256*result[3]
+		print(f'-- MUX Register: 0x{temp:04X}')
+		print(f'-- MUX Register: {temp:016b}')
 	if ((result[5] != None) and (result[6] != None)):
 		temp = result[6]+256*result[5]
-		print(f'-- MUX Register: 0x{temp:04X}')
+		print(f'-- DAC Register: {temp}')
 	if ((result[7] != None) and (result[8] != None)):
 		temp = result[8]+256*result[7]
-		print(f'-- DAC Register: {temp}')
-	if ((result[9] != None) and (result[10] != None)):
-		temp = result[10]+256*result[9]
 		print(f'-- DIV Register: {temp}')
 ##########################################
 def expect_ok(ser):
@@ -86,7 +83,8 @@ def read(channel, size = 1):
 			print('I/O error')
 			raise Exception('I/O error')
 	except:
-		print('Read Error!')
+		result = ([0] * size)
+		print(f'Read Error! Size: {size}')
 	return result
 
 def make_checksum(data):
@@ -107,7 +105,7 @@ def read_with_checksum(ser, size):
 
 def read_clock(ser):
 	write_with_checksum(ser, b'DR')
-	result = read_with_checksum(ser, 11)
+	result = read_with_checksum(ser, 9)
 	#dump_registers(result)
 	return result
 
@@ -119,8 +117,7 @@ def write_clock(ser, data):
 	write_with_checksum(ser, message)
 	expect_ok(ser)
 ##########################################
-def find_registers(freq_fast, freq_slow, val):
-	retval = val
+def find_registers(freq_fast, freq_slow=1000000):
 	offset = 6
 	prescaler = 1
 	stepsize = 5000 # Datasheet 5kHz Stepsize for DS1085-5
@@ -145,20 +142,11 @@ def find_registers(freq_fast, freq_slow, val):
 		else:
 			mclk_window_min = (int)((2560000 * (offset + 18)) / prescaler)
 		#print (f'freq window: {mclk_window_max} - {mclk_window_min}, offset: {offset}, prescaler: {prescaler}')
-	print(f"found offset: {offset}, prescaler0: {prescaler}")
-	
-	retval[1] = prescaler # set prescaler 0
-	retval[0] = offset
 	dac_off = round((freq_fast - mclk_window_min) * prescaler / stepsize) # 5kHz step size
-	print(f"found DAC: {dac_off}")
-	temp = dac_off.to_bytes(2, 'big')
-	retval[7] = temp[0]  #Hi
-	retval[8] = temp[1]  #Lo
-
 	real_freq = (int)((2560000 * (offset + 18) + (dac_off*stepsize)) / prescaler)
 	error = 1E6 * ((real_freq - freq_fast) / freq_fast)
 	main_clock = real_freq * prescaler
-	print(f"Main Clockfreq.: {main_clock}")
+	print(f"found offset: {offset}, prescaler0: {prescaler}, DAC: {dac_off}, Main Clockfreq.: {main_clock}")	
 	if main_clock < 33000000:
 		print(f'****************************************************************')
 		print(f'****************************************************************')
@@ -167,22 +155,18 @@ def find_registers(freq_fast, freq_slow, val):
 		print(f'****************  lead to unexpected operation!  ***************')
 		print(f'****************************************************************')
 		print(f'****************************************************************')
-	print(f"Real frequency fast: {real_freq} CPU: {real_freq/8} Hz Error: {error:.2f} ppm")
+	print(f"frequency fast in: {freq_fast} out: {real_freq} CPU: {real_freq/8} Hz Error: {error:.2f} ppm")
 	div1 = (round(main_clock / freq_slow)) - 2
 	if div1 > 1024:
 		print(f'{bcolors.FAIL}ATTETION DIVIDER > 1024!{bcolors.ENDC}')
-	temp = div1.to_bytes(2, 'big')
-	retval[9] = temp[0]  #Hi
-	retval[10] = temp[1] #Lo	
-	print(f'Got freq. slow: {freq_slow} Hz, divider: {div1}')
 	real_freq2 = main_clock / (div1 + 2)
 	error2 = 1E6 * ((real_freq2 - freq_slow) / freq_slow)
 	error3 = 100 * ((real_freq2 - freq_slow) / freq_slow)
-	print(f'Real frequncy slow: {real_freq2/1E6:#.6f} MHz, Error: {error3:#.3f} %, {error2:#.3f} ppm')
-	return retval
+	print(f'frequency slow in: {freq_slow} out: {int(real_freq2)}, divider: {div1} Error: {error3:#.3f} %, {error2:#.3f} ppm')
+	return offset,prescaler,dac_off,div1
 
 
-def main(val):
+def main(f0=None, f1=None, p0=None, p1=None, offset=None, address=None, mux=None, dac=None, div=None):
 
 	try:
 		ser = Serial(port, 115200, timeout = 1, writeTimeout = 1)
@@ -191,166 +175,235 @@ def main(val):
 		ser = ''
 		#exit()
 
-	#if freq_fast == 0:
-	#	print('Shutting clock off.')
 	clocksettings = read_clock(ser)
-	def_offset = clocksettings[0]
-	if val[0] != None:
-		val[3] = val[0]+def_offset
-		val[0] = 0
+	def_offset = clocksettings[0]   # first byte is range register
+	o_offset = clocksettings[1]
+	o_address = clocksettings[2]
+	o_mux = clocksettings[4]+256*clocksettings[3]
+	o_dac = clocksettings[6]+256*clocksettings[5]
+	o_div = clocksettings[8]+256*clocksettings[7]
+	newval = [None] * 9
 
-	print(f'----- Old Settings ------')
-	dump_registers(clocksettings)
-	for i in range(len(val)):
-		if val[i] == None:
-			val[i] = clocksettings[i]; # use the old values as default
+	#print(f'----- Old Settings ------')
+	#dump_registers(clocksettings)
+	#print(f'Length of clocksettings: {len(clocksettings)}')
 
-	print(f'------ New settings ------')
-	dump_registers(val)
-	write_clock(ser, val)
+	if f0 != None:
+		#print(f'Calculating registers for f0. {f0}')
+		if f0 > 66555000:
+			print("f0 too big, out of Range!")
+			exit()
+		tf0 = f0
+	else:
+		tf0 = 8000000
+
+	if f1 != None:
+		#print(f'Calculating registers for f1. {f1}')
+		tf1 = f1
+	else: tf1 = 1000000
+
+	if f0 != None or f1 != None:
+		offset,p0,o_dac,o_div = find_registers(tf0, tf1)
+
+	if p0 != None:
+		#print(f'Calculating registers for prescaler0. {p0}')
+		temp = o_mux & 0x1E7 # clr bit 3 and 4 (and 9)
+		if p0 == 1:
+			o_mux = temp 
+		elif p0 == 2:
+			o_mux = temp | 0x0008
+		elif p0 == 4:
+			o_mux = temp | 0x0010
+		elif p0 == 8:
+			o_mux = temp | 0x0018
+
+	if p1 != None:
+		#print(f'Calculating registers for prescaler1. {p1}')
+		temp = o_mux & 0x1F9 # clr bit 1 and 2 (and 9)
+		if p1 == 1:
+			o_mux = temp 
+		elif p1 == 2:
+			o_mux = temp | 0x0002
+		elif p1 == 4:
+			o_mux = temp | 0x0004
+		elif p1 == 8:
+			o_mux = temp | 0x0006
+
+	if offset != None:
+		#print(f'Calculating registers for offset. {offset}')
+		o_offset = offset + def_offset
+
+	o_address = 8 # Disable automatic save (WC Bit = 1)
+	if address != None:
+		#print(f'Calculating registers for address. {address}')
+		o_address = address
+
+	if mux != None:
+		#print(f'Calculating registers for mux. {mux}')
+		o_mux = mux
+
+	if dac != None:
+		#print(f'Calculating registers for dac. {dac}')
+		o_dac = dac
+
+	if div != None:
+		#print(f'Calculating registers for div. {div}')
+		temp = o_mux & 0x1FE # clr bit 0 (and 9)
+		if div == 1:
+			o_mux = temp | 1 # set bit 0 (DIV1)
+		else:
+			o_mux = temp # bit 0 cleared
+			o_div = div - 2
+
+	newval[0] = def_offset # not used for writing
+	newval[1] = o_offset
+	newval[2] = o_address
+	temp = o_mux.to_bytes(2, 'big')
+	newval[3] = temp[0]  #Hi
+	newval[4] = temp[1]  #Lo
+	temp = o_dac.to_bytes(2, 'big')
+	newval[5] = temp[0]  #Hi
+	newval[6] = temp[1]  #Lo
+	temp = o_div.to_bytes(2, 'big')
+	newval[7] = temp[0]  #Hi
+	newval[8] = temp[1]  #Lo
+	#print(f'------ New settings ------')
+	#dump_registers(newval)
+	write_clock(ser, newval)
 
 if __name__ == '__main__':
 	parser = argparse.ArgumentParser(prog = 'ds1085.py')
-	parser.add_argument('-f',
+	parser.add_argument(
+		'-f0',
 		type = float,
 		help = 'Frequency for OUT0 in Hz, ds1085.py -f 1000000 for 1MHz')
-	parser.add_argument('-s',
+	parser.add_argument(
+		'-f1',
 		type = float,
 		help = 'Frequency for OUT1 in Hz, ds1085.py -s 1000000 for 1MHz')
-	parser.add_argument('-k',
+	parser.add_argument(
+		'-k',
 		type = float,
 		help = 'Frequency for OUT0 in kHz, ds1085.py -k 1000 for 1MHz')
-	parser.add_argument('-M',
+	parser.add_argument(
+		'-M',
 		type = float,
 		help = 'Frequency for OUT0 in MHz, ds1085.py -M 1 for 1MHz')
+	parser.add_argument(
+		'-m',
+		help = 'Write MUX Register')
+	parser.add_argument(
+		'-v',
+		help = 'Write DIV Register for OUT1')
+	parser.add_argument(
+		'-d',
+		help = 'Write DAC Register')
+	parser.add_argument(
+		'-o',
+		help = 'Write Offset Register (+/-6)')
+	parser.add_argument(
+		'-p0',
+		help = 'Set Prescaler for OUT0')
+	parser.add_argument(
+		'-p1',
+		help = 'Set Prescaler for OUT1')
+	parser.add_argument(
+		'-x',
+		help = 'Save Register values to EPROM')
 	subparsers = parser.add_subparsers(
 		dest = 'registers',
-		title = 'Read or Write registers')
+		title = 'Read registers')	
 	subparser = subparsers.add_parser(
-		'MUX',
-		help = 'Write MUX Register')
-	subparser.add_argument(
-		'-v', '--value',
-		help = 'value for Register')
-	subparser = subparsers.add_parser(
-		'DIV',
-		help = 'Write DIV Register for OUT1')
-	subparser.add_argument(
-		'-v', '--value',
-		help = 'value for Register')
-	subparser = subparsers.add_parser(
-		'DAC',
-		help = 'Write DAC Register')
-	subparser.add_argument(
-		'-v', '--value',
-		help = 'value for Register')
-	subparser = subparsers.add_parser(
-		'OFF',
-		help = 'Write Offset Register (+/-6)')
-	subparser.add_argument(
-		'-v', '--value',
-		help = 'value for Register')
-	subparser = subparsers.add_parser(
-		'PRE0',
-		help = 'Set Prescaler for OUT0')
-	subparser.add_argument(
-		'-v', '--value',
-		help = 'value for Register')
-	subparser = subparsers.add_parser(
-		'PRE1',
-		help = 'Set Prescaler for OUT1')
-	subparser.add_argument(
-		'-v', '--value',
-		help = 'value for Register')
-	subparser = subparsers.add_parser(
-		'SAVE',
-		help = 'Save Register values to EPROM')
+		'READ',
+		help = 'Read all Register')
 	args = parser.parse_args()
 
 	freq_fast = 0;
 	freq_slow = 0;
 
-	#set_addr(0x08); # Disable automatic save (WC Bit = 1)
-	def_offset = 0#get_range()
-	#temp = result[6]+256*result[5]
-	#print(f'-- MUX Register: 0x{temp:04X}')
-	#temp = result[8]+256*result[7]
-	#print(f'-- DAC Register: 0x{temp:04X}')
-	#temp = result[10]+256*result[9]
-	#print(f'-- DIV Register: 0x{temp:04X}')
-
-	newval = [None] * 11
-	if args.registers == None and args.f == None and args.k == None and args.M == None and args.s == None:
-		print("No command")
-		exit()
+	def_offset = 0
 	
-	elif args.registers == 'PRE0':
-		if args.value:
-			val = int(args.value, 0)
+	p0 = None
+	p1 = None
+	offset = None
+	address = None
+	mux = None
+	dac = None
+	div = None
+	f0 = None
+	f1 = None
+	#if args.x == None and args.f == None and args.k == None and args.M == None and args.m == None and args.q0 == None and args.q1 == None:
+	#	print("No command")
+	#	exit()
+	
+	if args.p0 != None:
+		if args.p0:
+			val = int(args.p0, 0)
 			if val in (1,2,4,8):
-				print(f'You entered {val}')
-				newval[1] = val
+				#print(f'You entered {val}')
+				p0 = val
 			else:
 				print(f'Prescaler {val} not supported')
 			#set_pre0(val)
-	elif args.registers == 'PRE1':
-		if args.value:
-			val = int(args.value, 0)
+	if args.p1 != None:
+		if args.p1:
+			val = int(args.p1, 0)
 			if val in (1,2,4,8):
-				newval[2] = val
-				print(f'You entered {val}')
+				#print(f'You entered {val}')
+				p1 = val
 			else:
 				print(f'Prescaler {val} not supported')
-	elif args.registers == 'OFF':
-		if args.value:
-			val = int(args.value, 0)
-			print(f'You entered: {val}')
+	if args.o != None:
+		if args.o:
+			val = int(args.o, 0)
+			#print(f'You entered: {val}')
 			if (val >= -7 and val <= 6):
 				print(f'Setting Offset at: {val+def_offset}')
-				newval[0] = (val+def_offset) # set at position 0
-	elif args.registers == 'SAVE':
-		print(f'Setting Address to 0 (automatically saves state)')
-		newval[4] = 0
-		exit()
-	elif args.registers == 'MUX':
-		if args.value:
-			val = int(args.value, 0)
-			print(f'You entered (HEX): 0x{val:04x} (DEC): {val}')
-			temp = val.to_bytes(2, 'big')
-			newval[5] = temp[0]  #Hi
-			newval[6] = temp[1]  #Lo
-	elif args.registers == 'DAC':
-		if args.value:
-			val = int(args.value, 0)
-			print(f'You entered (HEX): 0x{val:04x} (DEC): {val}')
-			temp = val.to_bytes(2, 'big')
-			newval[7] = temp[0]  #Hi
-			newval[8] = temp[1]  #Lo
-	elif args.registers == 'DIV':
-		if args.value:
-			val = int(args.value, 0)
-			if val < 2:
-				print('N-Divider must be > 2!')
+				offset = (val+def_offset) # set at position 0
+			else:
+				print(f'Setting out of range')
+
+	if args.x != None:
+		address = int(args.x, 0)
+		print(f'Setting Address to {address} (0 automatically saves state)')
+	
+	if args.m != None:
+		if args.m:
+			mux = int(args.m, 0)
+			#print(f'You entered (HEX): 0x{val:04x} (DEC): {val}')
+	
+	if args.d != None:
+		if args.d:
+			dac = int(args.d, 0)
+			#print(f'You entered (HEX): 0x{val:04x} (DEC): {val}')
+	
+	if args.v != None:
+		if args.v:
+			val = int(args.v, 0)
+			if val < 1:
+				print('N-Divider must be > 1!')
 				exit()
 			print(f'You entered (HEX): 0x{val:04x} (DEC): {val}')
-			temp = val.to_bytes(2, 'big')
-			newval[9] = temp[0]  #Hi
-			newval[10] = temp[1] #Lo
-			#set_div(val-2)
-	elif args.f != None:
-		freq_fast = (int)(args.f)
-	elif args.k != None:
-		freq_fast = (int)(args.k*1000)
-	elif args.M != None:
-		freq_fast = (int)(args.M*1000000)
-	if args.s != None:
-		freq_slow = (int)(args.s)
-	print (f'Got new freq_fast: {freq_fast:,.2f}')
-	if freq_fast > 66555000:
-		print("too big, out of Range!")
+			div = val
+
+	if args.registers != None:
+		try:
+			ser = Serial(port, 115200, timeout = 1, writeTimeout = 1)
+		except IOError:
+			print('Port not found!')
+			exit()
+		clocksettings = read_clock(ser)
+		#print(f'Length of clocksettings: {len(clocksettings)}')
+		dump_registers(clocksettings)
 		exit()
-	if ((freq_fast > 0) or (freq_slow > 0)):
-		newval = find_registers(freq_fast, freq_slow, newval)
-	#dump_registers(newval)
-	#print(f'-------------------------------')
-	main(newval)
+	
+	if args.f0 != None:
+		f0 = (int)(args.f0)
+	if args.k != None:
+		f0 = (int)(args.k*1000)
+	if args.M != None:
+		f0 = (int)(args.M*1000000)
+	if args.f1 != None:
+		f1 = (int)(args.f1)
+	#print (f'Got new f0: {f0:,.2f}')
+	main(f0, f1, p0, p1, offset, address, mux, dac, div)

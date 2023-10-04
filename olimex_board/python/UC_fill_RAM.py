@@ -386,17 +386,17 @@ def write_clock(ser, data):
 def read_clock(ser):
 	print(f'----------------------------- Read Clock -----------------------------')
 	write_with_checksum(ser, b'DR')
-	result = read_with_checksum(ser, 11)
+	result = read_with_checksum(ser, 9)
 	print(f'Range Register: 0x{result[0]:02X}')
-	print(f'Prescaler 0 Register: 0x{result[1]:02X}')
-	print(f'Prescaler 1 Register: 0x{result[2]:02X}')
-	print(f'Offset Register: 0x{result[3]:02X}')
-	print(f'Address Register: 0x{result[4]:02X}')
+	#print(f'Prescaler 0 Register: 0x{result[1]:02X}')
+	#print(f'Prescaler 1 Register: 0x{result[2]:02X}')
+	print(f'Offset Register: 0x{result[1]:02X}')
+	print(f'Address Register: 0x{result[2]:02X}')
+	temp = result[4]+256*result[3]
+	print(f'MUX Register: {temp:016b}')
 	temp = result[6]+256*result[5]
-	print(f'MUX Register: 0x{temp:04X}')
-	temp = result[8]+256*result[7]
 	print(f'DAC Register: 0x{temp:04X}')
-	temp = result[10]+256*result[9]
+	temp = result[8]+256*result[7]
 	print(f'DIV Register: 0x{temp:04X}')
 	
 	#serial_number = ','.join(hex(b)[2:] for b in result)
@@ -571,7 +571,7 @@ if __name__ == '__main__':
 	#---------------------------------------------------------------------------------    
 	subparser = subparsers.add_parser(
 		'clock',
-		help = 'writes clock data')
+		help = 'reads/writes clock data')
 	subparser.add_argument(
 		'data',
 		nargs = '?',

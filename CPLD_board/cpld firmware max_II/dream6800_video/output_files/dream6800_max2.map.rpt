@@ -1,5 +1,5 @@
 Analysis & Synthesis report for dream6800_max2
-Sun Aug 27 17:31:15 2023
+Thu Sep 21 20:20:02 2023
 Quartus II 64-Bit Version 13.0.1 Build 232 06/12/2013 Service Pack 1 SJ Web Edition
 
 
@@ -13,17 +13,18 @@ Quartus II 64-Bit Version 13.0.1 Build 232 06/12/2013 Service Pack 1 SJ Web Edit
   5. Analysis & Synthesis Source Files Read
   6. Analysis & Synthesis Resource Usage Summary
   7. Analysis & Synthesis Resource Utilization by Entity
-  8. General Register Statistics
-  9. Port Connectivity Checks: "CD4014:SR|dff1:FF7"
- 10. Port Connectivity Checks: "CD4014:SR|dff1:FF6"
- 11. Port Connectivity Checks: "CD4014:SR|dff1:FF5"
- 12. Port Connectivity Checks: "CD4014:SR|dff1:FF4"
- 13. Port Connectivity Checks: "CD4014:SR|dff1:FF3"
- 14. Port Connectivity Checks: "CD4014:SR|dff1:FF2"
- 15. Port Connectivity Checks: "CD4014:SR|dff1:FF1"
- 16. Port Connectivity Checks: "CD4014:SR|dff1:FF0"
- 17. Port Connectivity Checks: "CD4014:SR"
- 18. Analysis & Synthesis Messages
+  8. Registers Removed During Synthesis
+  9. General Register Statistics
+ 10. Port Connectivity Checks: "CD4014:SR|dff1:FF7"
+ 11. Port Connectivity Checks: "CD4014:SR|dff1:FF6"
+ 12. Port Connectivity Checks: "CD4014:SR|dff1:FF5"
+ 13. Port Connectivity Checks: "CD4014:SR|dff1:FF4"
+ 14. Port Connectivity Checks: "CD4014:SR|dff1:FF3"
+ 15. Port Connectivity Checks: "CD4014:SR|dff1:FF2"
+ 16. Port Connectivity Checks: "CD4014:SR|dff1:FF1"
+ 17. Port Connectivity Checks: "CD4014:SR|dff1:FF0"
+ 18. Port Connectivity Checks: "CD4014:SR"
+ 19. Analysis & Synthesis Messages
 
 
 
@@ -49,13 +50,13 @@ applicable agreement for further details.
 +-------------------------------------------------------------------------------+
 ; Analysis & Synthesis Summary                                                  ;
 +-----------------------------+-------------------------------------------------+
-; Analysis & Synthesis Status ; Successful - Sun Aug 27 17:31:15 2023           ;
+; Analysis & Synthesis Status ; Successful - Thu Sep 21 20:20:02 2023           ;
 ; Quartus II 64-Bit Version   ; 13.0.1 Build 232 06/12/2013 SP 1 SJ Web Edition ;
 ; Revision Name               ; dream6800_max2                                  ;
 ; Top-level Entity Name       ; dream6800_video                                 ;
 ; Family                      ; MAX II                                          ;
-; Total logic elements        ; 50                                              ;
-; Total pins                  ; 39                                              ;
+; Total logic elements        ; 53                                              ;
+; Total pins                  ; 33                                              ;
 ; Total virtual pins          ; 0                                               ;
 ; UFM blocks                  ; 0 / 1 ( 0 % )                                   ;
 +-----------------------------+-------------------------------------------------+
@@ -160,33 +161,33 @@ Parallel compilation was disabled, but you have multiple processors available. E
 +---------------------------------------------+-------+
 ; Resource                                    ; Usage ;
 +---------------------------------------------+-------+
-; Total logic elements                        ; 50    ;
+; Total logic elements                        ; 53    ;
 ;     -- Combinational with no register       ; 13    ;
 ;     -- Register only                        ; 1     ;
-;     -- Combinational with a register        ; 36    ;
+;     -- Combinational with a register        ; 39    ;
 ;                                             ;       ;
 ; Logic element usage by number of LUT inputs ;       ;
 ;     -- 4 input functions                    ; 10    ;
-;     -- 3 input functions                    ; 10    ;
-;     -- 2 input functions                    ; 26    ;
-;     -- 1 input functions                    ; 3     ;
+;     -- 3 input functions                    ; 11    ;
+;     -- 2 input functions                    ; 27    ;
+;     -- 1 input functions                    ; 4     ;
 ;     -- 0 input functions                    ; 0     ;
 ;                                             ;       ;
 ; Logic elements by mode                      ;       ;
-;     -- normal mode                          ; 28    ;
+;     -- normal mode                          ; 31    ;
 ;     -- arithmetic mode                      ; 22    ;
 ;     -- qfbk mode                            ; 0     ;
 ;     -- register cascade mode                ; 0     ;
 ;     -- synchronous clear/load mode          ; 18    ;
 ;     -- asynchronous clear/load mode         ; 0     ;
 ;                                             ;       ;
-; Total registers                             ; 37    ;
+; Total registers                             ; 40    ;
 ; Total logic cells in carry chains           ; 25    ;
-; I/O pins                                    ; 39    ;
-; Maximum fan-out node                        ; clk4  ;
-; Maximum fan-out                             ; 29    ;
-; Total fan-out                               ; 226   ;
-; Average fan-out                             ; 2.54  ;
+; I/O pins                                    ; 33    ;
+; Maximum fan-out node                        ; ph0   ;
+; Maximum fan-out                             ; 32    ;
+; Total fan-out                               ; 209   ;
+; Average fan-out                             ; 2.43  ;
 +---------------------------------------------+-------+
 
 
@@ -195,7 +196,7 @@ Parallel compilation was disabled, but you have multiple processors available. E
 +----------------------------+-------------+--------------+------------+------+--------------+--------------+-------------------+------------------+-----------------+------------+-------------------------------------+--------------+
 ; Compilation Hierarchy Node ; Logic Cells ; LC Registers ; UFM Blocks ; Pins ; Virtual Pins ; LUT-Only LCs ; Register-Only LCs ; LUT/Register LCs ; Carry Chain LCs ; Packed LCs ; Full Hierarchy Name                 ; Library Name ;
 +----------------------------+-------------+--------------+------------+------+--------------+--------------+-------------------+------------------+-----------------+------------+-------------------------------------+--------------+
-; |dream6800_video           ; 50 (42)     ; 37           ; 0          ; 39   ; 0            ; 13 (13)      ; 1 (1)             ; 36 (28)          ; 25 (25)         ; 0 (0)      ; |dream6800_video                    ; work         ;
+; |dream6800_video           ; 53 (45)     ; 40           ; 0          ; 33   ; 0            ; 13 (13)      ; 1 (1)             ; 39 (31)          ; 25 (25)         ; 0 (0)      ; |dream6800_video                    ; work         ;
 ;    |CD4014:SR|             ; 8 (0)       ; 8            ; 0          ; 0    ; 0            ; 0 (0)        ; 0 (0)             ; 8 (0)            ; 0 (0)           ; 0 (0)      ; |dream6800_video|CD4014:SR          ; work         ;
 ;       |dff1:FF0|           ; 1 (1)       ; 1            ; 0          ; 0    ; 0            ; 0 (0)        ; 0 (0)             ; 1 (1)            ; 0 (0)           ; 0 (0)      ; |dream6800_video|CD4014:SR|dff1:FF0 ; work         ;
 ;       |dff1:FF1|           ; 1 (1)       ; 1            ; 0          ; 0    ; 0            ; 0 (0)        ; 0 (0)             ; 1 (1)            ; 0 (0)           ; 0 (0)      ; |dream6800_video|CD4014:SR|dff1:FF1 ; work         ;
@@ -209,17 +210,29 @@ Parallel compilation was disabled, but you have multiple processors available. E
 Note: For table entries with two numbers listed, the numbers in parentheses indicate the number of resources of the given type used by the specific entity alone. The numbers listed outside of parentheses indicate the total resources of the given type used by the specific entity and all of its sub-entities in the hierarchy.
 
 
++----------------------------------------------------------------+
+; Registers Removed During Synthesis                             ;
++---------------------------------------+------------------------+
+; Register name                         ; Reason for Removal     ;
++---------------------------------------+------------------------+
+; pattern[2,4,6]                        ; Merged with pattern[0] ;
+; pattern[0,3,5,7]                      ; Merged with pattern[1] ;
+; patterncnt[2]                         ; Lost fanout            ;
+; Total Number of Removed Registers = 8 ;                        ;
++---------------------------------------+------------------------+
+
+
 +------------------------------------------------------+
 ; General Register Statistics                          ;
 +----------------------------------------------+-------+
 ; Statistic                                    ; Value ;
 +----------------------------------------------+-------+
-; Total registers                              ; 37    ;
+; Total registers                              ; 40    ;
 ; Number of registers using Synchronous Clear  ; 18    ;
 ; Number of registers using Synchronous Load   ; 0     ;
 ; Number of registers using Asynchronous Clear ; 0     ;
 ; Number of registers using Asynchronous Load  ; 0     ;
-; Number of registers using Clock Enable       ; 11    ;
+; Number of registers using Clock Enable       ; 14    ;
 ; Number of registers using Preset             ; 0     ;
 +----------------------------------------------+-------+
 
@@ -332,7 +345,7 @@ Info: Running Quartus II 64-Bit Analysis & Synthesis
     Info: programming logic devices manufactured by Altera and sold by 
     Info: Altera or its authorized distributors.  Please refer to the 
     Info: applicable agreement for further details.
-    Info: Processing started: Sun Aug 27 17:31:14 2023
+    Info: Processing started: Thu Sep 21 20:20:01 2023
 Info: Command: quartus_map --read_settings_files=on --source=dream6800_max2.vhd --source=../../../vhdl_components/CD4014.vhd --source=../../../vhdl_components/dff1.vhd --source=../../../vhdl_components/ls165.vhd dream6800_max2
 Warning (20028): Parallel compilation is not licensed and has been disabled
 Info (12021): Found 2 design units, including 1 entities, in source file dream6800_max2.vhd
@@ -348,23 +361,28 @@ Info (12021): Found 2 design units, including 1 entities, in source file /home/r
     Info (12022): Found design unit 1: ls165-ls165_body
     Info (12023): Found entity 1: ls165
 Info (12127): Elaborating entity "dream6800_video" for the top level hierarchy
-Warning (10541): VHDL Signal Declaration warning at dream6800_max2.vhd(15): used implicit default value for signal "led" because signal was never assigned a value or an explicit default value. Use of implicit default value may introduce unintended design optimizations.
-Warning (10036): Verilog HDL or VHDL warning at dream6800_max2.vhd(43): object "pattern" assigned a value but never read
+Warning (10036): Verilog HDL or VHDL warning at dream6800_max2.vhd(37): object "A_int" assigned a value but never read
 Info (12128): Elaborating entity "CD4014" for hierarchy "CD4014:SR"
 Info (12128): Elaborating entity "dff1" for hierarchy "CD4014:SR|dff1:FF0"
 Warning (12241): 1 hierarchies have connectivity warnings - see the Connectivity Checks report folder
-Warning (13024): Output pins are stuck at VCC or GND
-    Warning (13410): Pin "led" is stuck at GND
-Warning (21074): Design contains 2 input pin(s) that do not drive logic
+Info (17049): 1 registers lost all their fanouts during netlist optimizations.
+Warning (21074): Design contains 9 input pin(s) that do not drive logic
     Warning (15610): No output dependent on input pin "clk50"
-    Warning (15610): No output dependent on input pin "DMAEN"
-Info (21057): Implemented 89 device resources after synthesis - the final resource count might be different
-    Info (21058): Implemented 12 input pins
-    Info (21059): Implemented 27 output pins
-    Info (21061): Implemented 50 logic cells
-Info: Quartus II 64-Bit Analysis & Synthesis was successful. 0 errors, 9 warnings
+    Warning (15610): No output dependent on input pin "D_in[0]"
+    Warning (15610): No output dependent on input pin "D_in[1]"
+    Warning (15610): No output dependent on input pin "D_in[2]"
+    Warning (15610): No output dependent on input pin "D_in[3]"
+    Warning (15610): No output dependent on input pin "D_in[4]"
+    Warning (15610): No output dependent on input pin "D_in[5]"
+    Warning (15610): No output dependent on input pin "D_in[6]"
+    Warning (15610): No output dependent on input pin "D_in[7]"
+Info (21057): Implemented 86 device resources after synthesis - the final resource count might be different
+    Info (21058): Implemented 10 input pins
+    Info (21059): Implemented 23 output pins
+    Info (21061): Implemented 53 logic cells
+Info: Quartus II 64-Bit Analysis & Synthesis was successful. 0 errors, 13 warnings
     Info: Peak virtual memory: 602 megabytes
-    Info: Processing ended: Sun Aug 27 17:31:15 2023
+    Info: Processing ended: Thu Sep 21 20:20:02 2023
     Info: Elapsed time: 00:00:01
     Info: Total CPU time (on all processors): 00:00:01
 

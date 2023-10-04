@@ -1,0 +1,239 @@
+﻿
+<!DOCTYPE HTML>
+
+<html lang="en">
+
+<head>
+<title>minuszerodegrees.net</title>
+<meta charset="UTF-8">
+<link rel="stylesheet" type="text/css" href="../style/style.css?id=346287">
+
+<style type="text/css">
+<!--
+.styTablePadded_1_4px_center td:first-child {color:#FFFFFF; background-color:#999999;}
+-->
+</style>
+
+</head>
+
+<body>
+
+<table>
+  <tr>
+	<td style="width:800px;">&nbsp;</td>
+	<td style="width:200px;"><a href="../index.htm">Home</a>&nbsp;</td>
+  </tr>
+</table>
+
+<span class="styPageType1_heading_L1">IBM: &nbsp;MDA / CGA / EGA</span><br>
+<br>
+<br>
+
+<hr><br>
+<span class="styPageType1_heading_L2">Pin Assignment</span>
+<br>
+<br>
+• Pin assignment within the 9-pin D connector.<br>
+• All signals are digital, at TTL levels.<br>
+• Warning: Some third party cards and monitors (notably Taxan made ones) use nonstandard sync frequencies.<br>
+<br>
+<table class="styTablePadded_1_4px_center" style="overflow:hidden; white-space:nowrap;">
+       <tr>
+         <th style="width: 50px;">&nbsp;</th>
+         <th style="width:150px;">MDA</th>
+         <th style="width:150px;">CGA</th>
+         <th style="width:150px;">EGA</th>
+         <th style="width:650px; text-align:left">&nbsp;&nbsp;&nbsp;Pin &nbsp;comments</th>
+       </tr>
+       <tr>
+         <td>Pin 1</td>
+         <td>Ground</td>
+         <td>Ground</td>
+         <td>Ground</td>
+         <td style="text-align:left;">&nbsp;</td>
+       </tr>
+       <tr>
+         <td>Pin 2</td>
+         <td>Ground</td>
+         <td>Ground</td>
+         <td>+ Secondary Red</td>
+         <td style="text-align:left;">&nbsp;<span style="font-weight:bold;">IBM EGA Card:</span> See note 1 below</td>
+       </tr>
+       <tr>
+         <td>Pin 3</td>
+         <td>&nbsp;</td>
+         <td>+ Red</td>
+         <td>+ Red</td>
+         <td style="text-align:left;">&nbsp;<span style="font-weight:bold;">IBM MDA Card:</span> See note 2 below</td>
+       </tr>
+       <tr>
+         <td>Pin 4</td>
+         <td>&nbsp;</td>
+         <td>+ Green</td>
+         <td>+ Green</td>
+         <td style="text-align:left;">&nbsp;<span style="font-weight:bold;">IBM MDA Card:</span> See note 2 below</td>
+       </tr>
+       <tr>
+         <td>Pin 5</td>
+         <td>&nbsp;</td>
+         <td>+ Blue</td>
+         <td>+ Blue</td>
+         <td style="text-align:left;">&nbsp;<span style="font-weight:bold;">IBM MDA Card:</span> See note 2 below</td>
+       </tr>
+       <tr>
+         <td>Pin 6</td>
+         <td>+ Intensity</td>
+         <td>+ Intensity</td>
+         <td>+ Secondary Green</td>
+         <td style="text-align:left;">&nbsp;<span style="font-weight:bold;">IBM EGA Card:</span> Pin 6 becomes 'Intensity' when card configured for IBM 5151 (MDA) or 5153 (CGA)</td>
+       </tr>
+       <tr>
+         <td>Pin 7</td>
+         <td>+ Video</td>
+         <td>&nbsp;</td>
+         <td>+ Secondary Blue</td>
+         <td style="text-align:left;">&nbsp;<span style="font-weight:bold;">IBM EGA Card:</span> Pin 7 becomes 'Video' when card configured for IBM 5151 (MDA)</td>
+       </tr>
+       <tr>
+         <td>Pin 8</td>
+         <td>+ Horizontal Sync.<br>(18.43 kHz)</td>
+         <td>+ Horizontal Sync.<br>(15.7 kHz)</td>
+         <td>+ Horizontal Sync.<br>(15.7 / 21.85 kHz)</td>
+         <td style="text-align:left;">&nbsp;<span style="font-weight:bold;">IBM EGA Card:</span> See note 3 below</td>
+       </tr>
+       <tr>
+         <td>Pin 9</td>
+         <td>- Vertical Sync.<br>(50 Hz)</td>
+         <td>+ Vertical Sync.<br>(60 Hz)</td>
+         <td>+/- Vertical Sync.<br>(60 Hz)</td>
+         <td style="text-align:left;">&nbsp;</td>
+       </tr>
+</table>
+
+<br>
+<br>
+<table class="styTableNotes">
+  <tr>
+	<td style="width:  70px;">Note 1</td>
+	<td style="width:1330px;">If the IBM EGA card is <a href="../ibm_ega/ibm_ega_switch_settings.htm">configured</a> for an IBM 5151 monitor (MDA) or an IBM 5153 monitor (CGA), then ideally, pin 2 should be grounded (to meet the MDA/CGA standard).<br>
+                                  Although a jumper (<a href="../ibm_ega/ibm_ega_jumper_settings.png">P1</a>) is provided on the IBM EGA card to do just that, I have never found a requirement to use it.</td>
+  </tr>
+  <tr>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+  </tr>
+  <tr>
+        <td>Note 2</td>
+	<td>Normally not connected, but in an early version of the IBM MDA that I have (dated 1982), pins 3/4/5 are connected to chip U64 and consequently are being driven low.<br>
+            Diagram <a href="../images2/ibm_early_mda_pin_3_4_5.jpg">here</a></td>
+  </tr>
+  <tr>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+  </tr>
+  <tr>
+        <td>Note 3</td>
+	<td>Mode 1 = 15.7 kHz, &nbsp;Mode 2 = 21.85 kHz<br>
+            IBM's EGA monitor, the IBM 5154, automatically switches between Modes 1 and 2 according to the polarity of the incoming vertical sync pulses.<br>
+            More information about Modes 1 and 2 follows.</td>
+  </tr>
+</table>
+
+<br>
+<br>
+<br>
+
+<div id="sp"></div>
+<hr><br>
+<span class="styPageType1_heading_L2">Sync Pulses</span>
+<br>
+<br>
+• As measured on the IBM cards (third party cards can differ).<br>
+• Figures are approximate only.<br>
+• Like the other types of signals, these are TTL level.<br>
+<br>
+<table class="styTablePadded_1_4px_center" style="overflow:hidden; white-space:nowrap;">
+       <tr>
+         <th style="width:100px;">&nbsp;</th>
+         <th style="width:300px;">MDA</th>
+         <th style="width:300px;">CGA</th>
+         <th style="width:400px;">EGA</th>
+       </tr>
+       <tr>
+         <td>Horizontal<br>Sync</td>
+         <td><a href="mda_sync_hor.bmp">8 µs positive going pulse every 54.3 µs</a></td>
+         <td><a href="cga_sync_hor.bmp">4 µs positive going pulse every 63.7 µs</a></td>
+         <td style="text-align:left;"><br>
+                                 &nbsp;&nbsp;Mode 1:&nbsp;&nbsp; <a href="ega_sync_hor_mode1.bmp">4.5 µs positive going pulse every 63.7 µs</a><br>
+                                 <br>
+                                 &nbsp;&nbsp;Mode 2:&nbsp;&nbsp; <a href="ega_sync_hor_mode2.bmp">5 µs positive going pulse every 45.8 µs</a><br>
+                                 <br></td>
+       </tr>
+       <tr>
+         <td>Vertical<br>Sync</td>
+         <td><a href="mda_sync_ver.bmp">850 µs <span style="font-weight:bold;">negative</span> going pulse every 20 ms</a></td>
+         <td><a href="cga_sync_ver.bmp">190 µs positive going pulse every 16.7 ms</a></td>
+         <td style="text-align:left;"><br>
+                                 &nbsp;&nbsp;Mode 1:&nbsp;&nbsp; <a href="ega_sync_ver_mode1.bmp">190 µs positive going pulse every 16.7 ms</a><br>
+                                 <br>
+                                 &nbsp;&nbsp;Mode 2:&nbsp;&nbsp; <a href="ega_sync_ver_mode2.bmp">600 µs <span style="font-weight:bold;">negative</span> going pulse every 16.7 ms</a><br>
+                                 <br></td>
+       </tr>
+</table>
+
+<br>
+<br>
+<br>
+
+<div id="ega12"></div>
+<hr><br>
+<span class="styPageType1_heading_L2">EGA - Modes 1 and 2</span>
+<br>
+<br>
+'Mode 1' and 'Mode 2' are terms that IBM uses in the documentation for its EGA monitor, the IBM 5154 (which can also act as a CGA monitor).<br>
+These modes must not be confused with what are known as '<a href="../video/bios_video_modes.htm">video modes</a>'.<br>
+<br>
+In IBM's documentation for the EGA card, Mode 2 is refered to as either "High Resolution" mode or "Hi Res" mode.<br>
+<br>
+The IBM 5154 monitor is a multi-sync monitor, and Mode 1 and Mode 2 are the two modes that it can operate in:<br>
+&nbsp;&nbsp; Mode 1 = LINES: 200, H.SYNC: positive at 15.7 kHz, V.SYNC: positive at 60 Hz<br>
+&nbsp;&nbsp; Mode 2 = LINES: 350, H.SYNC: positive at 21.85 kHz, V.SYNC: negative at 60 Hz<br>
+<br>
+When the IBM 5154 monitor is connected to an IBM EGA card, Mode 2 is the normal mode of operation, however, when software uses the <a href="../video/bios_video_modes.htm">video modes</a> of 04/05/06/0D/0E, the EGA card will switch to Mode 1 operation, which in turn will result in the 5154 monitor switching to Mode 1 operation.<br>
+You can see this for yourself:<br>
+<table class="styTableBpPad_1_4px">
+       <tr>
+         <td style="text-align:right; width:30px;">1.</td>
+         <td style="text-align:left">Boot your computer into DOS.</td>
+       </tr>
+       <tr>
+         <td style="text-align:right;">2.</td>
+         <td>Because Mode 2 operation is in effect, you'll find that the 'V.SIZE 2' adjustment on the 5154 monitor rear works, but that the 'V.SIZE 1' adjustment does not.</td>
+       </tr>
+       <tr>
+         <td style="text-align:right;">3.</td>
+         <td>Run <a href="../software/software.htm">CheckIt</a> software (either version 2.1 or 3).</td>
+       </tr>
+       <tr>
+         <td style="text-align:right;">4.</td>
+         <td>Select TESTS then VIDEO then GRAPHICS. A test pattern will show, using video mode 04.</td>
+       </tr>
+       <tr>
+         <td style="text-align:right;">5.</td>
+         <td>Because Mode 1 operation is now in effect, you'll find that the 'V.SIZE 1' adjustment on the 5154 monitor rear works, but that the 'V.SIZE 2' adjustment does not.</td>
+       </tr>
+</table>
+<br>
+There is another situation which causes the IBM 5154 monitor to switch to Mode 1 operation: If you connect an IBM EGA monitor to an IBM CGA card, the monitor will switch into Mode 1 operation (because of the positive vertical sync pulses), and behave just like a CGA monitor. All colours, including the intensified versions, are displayed correctly. I know, because I have tried that with my IBM hardware.<br>
+
+
+<br><br><br><br><br><br><br><br>
+<br><br><br><br><br><br><br><br>
+<br><br><br><br><br><br><br><br>
+<br><br><br><br><br><br><br><br>
+<br><br><br><br><br><br><br><br>
+<br><br><br><br><br><br><br><br>
+
+</body>
+
+</html>

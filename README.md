@@ -175,6 +175,21 @@ tmux serial window:
 	- writes the .jed file to the selected devices
 	- Example: sudo UC_write_cpld 0 filename.jed - writes .jed file to cpld zero
 
+* Prepare new SD-Card:
+    - copy image to sd-card:
+    sudo dd if=A20-OLinuXino-bullseye-minimal-20230515-130040.img of=/dev/sdb bs=1k status=progress
+    - start olimex an login with olimex/olimex
+    - delete password with: sudo passwd -d olimex
+    - make update: sudo apt update && sudo apt upgrade
+    - install minimal components: sudo apt install git mc
+    - clone github repository: git clone https://github.com/roberto314/Unicomp2.git
+    - open midnight commander: mc
+    - navigate into Unicomp2/olimex_board/config
+    - Run script: install_software.sh
+    - Run script: copy_files.sh
+    - 
+
+
 
 ### CPLD programming ###
 
