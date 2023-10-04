@@ -187,7 +187,7 @@ tmux serial window:
     - navigate into Unicomp2/olimex_board/config
     - Run script: install_software.sh
     - Run script: copy_files.sh
-    - 
+    - restart
 
 
 

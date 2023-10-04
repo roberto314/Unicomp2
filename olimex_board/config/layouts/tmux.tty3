@@ -4,4 +4,4 @@ echo -e "\033[1m"
 clear
 echo "------------ console for ChibiOS debug 115200 ----------------"
 echo -e "\033[m"
-picocom -b 115200 /dev/ttyS5
+picocom -b 115200 /dev/ttyS3

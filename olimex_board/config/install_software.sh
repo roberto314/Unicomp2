@@ -14,10 +14,11 @@ mkdir xc3sprog-libgpio/build
 cd xc3sprog-libgpio/build
 cmake .. -DUSE_WIRINGPI=OFF
 make
+cp xc3sprog ~/.local/bin
+cd $OLDDIR
 
 git clone https://github.com/jimeh/tmuxifier.git ~/.tmuxifier
 sudo chmod u+s /usr/bin/fbterm  # prevent error "can`t change kernel map"
 python3 -m pip install --upgrade pip setuptools wheel
 sudo pip3 install pyA20 configobj pyserial
 
-cd $OLDDIR
