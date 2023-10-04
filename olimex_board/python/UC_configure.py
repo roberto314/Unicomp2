@@ -1,8 +1,11 @@
 #!/usr/bin/env python3
 import sys, os
 from configobj import ConfigObj
+import time
+from serial import Serial
 
 ver = 2.10
+port = '/dev/ttyACM0'
 
 import UC_set_freq_stm32 as sf
 import UC_fill_RAM as fr
@@ -104,7 +107,7 @@ def read_file(fn):
 		print(f'{bcolors.FAIL}---- File {fn} not found!{bcolors.ENDC}')
 		exit()
 
-def upload_image(dir, cf, key):
+def upload_image(ser, dir, cf, key):
 	try:
 		name = key
 		imgstart = int(cf[name]['start'], 0)
@@ -117,13 +120,13 @@ def upload_image(dir, cf, key):
 		if len(img) != size:
 			print(f'{bcolors.FAIL}      ###### Size is wrong! (Image: 0x{len(img):04X} Space: 0x{size:04X}) ######{bcolors.ENDC}')
 			exit()
-		fr.main('write', img, imgstart)
+		fr.main(ser, 'write', img, imgstart)
 		return 0
 	except Exception as e:
 		print(f'Error in upload_image: {e}!')
 		return 1
 
-def upload_patch(cf, key):
+def upload_patch(ser, cf, key):
 	try:
 		name = key
 		imgstart = int(cf[name]['address'], 0)
@@ -139,7 +142,7 @@ def upload_patch(cf, key):
 			else:
 				print(f'couldnt interpret: {b}')
 		img = bytes(mylist)
-		fr.main('write', img, imgstart)
+		fr.main(ser, 'write', img, imgstart)
 		return 0
 	except Exception as e:
 		print(f'Error in upload_image: {e}!')
@@ -487,7 +490,7 @@ def config_per(cf):
  #		print(f'Errval: {errval}')
 		new_file = make_bytearray(el)
 		new_file += b'\x00\x00\x00\x00\x00' # this marks is the end (Address = 0)
-		write_file(new_file, 'configdata.uc')
+		#write_file(new_file, 'configdata.uc')
 		dump_data(new_file, 5)
 		if errval == 0:
 			fr.main('config', new_file)
@@ -496,31 +499,29 @@ def config_per(cf):
 		print(f'Error: {e}')
 		#raise
 
-def main(dir, cf, norom):
+def main(ser, dir, cf, norom):
 	appname = cf['app']['name']
 	version = cf['app']['ver']
 	computername = cf['computer']['name']
 	clockfreqf = int(cf['computer']['freqf'], 0)
 	clockfreqs = int(cf['computer']['freqs'], 0)
-	configdata = {}
+	#configdata = {}
 	print(f'Appname: {appname}, Version: {version}')
 	print(f'Configure for:\n\t{computername} \n\t{clockfreqf/1E6:#.6f} MHz fast clock, \n\t{clockfreqs/1E6:#.6f} MHz slow clock.')
 	print(f'{bcolors.OKGREEN}-------------------------- Reset Unicomp ---------------------------{bcolors.ENDC}')
-	#s_rst.main(0) # Reset active
-	fr.main('pins',bytes([0])) # Reset active
+	fr.main(ser, 'pins',bytes([0])) # Reset active
 	print(f'{bcolors.OKGREEN}-------------------------- Turn off Clock --------------------------{bcolors.ENDC}')
-	fr.main('pins',bytes([3])) # Clock Off
+	fr.main(ser, 'pins',bytes([3])) # Clock Off
 	print(f'{bcolors.OKGREEN}------------------------- Configure Clock --------------------------{bcolors.ENDC}')
-	clockreg = sf.find_registers(clockfreqf*8, clockfreqs)  # configure Clock
+	sf.main(ser, clockfreqf*8, clockfreqs)  # configure Clock
 
 	if (config_per(cf)): # configure peripherals
 		exit()
 	
-	
 	for k in cf.keys():
 		if 'img' in k:
 			if norom == 'false':
-				if (upload_image(dir, cf, k)):
+				if (upload_image(ser, dir, cf, k)):
 					print(f'{bcolors.FAIL}Problem uploading Image!{bcolors.ENDC}')
 			else:
 				print(f'{bcolors.FAIL}        ###### actually NOT uploading Image! ######{bcolors.ENDC}')
@@ -528,17 +529,17 @@ def main(dir, cf, norom):
 	for k in cf.keys():
 		if 'patch' in k:
 			if norom == 'false':
-				if (upload_patch(cf, k)):
+				if (upload_patch(ser, cf, k)):
 					print(f'{bcolors.FAIL}Problem uploading Patch!{bcolors.ENDC}')
 					break
 			else:
 				print(f'{bcolors.FAIL}        ###### actually NOT applying patch! ######{bcolors.ENDC}')
 			
 
-	fr.main('pins',bytes([2])) # Clock On
+	
+	fr.main(ser, 'pins',bytes([2])) # Clock On
 	print(f'{bcolors.OKGREEN}-------------------------- Reset inactive --------------------------{bcolors.ENDC}')
-	#s_rst.main(1)  # Reset inactive - Run
-	fr.main('pins',bytes([1]))  # Reset inactive - Run
+	fr.main(ser, 'pins',bytes([1]))  # Reset inactive - Run
 	print(f'{bcolors.OKGREEN}-------------------------- Modifications  --------------------------{bcolors.ENDC}')
 	text1 = cf['modifications']['text']
 	print(f'{text1}')
@@ -565,4 +566,9 @@ if __name__ == '__main__':
 	configfile = configpath + '/' + configdir + '.cfg';
 	print(f'{bcolors.OKCYAN}Configfile found: {configfile}{bcolors.ENDC}')
 	cf = ConfigObj(configfile)
-	main(configpath, cf, norom)
+	try:
+		ser = Serial(port, 115200, timeout = 1, writeTimeout = 1)
+	except IOError:
+		print('Port not found!')
+
+	main(ser, configpath, cf, norom)

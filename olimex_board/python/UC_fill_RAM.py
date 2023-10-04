@@ -82,6 +82,7 @@ def write_file(data, fn):
 def write(channel, data):
 	if isinstance(data, int):
 		data = bytes((data,))
+		
 
 	try:
 		result = channel.write(data)
@@ -112,7 +113,24 @@ def read(channel, size = 1):
 def read_byte(ser):
 	# Read a single byte
 	return int(read(ser)[0])
+	#data = rw_serial(ser, 'read',0,1)
+	#print(f'Read1....{data}')
+	#return int(data[0])
 
+#def rw_serial(ser, func, data, size=1):
+#	try:
+#		com = Serial(port, 115200, timeout = 1, writeTimeout = 1)
+#	except IOError:
+#		print('Port not found!')
+#		exit()	
+#	if func == 'read':
+#		#print(f'Read....')
+#		return(read(com, size))
+#	elif func == 'write':
+#		#print(f'Write....')
+#		return(write(com, data))
+#	else:
+#		print(f'no function')
 #----------------------------------
 def make_checksum(data):
 	return sum(data) & 0xff
@@ -133,10 +151,11 @@ def print_header(data, cs):
 
 def write_with_checksum(ser, data):
 	cs_file = make_checksum(data)
-	#print(len(data))
+	#print(f' Write with Checksum: {len(data)}')
 	if len(data) < 10:
 		print_header(data, cs_file)
 	data += bytes([cs_file])
+	#dump_data(data)
 	write(ser, data)
 
 def read_with_checksum(ser, size):
@@ -150,8 +169,8 @@ def read_with_checksum(ser, size):
 	return data
 
 def display_version(ser):
-	write(ser, b'VV')
 	print(f'Header: VV, no Checksum.')
+	write(ser, b'VV')
 	device_type = read_byte(ser)
 	print('%10s: %s' % ('Major', device_type))
 	version = read_byte(ser)
@@ -400,12 +419,13 @@ def read_clock(ser):
 	print(f'DIV Register: 0x{temp:04X}')
 	
 	#serial_number = ','.join(hex(b)[2:] for b in result)
-	#print('%10s %s' % ('Clock Data:', serial_number))     
+	#print('%10s %s' % ('Clock Data:', serial_number)) 
+	return result[0]    
 
 def write_pins(ser, data):
-	print('------------------------------ Pins ------------------------------')
+	print('------------------------------ Pins --------------------------------')
 	length = len(data)
-	print (f'Length of data: {length} or 0x{length:04x}')
+	#print (f'Length of data: {length} or 0x{length:04x}')
 	if length > 256:
 		print(f'Only block <= 256 Bytes supported!')
 		exit()
@@ -416,7 +436,7 @@ def write_pins(ser, data):
 	expect_ok(ser)
 
 def check_bank(ser, start, end):
-	print('-------------------------- Check Bank ----------------------------')
+	print('-------------------------- Check Bank ------------------------------')
 	bank = get_io_bank(ser)
 	banks = start // 0x10000
 	banke = end // 0x10000
@@ -452,14 +472,14 @@ def bulk_write_chunks_start_border_clean(ser, data, saddress):
 		write_memory(ser, data[edata:], saddress)
 
 ############################################
-def main(func, data = 0, start = 0, end = 0):
+def main(ser, func, data = 0, start = 0, end = 0):
 
-	try:
-		ser = Serial(port, 115200, timeout = 1, writeTimeout = 1)
-	except IOError:
-		print('Port not found!')
-		ser = ''
-		#exit()
+	#try:
+	#	ser = Serial(port, 115200, timeout = 1, writeTimeout = 1)
+	#except IOError:
+	#	print('Port not found!')
+	#ser = ''
+	#	#exit()
 
 	if func == 'version':
 		display_version(ser)
@@ -501,7 +521,7 @@ def main(func, data = 0, start = 0, end = 0):
 	elif func == 'clockw':
 		write_clock(ser, data)
 	elif func == 'clockr':
-		read_clock(ser)
+		return(read_clock(ser))
 	elif func == 'pins':
 		write_pins(ser, data)
 
@@ -610,22 +630,28 @@ if __name__ == '__main__':
 	if args.command == '':
 		print("No command")
 		exit()
+	ser = None
+	try:
+		ser = Serial(port, 115200, timeout = 1, writeTimeout = 1)
+	except IOError:
+		print('Port not found!')
+		#exit()
 
 	if args.command == 'version':
-		main('version')
+		main(ser, 'version')
 
 	elif args.command == 'serial':
-		main('serial')
+		main(ser, 'serial')
 
 	elif args.command == 'setbank':
-		main('setbank', args.bank)
+		main(ser, 'setbank', args.bank)
 
 	elif args.command == 'getbank':
-		main('getbank')
+		main(ser, 'getbank')
 
 	elif args.command == 'config':
 		img = read_file(args.file)
-		main('config', img)
+		main(ser, 'config', img)
 
 	elif args.command == 'pins':
 		mylist = []
@@ -633,13 +659,13 @@ if __name__ == '__main__':
 		n = int(b,0)
 		mylist.append(n)
 		print(f'Received: {b} interpreted as: {n:02X}')
-		main('pins', bytes(mylist))
+		main(ser, 'pins', bytes(mylist))
 
 	elif args.command == 'clock':
 		mylist = []
 		if args.data == '':
 			print(f'Read Registers')
-			main('clockr')
+			main(ser, 'clockr')
 		else:
 			for b in (args.data).split(','):
 				if b.isalnum():
@@ -650,7 +676,7 @@ if __name__ == '__main__':
 					print(f'couldnt interpret: {b}')
 
 			img = bytes(mylist)
-			main('clockw', img)
+			main(ser, 'clockw', img)
 	
 	elif args.command == 'write':
 		if args.file[0] == ':':    # Some bytes received (format :yy,xx,zz)
@@ -670,7 +696,7 @@ if __name__ == '__main__':
 			if end > RAMMAX:
 				print(f'Write goes beyond 0x7FFF! (size: 0x{len(img):04X})')
 				exit()
-			main('write', img, start)
+			main(ser, 'write', img, start)
 		else:                   # real file received
 			print(f'real file received {args.file}')
 			img = read_file(args.file)
@@ -681,7 +707,7 @@ if __name__ == '__main__':
 				if end > RAMMAX:
 					print(f'Write goes beyond 0x7FFF! (size: 0x{len(img):04X})')
 					exit()
-				main('write', img, start)	
+				main(ser, 'write', img, start)	
 			else:                          # .ucb file has startaddress and size within
 				print(f'Extension: {ext}')
 
@@ -690,7 +716,7 @@ if __name__ == '__main__':
 					if len(rest) == 0:
 						break
 					print(f'start: 0x{start:04X} end: 0x{end:04X}')
-					main('write', oimg, start)
+					main(ser, 'write', oimg, start)
 					img = rest
 
 	elif args.command == 'read':
@@ -712,7 +738,7 @@ if __name__ == '__main__':
 		if end > RAMMAX:
 			print('Read goes beyond 0x7FFF!')
 			exit()
-		data = main('read', 0, start, end)
+		data = main(ser, 'read', 0, start, end)
 		write_file(data, args.file)
 	try:
 		ser.close()

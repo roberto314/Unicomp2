@@ -166,14 +166,7 @@ def find_registers(freq_fast, freq_slow=1000000):
 	return offset,prescaler,dac_off,div1
 
 
-def main(f0=None, f1=None, p0=None, p1=None, offset=None, address=None, mux=None, dac=None, div=None):
-
-	try:
-		ser = Serial(port, 115200, timeout = 1, writeTimeout = 1)
-	except IOError:
-		print('Port not found!')
-		ser = ''
-		#exit()
+def main(ser, f0=None, f1=None, p0=None, p1=None, offset=None, address=None, mux=None, dac=None, div=None):
 
 	clocksettings = read_clock(ser)
 	def_offset = clocksettings[0]   # first byte is range register
@@ -335,6 +328,11 @@ if __name__ == '__main__':
 	#if args.x == None and args.f == None and args.k == None and args.M == None and args.m == None and args.q0 == None and args.q1 == None:
 	#	print("No command")
 	#	exit()
+	ser = None
+	try:
+		ser = Serial(port, 115200, timeout = 1, writeTimeout = 1)
+	except IOError:
+		print('Port not found!')
 	
 	if args.p0 != None:
 		if args.p0:
@@ -406,4 +404,9 @@ if __name__ == '__main__':
 	if args.f1 != None:
 		f1 = (int)(args.f1)
 	#print (f'Got new f0: {f0:,.2f}')
-	main(f0, f1, p0, p1, offset, address, mux, dac, div)
+	main(ser, f0, f1, p0, p1, offset, address, mux, dac, div)
+	try:
+		ser.close()
+	except:
+		pass
+	
