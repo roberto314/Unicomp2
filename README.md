@@ -178,15 +178,15 @@ tmux serial window:
 * Prepare new SD-Card:
     - copy image to sd-card:
     sudo dd if=A20-OLinuXino-bullseye-minimal-20230515-130040.img of=/dev/sdb bs=1k status=progress
-    - start olimex an login with olimex/olimex
-    - change password with: sudo passwd olimex to something shorter like 'oli'
-    - make update: sudo apt update && sudo apt upgrade
-    - install minimal components: sudo apt install git mc
-    - clone github repository: git clone https://github.com/roberto314/Unicomp2.git
-    - open midnight commander: mc
+    - start olimex and login with 'olimex/olimex'
+    - change password with: 'sudo passwd olimex' to something shorter like 'oli'
+    - make update: 'sudo apt update && sudo apt upgrade'
+    - install minimal components: 'sudo apt install git mc'
+    - clone github repository: 'git clone https://github.com/roberto314/Unicomp2.git'
+    - open midnight commander: 'mc'
     - navigate into Unicomp2/olimex_board/config
-    - Run script: install_software.sh
-    - Run script: copy_files.sh
+    - Run script: 'install_software.sh'
+    - Run script: 'copy_files.sh'
     - restart
 
 
