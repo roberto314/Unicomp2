@@ -1,5 +1,5 @@
 Analysis & Synthesis report for floppy_max2
-Mon Oct  2 15:41:07 2023
+Thu Oct 12 07:51:01 2023
 Quartus II 64-Bit Version 13.0.1 Build 232 06/12/2013 Service Pack 1 SJ Web Edition
 
 
@@ -16,8 +16,8 @@ Quartus II 64-Bit Version 13.0.1 Build 232 06/12/2013 Service Pack 1 SJ Web Edit
   8. Registers Removed During Synthesis
   9. General Register Statistics
  10. Multiplexer Restructuring Statistics (Restructuring Performed)
- 11. Parameter Settings for User Entity Instance: SPI_SLAVE:spi_slave
- 12. Port Connectivity Checks: "SPI_SLAVE:spi_slave"
+ 11. Port Connectivity Checks: "spi_slave_in16:spi_slave_in"
+ 12. Port Connectivity Checks: "spi_slave_out48:spi_slave_out"
  13. Analysis & Synthesis Messages
 
 
@@ -44,13 +44,13 @@ applicable agreement for further details.
 +-------------------------------------------------------------------------------+
 ; Analysis & Synthesis Summary                                                  ;
 +-----------------------------+-------------------------------------------------+
-; Analysis & Synthesis Status ; Successful - Mon Oct  2 15:41:07 2023           ;
+; Analysis & Synthesis Status ; Successful - Thu Oct 12 07:51:01 2023           ;
 ; Quartus II 64-Bit Version   ; 13.0.1 Build 232 06/12/2013 SP 1 SJ Web Edition ;
 ; Revision Name               ; floppy_max2                                     ;
 ; Top-level Entity Name       ; floppy_controller                               ;
 ; Family                      ; MAX II                                          ;
-; Total logic elements        ; 165                                             ;
-; Total pins                  ; 53                                              ;
+; Total logic elements        ; 213                                             ;
+; Total pins                  ; 60                                              ;
 ; Total virtual pins          ; 0                                               ;
 ; UFM blocks                  ; 0 / 1 ( 0 % )                                   ;
 +-----------------------------+-------------------------------------------------+
@@ -139,70 +139,87 @@ Parallel compilation was disabled, but you have multiple processors available. E
 +----------------------------+--------+
 
 
-+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-; Analysis & Synthesis Source Files Read                                                                                                                                                        ;
-+----------------------------------------+-----------------+-----------------+--------------------------------------------------------------------------------------------------------+---------+
-; File Name with User-Entered Path       ; Used in Netlist ; File Type       ; File Name with Absolute Path                                                                           ; Library ;
-+----------------------------------------+-----------------+-----------------+--------------------------------------------------------------------------------------------------------+---------+
-; floppy_max2.vhd                        ; yes             ; User VHDL File  ; /home/rob/Data/rob/Projects/Unicomp2/CPLD_board/cpld firmware max_II/floppy_controller/floppy_max2.vhd ;         ;
-; ../../../vhdl_components/spi_slave.vhd ; yes             ; User VHDL File  ; /home/rob/Data/rob/Projects/Unicomp2/vhdl_components/spi_slave.vhd                                     ;         ;
-+----------------------------------------+-----------------+-----------------+--------------------------------------------------------------------------------------------------------+---------+
++-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; Analysis & Synthesis Source Files Read                                                                                                                                                              ;
++----------------------------------------------+-----------------+-----------------+--------------------------------------------------------------------------------------------------------+---------+
+; File Name with User-Entered Path             ; Used in Netlist ; File Type       ; File Name with Absolute Path                                                                           ; Library ;
++----------------------------------------------+-----------------+-----------------+--------------------------------------------------------------------------------------------------------+---------+
+; floppy_max2.vhd                              ; yes             ; User VHDL File  ; /home/rob/Data/rob/Projects/Unicomp2/CPLD_board/cpld firmware max_II/floppy_controller/floppy_max2.vhd ;         ;
+; ../../../vhdl_components/spi_slave_in16.vhd  ; yes             ; User VHDL File  ; /home/rob/Data/rob/Projects/Unicomp2/vhdl_components/spi_slave_in16.vhd                                ;         ;
+; ../../../vhdl_components/spi_slave_out48.vhd ; yes             ; User VHDL File  ; /home/rob/Data/rob/Projects/Unicomp2/vhdl_components/spi_slave_out48.vhd                               ;         ;
++----------------------------------------------+-----------------+-----------------+--------------------------------------------------------------------------------------------------------+---------+
 
 
-+-----------------------------------------------------+
-; Analysis & Synthesis Resource Usage Summary         ;
-+---------------------------------------------+-------+
-; Resource                                    ; Usage ;
-+---------------------------------------------+-------+
-; Total logic elements                        ; 165   ;
-;     -- Combinational with no register       ; 53    ;
-;     -- Register only                        ; 20    ;
-;     -- Combinational with a register        ; 92    ;
-;                                             ;       ;
-; Logic element usage by number of LUT inputs ;       ;
-;     -- 4 input functions                    ; 40    ;
-;     -- 3 input functions                    ; 97    ;
-;     -- 2 input functions                    ; 7     ;
-;     -- 1 input functions                    ; 1     ;
-;     -- 0 input functions                    ; 0     ;
-;                                             ;       ;
-; Logic elements by mode                      ;       ;
-;     -- normal mode                          ; 160   ;
-;     -- arithmetic mode                      ; 5     ;
-;     -- qfbk mode                            ; 0     ;
-;     -- register cascade mode                ; 0     ;
-;     -- synchronous clear/load mode          ; 33    ;
-;     -- asynchronous clear/load mode         ; 49    ;
-;                                             ;       ;
-; Total registers                             ; 112   ;
-; Total logic cells in carry chains           ; 6     ;
-; I/O pins                                    ; 53    ;
-; Maximum fan-out node                        ; clk50 ;
-; Maximum fan-out                             ; 63    ;
-; Total fan-out                               ; 801   ;
-; Average fan-out                             ; 3.67  ;
-+---------------------------------------------+-------+
++-------------------------------------------------------+
+; Analysis & Synthesis Resource Usage Summary           ;
++---------------------------------------------+---------+
+; Resource                                    ; Usage   ;
++---------------------------------------------+---------+
+; Total logic elements                        ; 213     ;
+;     -- Combinational with no register       ; 96      ;
+;     -- Register only                        ; 87      ;
+;     -- Combinational with a register        ; 30      ;
+;                                             ;         ;
+; Logic element usage by number of LUT inputs ;         ;
+;     -- 4 input functions                    ; 76      ;
+;     -- 3 input functions                    ; 20      ;
+;     -- 2 input functions                    ; 27      ;
+;     -- 1 input functions                    ; 2       ;
+;     -- 0 input functions                    ; 1       ;
+;                                             ;         ;
+; Logic elements by mode                      ;         ;
+;     -- normal mode                          ; 199     ;
+;     -- arithmetic mode                      ; 14      ;
+;     -- qfbk mode                            ; 0       ;
+;     -- register cascade mode                ; 0       ;
+;     -- synchronous clear/load mode          ; 6       ;
+;     -- asynchronous clear/load mode         ; 48      ;
+;                                             ;         ;
+; Total registers                             ; 117     ;
+; Total logic cells in carry chains           ; 16      ;
+; I/O pins                                    ; 60      ;
+; Maximum fan-out node                        ; nCSCPLD ;
+; Maximum fan-out                             ; 69      ;
+; Total fan-out                               ; 800     ;
+; Average fan-out                             ; 2.93    ;
++---------------------------------------------+---------+
 
 
-+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-; Analysis & Synthesis Resource Utilization by Entity                                                                                                                                                                                     ;
-+----------------------------+-------------+--------------+------------+------+--------------+--------------+-------------------+------------------+-----------------+------------+----------------------------------------+--------------+
-; Compilation Hierarchy Node ; Logic Cells ; LC Registers ; UFM Blocks ; Pins ; Virtual Pins ; LUT-Only LCs ; Register-Only LCs ; LUT/Register LCs ; Carry Chain LCs ; Packed LCs ; Full Hierarchy Name                    ; Library Name ;
-+----------------------------+-------------+--------------+------------+------+--------------+--------------+-------------------+------------------+-----------------+------------+----------------------------------------+--------------+
-; |floppy_controller         ; 165 (92)    ; 112          ; 0          ; 53   ; 0            ; 53 (43)      ; 20 (9)            ; 92 (40)          ; 6 (0)           ; 0 (0)      ; |floppy_controller                     ; work         ;
-;    |SPI_SLAVE:spi_slave|   ; 73 (73)     ; 63           ; 0          ; 0    ; 0            ; 10 (10)      ; 11 (11)           ; 52 (52)          ; 6 (6)           ; 0 (0)      ; |floppy_controller|SPI_SLAVE:spi_slave ; work         ;
-+----------------------------+-------------+--------------+------------+------+--------------+--------------+-------------------+------------------+-----------------+------------+----------------------------------------+--------------+
++-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; Analysis & Synthesis Resource Utilization by Entity                                                                                                                                                                                                       ;
++------------------------------------+-------------+--------------+------------+------+--------------+--------------+-------------------+------------------+-----------------+------------+--------------------------------------------------+--------------+
+; Compilation Hierarchy Node         ; Logic Cells ; LC Registers ; UFM Blocks ; Pins ; Virtual Pins ; LUT-Only LCs ; Register-Only LCs ; LUT/Register LCs ; Carry Chain LCs ; Packed LCs ; Full Hierarchy Name                              ; Library Name ;
++------------------------------------+-------------+--------------+------------+------+--------------+--------------+-------------------+------------------+-----------------+------------+--------------------------------------------------+--------------+
+; |floppy_controller                 ; 213 (149)   ; 117          ; 0          ; 60   ; 0            ; 96 (96)      ; 87 (24)           ; 30 (29)          ; 16 (16)         ; 0 (0)      ; |floppy_controller                               ; work         ;
+;    |spi_slave_in16:spi_slave_in|   ; 16 (16)     ; 16           ; 0          ; 0    ; 0            ; 0 (0)        ; 16 (16)           ; 0 (0)            ; 0 (0)           ; 0 (0)      ; |floppy_controller|spi_slave_in16:spi_slave_in   ; work         ;
+;    |spi_slave_out48:spi_slave_out| ; 48 (48)     ; 48           ; 0          ; 0    ; 0            ; 0 (0)        ; 47 (47)           ; 1 (1)            ; 0 (0)           ; 0 (0)      ; |floppy_controller|spi_slave_out48:spi_slave_out ; work         ;
++------------------------------------+-------------+--------------+------------+------+--------------+--------------+-------------------+------------------+-----------------+------------+--------------------------------------------------+--------------+
 Note: For table entries with two numbers listed, the numbers in parentheses indicate the number of resources of the given type used by the specific entity alone. The numbers listed outside of parentheses indicate the total resources of the given type used by the specific entity and all of its sub-entities in the hierarchy.
 
 
-+--------------------------------------------------------------------------------+
-; Registers Removed During Synthesis                                             ;
-+---------------------------------------+----------------------------------------+
-; Register name                         ; Reason for Removal                     ;
-+---------------------------------------+----------------------------------------+
-; SPI_SLAVE:spi_slave|shreg_busy        ; Stuck at VCC due to stuck port data_in ;
-; Total Number of Removed Registers = 1 ;                                        ;
-+---------------------------------------+----------------------------------------+
++---------------------------------------------------------------------------------+
+; Registers Removed During Synthesis                                              ;
++----------------------------------------+----------------------------------------+
+; Register name                          ; Reason for Removal                     ;
++----------------------------------------+----------------------------------------+
+; Dio[0]~en                              ; Stuck at GND due to stuck port data_in ;
+; Dio[1]~en                              ; Stuck at GND due to stuck port data_in ;
+; Dio[2]~en                              ; Stuck at GND due to stuck port data_in ;
+; Dio[3]~en                              ; Stuck at GND due to stuck port data_in ;
+; Dio[4]~en                              ; Stuck at GND due to stuck port data_in ;
+; Dio[5]~en                              ; Stuck at GND due to stuck port data_in ;
+; Dio[6]~en                              ; Stuck at GND due to stuck port data_in ;
+; Dio[7]~en                              ; Stuck at GND due to stuck port data_in ;
+; Dio[7]~reg0                            ; Stuck at GND due to stuck port data_in ;
+; Dio[6]~reg0                            ; Stuck at GND due to stuck port data_in ;
+; Dio[5]~reg0                            ; Stuck at GND due to stuck port data_in ;
+; Dio[4]~reg0                            ; Stuck at GND due to stuck port data_in ;
+; Dio[3]~reg0                            ; Stuck at GND due to stuck port data_in ;
+; Dio[2]~reg0                            ; Stuck at GND due to stuck port data_in ;
+; Dio[1]~reg0                            ; Stuck at GND due to stuck port data_in ;
+; Dio[0]~reg0                            ; Stuck at GND due to stuck port data_in ;
+; Total Number of Removed Registers = 16 ;                                        ;
++----------------------------------------+----------------------------------------+
 
 
 +------------------------------------------------------+
@@ -210,49 +227,44 @@ Note: For table entries with two numbers listed, the numbers in parentheses indi
 +----------------------------------------------+-------+
 ; Statistic                                    ; Value ;
 +----------------------------------------------+-------+
-; Total registers                              ; 112   ;
-; Number of registers using Synchronous Clear  ; 0     ;
-; Number of registers using Synchronous Load   ; 33    ;
-; Number of registers using Asynchronous Clear ; 49    ;
-; Number of registers using Asynchronous Load  ; 0     ;
-; Number of registers using Clock Enable       ; 70    ;
+; Total registers                              ; 117   ;
+; Number of registers using Synchronous Clear  ; 6     ;
+; Number of registers using Synchronous Load   ; 0     ;
+; Number of registers using Asynchronous Clear ; 0     ;
+; Number of registers using Asynchronous Load  ; 48    ;
+; Number of registers using Clock Enable       ; 53    ;
 ; Number of registers using Preset             ; 0     ;
 +----------------------------------------------+-------+
 
 
-+---------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-; Multiplexer Restructuring Statistics (Restructuring Performed)                                                                                                      ;
-+--------------------+-----------+---------------+----------------------+------------------------+------------+-------------------------------------------------------+
-; Multiplexer Inputs ; Bus Width ; Baseline Area ; Area if Restructured ; Saving if Restructured ; Registered ; Example Multiplexer Output                            ;
-+--------------------+-----------+---------------+----------------------+------------------------+------------+-------------------------------------------------------+
-; 3:1                ; 48 bits   ; 96 LEs        ; 48 LEs               ; 48 LEs                 ; Yes        ; |floppy_controller|SPI_SLAVE:spi_slave|data_shreg[47] ;
-; 4:1                ; 8 bits    ; 16 LEs        ; 16 LEs               ; 0 LEs                  ; Yes        ; |floppy_controller|spi_data[34]                       ;
-; 4:1                ; 8 bits    ; 16 LEs        ; 16 LEs               ; 0 LEs                  ; Yes        ; |floppy_controller|spi_data[11]                       ;
-; 4:1                ; 8 bits    ; 16 LEs        ; 16 LEs               ; 0 LEs                  ; Yes        ; |floppy_controller|spi_data[19]                       ;
-; 4:1                ; 8 bits    ; 16 LEs        ; 16 LEs               ; 0 LEs                  ; Yes        ; |floppy_controller|spi_data[27]                       ;
-; 4:1                ; 8 bits    ; 16 LEs        ; 16 LEs               ; 0 LEs                  ; Yes        ; |floppy_controller|spi_data[4]                        ;
-+--------------------+-----------+---------------+----------------------+------------------------+------------+-------------------------------------------------------+
++-----------------------------------------------------------------------------------------------------------------------------------------------+
+; Multiplexer Restructuring Statistics (Restructuring Performed)                                                                                ;
++--------------------+-----------+---------------+----------------------+------------------------+------------+---------------------------------+
+; Multiplexer Inputs ; Bus Width ; Baseline Area ; Area if Restructured ; Saving if Restructured ; Registered ; Example Multiplexer Output      ;
++--------------------+-----------+---------------+----------------------+------------------------+------------+---------------------------------+
+; 4:1                ; 4 bits    ; 8 LEs         ; 8 LEs                ; 0 LEs                  ; Yes        ; |floppy_controller|D_fdc_sta[7] ;
+; 4:1                ; 8 bits    ; 16 LEs        ; 16 LEs               ; 0 LEs                  ; Yes        ; |floppy_controller|D_fdc_dat[0] ;
+; 13:1               ; 8 bits    ; 64 LEs        ; 24 LEs               ; 40 LEs                 ; Yes        ; |floppy_controller|D_fdc_trk[1] ;
++--------------------+-----------+---------------+----------------------+------------------------+------------+---------------------------------+
 
 
-+------------------------------------------------------------------+
-; Parameter Settings for User Entity Instance: SPI_SLAVE:spi_slave ;
-+----------------+-------+-----------------------------------------+
-; Parameter Name ; Value ; Type                                    ;
-+----------------+-------+-----------------------------------------+
-; word_size      ; 48    ; Signed Integer                          ;
-+----------------+-------+-----------------------------------------+
-Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
++-----------------------------------------------------------------------------------------------------------------------+
+; Port Connectivity Checks: "spi_slave_in16:spi_slave_in"                                                               ;
++-------------+--------+----------+-------------------------------------------------------------------------------------+
+; Port        ; Type   ; Severity ; Details                                                                             ;
++-------------+--------+----------+-------------------------------------------------------------------------------------+
+; data[15..8] ; Output ; Info     ; Connected to dangling logic. Logic that only feeds a dangling port will be removed. ;
+; miso        ; Output ; Info     ; Connected to dangling logic. Logic that only feeds a dangling port will be removed. ;
++-------------+--------+----------+-------------------------------------------------------------------------------------+
 
 
-+-------------------------------------------------------------------------------------------------------------------+
-; Port Connectivity Checks: "SPI_SLAVE:spi_slave"                                                                   ;
-+---------+--------+----------+-------------------------------------------------------------------------------------+
-; Port    ; Type   ; Severity ; Details                                                                             ;
-+---------+--------+----------+-------------------------------------------------------------------------------------+
-; rst     ; Input  ; Info     ; Stuck at GND                                                                        ;
-; din_vld ; Input  ; Info     ; Stuck at VCC                                                                        ;
-; din_rdy ; Output ; Info     ; Connected to dangling logic. Logic that only feeds a dangling port will be removed. ;
-+---------+--------+----------+-------------------------------------------------------------------------------------+
++-----------------------------------------------------------+
+; Port Connectivity Checks: "spi_slave_out48:spi_slave_out" ;
++------+-------+----------+---------------------------------+
+; Port ; Type  ; Severity ; Details                         ;
++------+-------+----------+---------------------------------+
+; mosi ; Input ; Info     ; Stuck at GND                    ;
++------+-------+----------+---------------------------------+
 
 
 +-------------------------------+
@@ -274,8 +286,8 @@ Info: Running Quartus II 64-Bit Analysis & Synthesis
     Info: programming logic devices manufactured by Altera and sold by 
     Info: Altera or its authorized distributors.  Please refer to the 
     Info: applicable agreement for further details.
-    Info: Processing started: Mon Oct  2 15:41:05 2023
-Info: Command: quartus_map --read_settings_files=on --source=floppy_max2.vhd --source=../../../vhdl_components/CD4014.vhd --source=../../../vhdl_components/8bit-register.vhd --source=../../../vhdl_components/dff1.vhd --source=../../../vhdl_components/ls165.vhd --source=../../../vhdl_components/spi_slave.vhd floppy_max2
+    Info: Processing started: Thu Oct 12 07:51:00 2023
+Info: Command: quartus_map --read_settings_files=on --source=floppy_max2.vhd --source=../../../vhdl_components/CD4014.vhd --source=../../../vhdl_components/8bit-register.vhd --source=../../../vhdl_components/spi_slave_in16.vhd --source=../../../vhdl_components/dff1.vhd --source=../../../vhdl_components/ls165.vhd --source=../../../vhdl_components/spi_slave.vhd --source=../../../vhdl_components/spi_slave_out48.vhd floppy_max2
 Warning (20028): Parallel compilation is not licensed and has been disabled
 Info (12021): Found 2 design units, including 1 entities, in source file floppy_max2.vhd
     Info (12022): Found design unit 1: floppy_controller-Behavioral
@@ -286,6 +298,9 @@ Info (12021): Found 2 design units, including 1 entities, in source file /home/r
 Info (12021): Found 2 design units, including 1 entities, in source file /home/rob/Data/rob/Projects/Unicomp2/vhdl_components/8bit-register.vhd
     Info (12022): Found design unit 1: Reg_8bit-arc_Reg_8bit_intern
     Info (12023): Found entity 1: Reg_8bit
+Info (12021): Found 2 design units, including 1 entities, in source file /home/rob/Data/rob/Projects/Unicomp2/vhdl_components/spi_slave_in16.vhd
+    Info (12022): Found design unit 1: spi_slave_in16-archi
+    Info (12023): Found entity 1: spi_slave_in16
 Info (12021): Found 2 design units, including 1 entities, in source file /home/rob/Data/rob/Projects/Unicomp2/vhdl_components/dff1.vhd
     Info (12022): Found design unit 1: dff1-LogicOperation
     Info (12023): Found entity 1: dff1
@@ -293,42 +308,60 @@ Info (12021): Found 2 design units, including 1 entities, in source file /home/r
     Info (12022): Found design unit 1: ls165-ls165_body
     Info (12023): Found entity 1: ls165
 Info (12021): Found 2 design units, including 1 entities, in source file /home/rob/Data/rob/Projects/Unicomp2/vhdl_components/spi_slave.vhd
-    Info (12022): Found design unit 1: SPI_SLAVE-RTL
-    Info (12023): Found entity 1: SPI_SLAVE
+    Info (12022): Found design unit 1: spi_slave-archi
+    Info (12023): Found entity 1: spi_slave
+Info (12021): Found 2 design units, including 1 entities, in source file /home/rob/Data/rob/Projects/Unicomp2/vhdl_components/spi_slave_out48.vhd
+    Info (12022): Found design unit 1: spi_slave_out48-archi
+    Info (12023): Found entity 1: spi_slave_out48
 Info (12127): Elaborating entity "floppy_controller" for the top level hierarchy
-Warning (10036): Verilog HDL or VHDL warning at floppy_max2.vhd(36): object "ncs" assigned a value but never read
-Warning (10492): VHDL Process Statement warning at floppy_max2.vhd(95): signal "nRST" is read inside the Process Statement but isn't in the Process Statement's sensitivity list
-Info (12128): Elaborating entity "SPI_SLAVE" for hierarchy "SPI_SLAVE:spi_slave"
-Warning (21074): Design contains 20 input pin(s) that do not drive logic
-    Warning (15610): No output dependent on input pin "As[0]"
-    Warning (15610): No output dependent on input pin "As[1]"
-    Warning (15610): No output dependent on input pin "As[2]"
-    Warning (15610): No output dependent on input pin "As[3]"
-    Warning (15610): No output dependent on input pin "As[4]"
-    Warning (15610): No output dependent on input pin "As[5]"
-    Warning (15610): No output dependent on input pin "As[6]"
-    Warning (15610): No output dependent on input pin "As[7]"
-    Warning (15610): No output dependent on input pin "As[8]"
-    Warning (15610): No output dependent on input pin "As[9]"
-    Warning (15610): No output dependent on input pin "As[10]"
-    Warning (15610): No output dependent on input pin "As[11]"
-    Warning (15610): No output dependent on input pin "As[12]"
-    Warning (15610): No output dependent on input pin "As[13]"
-    Warning (15610): No output dependent on input pin "As[14]"
-    Warning (15610): No output dependent on input pin "As[15]"
-    Warning (15610): No output dependent on input pin "As[16]"
-    Warning (15610): No output dependent on input pin "As[17]"
-    Warning (15610): No output dependent on input pin "As[18]"
-    Warning (15610): No output dependent on input pin "As[19]"
-Info (21057): Implemented 218 device resources after synthesis - the final resource count might be different
-    Info (21058): Implemented 43 input pins
-    Info (21059): Implemented 2 output pins
+Warning (10541): VHDL Signal Declaration warning at floppy_max2.vhd(25): used implicit default value for signal "SPI_A" because signal was never assigned a value or an explicit default value. Use of implicit default value may introduce unintended design optimizations.
+Warning (10873): Using initial value X (don't care) for net "As[18]" at floppy_max2.vhd(26)
+Warning (10873): Using initial value X (don't care) for net "As[16..0]" at floppy_max2.vhd(26)
+Info (12128): Elaborating entity "spi_slave_out48" for hierarchy "spi_slave_out48:spi_slave_out"
+Info (12128): Elaborating entity "spi_slave_in16" for hierarchy "spi_slave_in16:spi_slave_in"
+Warning (10541): VHDL Signal Declaration warning at spi_slave_in16.vhd(13): used implicit default value for signal "miso" because signal was never assigned a value or an explicit default value. Use of implicit default value may introduce unintended design optimizations.
+Warning (13027): Removed fan-outs from the following always-disabled I/O buffers
+    Warning (13028): Removed fan-out from the always-disabled I/O buffer "Dio[0]" to the node "Dio[0]"
+    Warning (13028): Removed fan-out from the always-disabled I/O buffer "Dio[1]" to the node "Dio[1]"
+    Warning (13028): Removed fan-out from the always-disabled I/O buffer "Dio[2]" to the node "Dio[2]"
+    Warning (13028): Removed fan-out from the always-disabled I/O buffer "Dio[3]" to the node "Dio[3]"
+    Warning (13028): Removed fan-out from the always-disabled I/O buffer "Dio[4]" to the node "Dio[4]"
+    Warning (13028): Removed fan-out from the always-disabled I/O buffer "Dio[5]" to the node "Dio[5]"
+    Warning (13028): Removed fan-out from the always-disabled I/O buffer "Dio[6]" to the node "Dio[6]"
+    Warning (13028): Removed fan-out from the always-disabled I/O buffer "Dio[7]" to the node "Dio[7]"
+Warning (13024): Output pins are stuck at VCC or GND
+    Warning (13410): Pin "SPI_A[0]" is stuck at GND
+    Warning (13410): Pin "SPI_A[1]" is stuck at GND
+    Warning (13410): Pin "SPI_A[2]" is stuck at GND
+    Warning (13410): Pin "As[0]" is stuck at GND
+    Warning (13410): Pin "As[1]" is stuck at GND
+    Warning (13410): Pin "As[2]" is stuck at GND
+    Warning (13410): Pin "As[3]" is stuck at GND
+    Warning (13410): Pin "As[4]" is stuck at GND
+    Warning (13410): Pin "As[5]" is stuck at GND
+    Warning (13410): Pin "As[6]" is stuck at GND
+    Warning (13410): Pin "As[7]" is stuck at GND
+    Warning (13410): Pin "As[8]" is stuck at GND
+    Warning (13410): Pin "As[9]" is stuck at GND
+    Warning (13410): Pin "As[10]" is stuck at GND
+    Warning (13410): Pin "As[11]" is stuck at GND
+    Warning (13410): Pin "As[12]" is stuck at GND
+    Warning (13410): Pin "As[13]" is stuck at GND
+    Warning (13410): Pin "As[14]" is stuck at GND
+    Warning (13410): Pin "As[15]" is stuck at GND
+    Warning (13410): Pin "As[16]" is stuck at GND
+    Warning (13410): Pin "As[18]" is stuck at GND
+Warning (21074): Design contains 1 input pin(s) that do not drive logic
+    Warning (15610): No output dependent on input pin "ph0"
+Info (21057): Implemented 273 device resources after synthesis - the final resource count might be different
+    Info (21058): Implemented 26 input pins
+    Info (21059): Implemented 26 output pins
     Info (21060): Implemented 8 bidirectional pins
-    Info (21061): Implemented 165 logic cells
-Info: Quartus II 64-Bit Analysis & Synthesis was successful. 0 errors, 24 warnings
-    Info: Peak virtual memory: 591 megabytes
-    Info: Processing ended: Mon Oct  2 15:41:07 2023
-    Info: Elapsed time: 00:00:02
+    Info (21061): Implemented 213 logic cells
+Info: Quartus II 64-Bit Analysis & Synthesis was successful. 0 errors, 38 warnings
+    Info: Peak virtual memory: 594 megabytes
+    Info: Processing ended: Thu Oct 12 07:51:01 2023
+    Info: Elapsed time: 00:00:01
     Info: Total CPU time (on all processors): 00:00:01
 
 

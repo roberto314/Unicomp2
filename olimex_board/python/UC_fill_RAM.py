@@ -3,6 +3,7 @@
 import logging, sys, argparse, math
 from serial import Serial
 from serial import SerialException
+import time
 
 ver = 1.3
 
@@ -37,7 +38,24 @@ class bcolors:
 #print(f'{bcolors.OKBLUE}{bcolors.ENDC}')
 #print(f'{bcolors.HEADER}{bcolors.ENDC}')
 #print(f'{bcolors.OKCYAN}{bcolors.ENDC}')
-
+##########################################
+def dump_registers(result):
+	if result[0] != None:
+		print(f'-- Range Register: {result[0]}')
+	if result[1] != None:
+		print(f'-- Offset Register: {result[1]}')
+	if result[2] != None:
+		print(f'-- Address Register: 0x{result[2]:02X}')
+	if ((result[3] != None) and (result[4] != None)):
+		temp = result[4]+256*result[3]
+		print(f'-- MUX Register: 0x{temp:04X}')
+		print(f'-- MUX Register: {temp:016b}')
+	if ((result[5] != None) and (result[6] != None)):
+		temp = result[6]+256*result[5]
+		print(f'-- DAC Register: {temp}')
+	if ((result[7] != None) and (result[8] != None)):
+		temp = result[8]+256*result[7]
+		print(f'-- DIV Register: {temp}')
 #----------------------------------
 def dump_data(data):
 	#print(len(data))
@@ -56,7 +74,7 @@ def dump_data(data):
 		for j in range(0,stop):
 			print(f'0x{data[i+j]:02X}, ', end = '')
 		idx -= 16
-		print('\r')
+		#print('\r')
 #----------------------------------
 def read_file(fn):
 	try:
@@ -82,15 +100,16 @@ def write_file(data, fn):
 def write(channel, data):
 	if isinstance(data, int):
 		data = bytes((data,))
-		
 
+	#dump_data(data)
 	try:
 		result = channel.write(data)
+		#print(f'Write Result: {result}')
 		if result != len(data):
 			raise Exception('write timeout')
 		channel.flush()
 	except:
-		print("Write failure!")
+		print("Write error!")
 		#print(f'Write: {data}')
 		#[print(f'Write: {e:02X}, {chr(e)}') for e in data]
 		pass
@@ -102,9 +121,10 @@ def read(channel, size = 1):
 
 	try:
 		result = channel.read(size)
+		#print(f'Read Result length: {len(result)}')
 		if len(result) != size:
-			print('I/O error')
-			raise Exception('I/O error')
+			print(f'Read error, Size: 0x{result:02X}')
+			raise Exception('Read error')
 	except:
 		print('Read Error!')
 		result = (read_file('rom.bin'))[:size] #only for debug on a pc
@@ -137,23 +157,16 @@ def make_checksum(data):
 
 def print_header(data, cs):
 	if cs != 'none':
-		try:
-			string = data.decode("ascii")
-		except:
-			string = 'not ascii'
-		print(f'Header: {string}, Checksum: 0x{cs:02x}')
+		print(f'Checksum: 0x{cs:02x}')
 	else:
-		#try:
-		#	string = data.decode("ascii")
-		#except:
-		#	string = 'not ascii'
-		print(f'Header: {data}, no Checksum.')
+		print(f'no Checksum.')
 
 def write_with_checksum(ser, data):
 	cs_file = make_checksum(data)
+	#print(f'Checksum: 0x{cs_file:02x}')
 	#print(f' Write with Checksum: {len(data)}')
-	if len(data) < 10:
-		print_header(data, cs_file)
+	#if len(data) < 50:
+	#print_header(data, cs_file)
 	data += bytes([cs_file])
 	#dump_data(data)
 	write(ser, data)
@@ -162,7 +175,7 @@ def read_with_checksum(ser, size):
 	data = read(ser, size)
 	checksum = ord(read(ser, 1))
 	cs_file = make_checksum(data)
-	print(f'Checksum of block: 0x{cs_file:02x}')
+	print(f'Checksum: 0x{checksum:02x}')
 	if checksum != cs_file:
 		#pass # TODO raise Exception('Read checksum does not match')
 		print(f'Checksum does not match! 0x{checksum:02x} vs 0x{cs_file:02x}')
@@ -191,6 +204,7 @@ def display_version(ser):
 
 def get_serial(ser):
 	write_with_checksum(ser, b'NS')
+	print(f'Header: NS, ', end = '')
 	result = read_with_checksum(ser, 9)
 	vendor_id = int(result[0])
 	serial_number = ''.join(hex(b)[2:] for b in result[1:])
@@ -206,17 +220,17 @@ def expect_ok(ser):
 		raise Exception('Response error')
 
 def set_io_bank(ser, bank):
-	print(f'--------------------------- Set Bank to: {bank} -------------------------')
+	#print(f'--------------------------- Set Bank to: {bank} -------------------------')
 	message = bytearray(b'BR')
 	message += bytes((bank,))
 	write_with_checksum(ser, message)
 	expect_ok(ser)
 
 def get_io_bank(ser):
-	print(f'----------------------------- Get Bank -----------------------------')
+	#print(f'----------------------------- Get Bank -----------------------------')
 	write_with_checksum(ser, b'BRR')
 	result = read_byte(ser)
-	print(f'Bank is set to: {result}')
+	#print(f'Bank is set to: {result}')
 
 def write_memory(ser, data, start_address):
 	chunk_size = 0x100
@@ -238,12 +252,16 @@ def write_memory(ser, data, start_address):
 		#print (f'mmsb: {mmsb:02X} msb: {msb:02X} lsb: {lsb:02X} offset: {offset:04X} chunk: {chunk_size:03X}')
 		
 		message = bytearray(b'W') # Normal Block Write
+		print(f'Header: W, ', end = '')
 		message += bytes((bytecount,))
 		message += bytes((msb,))
 		message += bytes((lsb,))
 		#print_header(message, 'none')
 		message += block
-		#dump_data(block)
+		if len(message) < 16:
+			dump_data(block)
+		cs_file = make_checksum(data)
+		print(f'Checksum: 0x{cs_file:02x}')
 		write_with_checksum(ser, message)
 		expect_ok(ser)
 
@@ -379,64 +397,67 @@ def bulk_read_memory(ser, start, end, chunk_size = 0x100):
 def write_config(ser, data):
 	print('------------------------------ Config ------------------------------')
 	length = len(data)
-	print (f'Length of data: {length} or 0x{length:04x}')
+	#print (f'Length of data: {length} or 0x{length:04x}')
 	if length > 256:
 		print(f'Only config <= 256 Bytes supported!')
 		exit()
 	message = bytearray(b'C') # Config Write
+	print(f'Header: C, ', end = '')
 	message += bytes((length,))
 	message += data
+	#dump_data(message)
+	cs_file = make_checksum(data)
+	print(f'Checksum: 0x{cs_file:02x}')
 	write_with_checksum(ser, message)
+	time.sleep(0.1)
 	expect_ok(ser)
 
 def write_clock(ser, data):
-	print('------------------------------ Clock ------------------------------')
+	print('--------------------------- Write Clock ------------------------------')
 	length = len(data)
 	print (f'Length of data: {length} or 0x{length:04x}')
 	if length > 256:
 		print(f'Only block <= 256 Bytes supported!')
 		exit()
 	message = bytearray(b'DW') # Clock Write
+	print(f'Header: DW, ', end = '')
 	message += bytes((length,))
 	message += data
+	dump_data(data)
+	cs_file = make_checksum(message)
+	print(f'Checksum: 0x{cs_file:02x}')
 	write_with_checksum(ser, message)
 	expect_ok(ser)
 
 def read_clock(ser):
-	print(f'----------------------------- Read Clock -----------------------------')
+	print(f'----------------------------- Read Clock ---------------------------')
+	print(f'Header: DR, ', end = '')
 	write_with_checksum(ser, b'DR')
+	#time.sleep(0.2)
 	result = read_with_checksum(ser, 9)
-	print(f'Range Register: 0x{result[0]:02X}')
-	#print(f'Prescaler 0 Register: 0x{result[1]:02X}')
-	#print(f'Prescaler 1 Register: 0x{result[2]:02X}')
-	print(f'Offset Register: 0x{result[1]:02X}')
-	print(f'Address Register: 0x{result[2]:02X}')
-	temp = result[4]+256*result[3]
-	print(f'MUX Register: {temp:016b}')
-	temp = result[6]+256*result[5]
-	print(f'DAC Register: 0x{temp:04X}')
-	temp = result[8]+256*result[7]
-	print(f'DIV Register: 0x{temp:04X}')
-	
-	#serial_number = ','.join(hex(b)[2:] for b in result)
-	#print('%10s %s' % ('Clock Data:', serial_number)) 
-	return result[0]    
+	dump_data(result)
+	return result
 
 def write_pins(ser, data):
-	print('------------------------------ Pins --------------------------------')
+	#print('------------------------------ Pins --------------------------------')
 	length = len(data)
 	#print (f'Length of data: {length} or 0x{length:04x}')
 	if length > 256:
 		print(f'Only block <= 256 Bytes supported!')
 		exit()
 	message = bytearray(b'P') # Pins Write
+	print(f'Header: P, Data: ', end = '')
 	message += bytes((length,))
 	message += data
+	dump_data(message)
+	cs_file = make_checksum(data)
+	print(f'Checksum: 0x{cs_file:02x}')
 	write_with_checksum(ser, message)
+	time.sleep(0.1)
 	expect_ok(ser)
 
 def check_bank(ser, start, end):
-	print('-------------------------- Check Bank ------------------------------')
+	#print('-------------------------- Check Bank ------------------------------')
 	bank = get_io_bank(ser)
 	banks = start // 0x10000
 	banke = end // 0x10000
@@ -447,7 +468,7 @@ def check_bank(ser, start, end):
 		if banks + 1 < banke:
 			print('Data crosses multiple bank boarders! This is not implemented.')
 			exit()
-		print(f'Data crosses bank border!')
+		#print(f'Data crosses bank border!')
 		chunk_end = (banks + 1) * 0x10000 - start
 		return chunk_end
 	else:
@@ -458,12 +479,12 @@ def bulk_write_chunks_start_border_clean(ser, data, saddress):
 	chunks = len(data) // 256
 	left = len(data) - chunks * 256
 	edata = len(data)-left
-	print(f'chunks: {chunks} Left: {left}')
+	#print(f'chunks: {chunks} Left: {left}')
 	if left == 0:
-		print('Data fits in 256 byte chunks.')
+		#print('Data fits in 256 byte chunks.')
 		bulk_write_memory(ser, data, saddress)
 	else:
-		print('Data does NOT fit in 256 byte chunks.')
+		#print('Data does NOT fit in 256 byte chunks.')
 		if (len(data) > 255):
 			bulk_write_memory(ser, data[:edata], saddress)
 		saddress = saddress + len(data[:edata])
@@ -495,14 +516,14 @@ def main(ser, func, data = 0, start = 0, end = 0):
 		#banke = end // 0x10000
 		#print(f'Banks used: startbank: {banks} endbank {banke}')
 		if ((start % 256) == 0):
-			print('Start is on 256 bytes boundary.')
+			#print('Start is on 256 bytes boundary.')
 			bulk_write_chunks_start_border_clean(ser, data, start)
 
 		else:
-			print('Start is NOT on a 256 bytes boundary!')
+			#print('Start is NOT on a 256 bytes boundary!')
 			end = (start & 0x7FF00) + 0xFF
 			dataend = end - start + 1
-			print(f'Start: 0x{start:04X}, size: 0x{dataend:04X} end: 0x{end:04X}')
+			#print(f'Start: 0x{start:04X}, size: 0x{dataend:04X} end: 0x{end:04X}')
 			check_bank(ser, start, end)
 			write_memory(ser, data[:dataend], start)
 			dataleft = len(data[dataend:])
@@ -521,7 +542,8 @@ def main(ser, func, data = 0, start = 0, end = 0):
 	elif func == 'clockw':
 		write_clock(ser, data)
 	elif func == 'clockr':
-		return(read_clock(ser))
+		clocksettings = read_clock(ser)
+		dump_registers(clocksettings)
 	elif func == 'pins':
 		write_pins(ser, data)
 
@@ -636,7 +658,7 @@ if __name__ == '__main__':
 	except IOError:
 		print('Port not found!')
 		#exit()
-
+	#print(ser)
 	if args.command == 'version':
 		main(ser, 'version')
 
@@ -664,7 +686,7 @@ if __name__ == '__main__':
 	elif args.command == 'clock':
 		mylist = []
 		if args.data == '':
-			print(f'Read Registers')
+			#print(f'Read Registers')
 			main(ser, 'clockr')
 		else:
 			for b in (args.data).split(','):

@@ -1,0 +1,211 @@
+AS02 Assembler for M6802 [1.42].                                     Page    1
+-------------------------------- FLEXLOAD.ASM --------------------------------
+
+193 lines read, no errors in pass 1.
+                        *-----------------------------------------------------
+                        * FLEXLOAD.ASM
+                        *    Double-sided compatible FLEX 2/3 loader for the
+                        *    SWTPC DC-X series of controllers
+                        *
+                        *    Mike Douglas, 11/14/2020
+                        *-----------------------------------------------------
+2400 =                  BOOTLOC	equ	$2400		;FLEX loader runs here
+a07f =                  SSTACK	equ	$A07F		;system stack location
+                        
+                        * Disk controller equates
+                        
+0002 =                  DRQ	equ	$02		;DRQ bit mask
+0001 =                  BUSY	equ	$01		;busy bit mask
+001c =                  RDMSK	equ	$1C		;read errors bit mask
+                        
+008c =                  RDCMND	equ	$8C		;read sector
+000b =                  RSCMND	equ	$0B		;restore to track 0
+001b =                  SKCMND	equ	$1B		;seek
+                        
+8014 =                  DRVREG	equ	$8014		;drive select register
+8018 =                  COMREG	equ	$8018		;1771 command register
+8019 =                  TRKREG	equ	$8019		;1771 track register
+801a =                  SECREG	equ	$801A		;1771 sector register
+801b =                  DATREG	equ	$801B		;1771 data register
+                        
+                        *-----------------------------------------------------
+                        * Boot ROM jumps here after loading this from sector 0
+                        *-----------------------------------------------------
+2400 =                  	org	BOOTLOC		;boot ROM loads us here
+                        
+2400 : 8ea07f           flxBoot	lds	#SSTACK		;init stack pointer
+2403 : 2008             	bra	loadFlx		;go load Flex
+                        
+2405 : 01               flexTrk	fcb	1		;track for FLEX2.SYS
+2406 : 0a               flexSec	fcb	10		;sector to find FLEX2.SYS
+                        			
+2407 : 0000             pFlex	rmb	2		;pointer to FLEX entry
+2409 : 0000             pDest	rmb	2		;pointer to destination
+240b : 0000             pSource	rmb	2		;pointer to data in secBuf
+                        
+                        *-----------------------------------------------------
+                        * loadFlx - Entry point for loading FLEX from disk. Th
+                        *    drive that loaded this program is used to load FL
+                        *    This allows booting from any drive.
+                        *-----------------------------------------------------
+240d : 860b             loadFlx	ldaa	#RSCMND		;issue restore to track zero
+240f : b78018           	staa	COMREG
+2412 : bd24b6           	jsr	delay		;wait for command acceptance
+2415 : bd24bb           	jsr	wait		;wait for command completion
+                        
+2418 : 8d43             	bsr	read1st		;read first sector of Flex
+                        
+241a : bd24c3           load1	jsr	getByte		;get next byte
+241d : 8102             	cmpa	#$02		;data record header?
+241f : 2715             	beq	load2
+                        
+2421 : 8116             	cmpa	#$16		;transfer address header?
+2423 : 26f5             	bne	load1		;loop if neither
+                        
+2425 : bd24c3           	jsr	getByte		;get transfer address
+AS02 Assembler for M6802 [1.42].                                     Page    2
+-------------------------------- FLEXLOAD.ASM --------------------------------
+
+2428 : b72407           	staa	pFlex		;MSB
+242b : bd24c3           	jsr	getByte		;LSB
+242e : b72408           	staa	pFlex+1
+                        
+2431 : fe2407           	ldx	pFlex		;jump to Flex
+2434 : 6e00             	jmp	0,x
+                        
+2436 : bd24c3           load2	jsr	getByte		;A=load address MSB
+2439 : 36               	psha
+243a : bd24c3           	jsr	getByte		;A=load address LSB
+243d : 33               	pulb			;B=load address MSB
+                        
+243e : b7240a           	staa	pDest+1		;save load address LSB
+2441 : f72409           	stab	pDest		;MSB
+                        
+2444 : bd24c3           	jsr	getByte		;A=byte count
+2447 : 16               	tab			;B=byte count
+2448 : 27d0             	beq	load1		;byte count was zero
+                        
+244a : 37               load3	pshb
+244b : bd24c3           	jsr	getByte		;get next data byte
+244e : 33               	pulb
+                        
+244f : fe2409           	ldx	pDest		;X->where to put the data
+2452 : a700             	staa	0,x
+2454 : 08               	inx
+2455 : ff2409           	stx	pDest
+                        
+2458 : 5a               	decb
+2459 : 26ef             	bne	load3		;loop for byte count in B
+                        
+245b : 20bd             	bra	load1		;get next record
+                        
+                        *-----------------------------------------------------
+                        * readSec 
+                        *-----------------------------------------------------
+245d : b62405           read1st	ldaa	flexTrk		;read 1st sector of Flex
+2460 : f62406           	ldab	flexSec
+                        
+2463 : 8d2f             readSec	bsr	seek		;seek to track, set sector
+2465 : 868c             	ldaa	#RDCMND
+2467 : b78018           	staa	COMREG
+246a : 8d4a             	bsr	delay
+                        	
+246c : c600             	ldab	#0		;B=sector length (256 bytes)
+246e : ce24dc           	ldx	#secBuf		;X->sector buffer
+                        
+2471 : b68018           rdLoop	ldaa	COMREG		;wait for data ready
+2474 : 8502             	bita	#DRQ
+2476 : 2606             	bne	rdByte		;have a byte
+                        
+2478 : 8501             	bita	#BUSY		;still busy?
+247a : 26f5             	bne	rdLoop		;yes
+                        
+247c : 208f             	bra	loadFlx		;failed, start over
+                        
+247e : b6801b           rdByte	ldaa	DATREG		;get data byte and store it
+2481 : a700             	staa	0,x
+2483 : 08               	inx
+2484 : 5a               	decb
+2485 : 26ea             	bne	rdLoop
+                        
+AS02 Assembler for M6802 [1.42].                                     Page    3
+-------------------------------- FLEXLOAD.ASM --------------------------------
+
+2487 : 8d32             	bsr	wait		;wait for 1771 to say done
+2489 : c51c             	bitb	#RDMSK		;any read errors?
+248b : 2680             	bne	loadFlx		;yes, start over
+                        	
+248d : ce24e0           	ldx	#secBuf+4	;data starts at offset 4
+2490 : ff240b           	stx	pSource		;pSource->data in secBuf
+2493 : 39               	rts
+                        
+                        * seek - seek to track in A, set sector to hunt from B
+                        
+2494 : b18019           seek	cmpa	TRKREG		;on correct track already?
+2497 : 2710             	beq	skDone		;yes, seek already done
+                        
+2499 : b7801b           	staa	DATREG		;give track to the 1771
+249c : 8d18             	bsr	delay
+                        
+249e : 861b             	ldaa	#SKCMND		;issue seek command
+24a0 : b78018           	staa	COMREG
+24a3 : 8d11             	bsr	delay
+                        
+24a5 : 37               	pshb			;perserve B
+24a6 : 8d13             	bsr	wait		;wait for seek to complete
+24a8 : 33               	pulb
+                        
+24a9 : f7801a           skDone	stab	SECREG		;set sector to look for
+24ac : 4f               	clra			;assume side 0, drive 0
+24ad : c10a             	cmpb	#10		;side 0 or 1?
+24af : 2302             	bls	setSide		;side 0
+                        
+24b1 : 8640             	ldaa	#$40		;else, set side 1, drive 0
+                        
+24b3 : b78014           setSide	staa	DRVREG
+                        
+                        * delay - delay 52us to let 1771 accept command
+                        
+24b6 : 8d00             delay	bsr	delay2
+24b8 : 8d00             delay2	bsr	sbrRts
+24ba : 39               sbrRts	rts
+                        
+                        * wait - wait for 1771 command to finish execution
+                        
+24bb : f68018           wait	ldab	COMREG		;loop while busy
+24be : c501             	bitb	#BUSY
+24c0 : 26f9             	bne	wait
+                        
+24c2 : 39               	rts
+                        
+                        *-----------------------------------------------------
+                        * getByte - Get next byte from sector buffer. Retrieve
+                        *    sector as needed.
+                        *-----------------------------------------------------
+24c3 : fe240b           getByte	ldx	pSource		;X->next byte 
+24c6 : 8c25dc           	cpx	#secBuf+256	;reached end of sector?
+24c9 : 2707             	beq	nextSec		;yes, get the next sector
+                        
+24cb : a600             	ldaa	0,x		;else, return next byte
+24cd : 08               	inx
+24ce : ff240b           	stx	pSource		;save updated pointer
+24d1 : 39               	rts
+                        
+24d2 : b624dc           nextSec	ldaa	secBuf		;A=next track
+24d5 : f624dd           	ldab	secBuf+1	;B=next sector
+AS02 Assembler for M6802 [1.42].                                     Page    4
+-------------------------------- FLEXLOAD.ASM --------------------------------
+
+24d8 : 8d89             	bsr	readSec
+24da : 20e7             	bra	getByte
+                        
+                        * Sector buffer starts here
+                        
+24dc =                  secBuf	equ	*
+                        
+                        	end
+                        
+No errors in pass 2.
+Wrote binary from address $2400 through $24db.
+Total size 220 bytes.
+

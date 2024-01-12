@@ -34,6 +34,31 @@ def set_addr(val):
 	byte1 = val&0x0f
 	write_i2c([DS1085_ADDR, byte1])
 
+#----------------------------------
+def dump_data(data):
+	#print(len(data))
+#	if len(data) == 1:
+#		print(f'0x{data[0]:02X}')
+#	else:
+#		for i in range(0,len(data)-1, 16):
+#			print(", ".join(f'0x{c:02X}' for c in data[i:i+16]))
+	idx = len(data)
+	for i in range(0, len(data), 16):
+		#print(f'idx: {idx}')
+		if idx < 16:
+			stop = idx
+		else:
+			stop = 16
+		for j in range(0,stop):
+			print(f'0x{data[i+j]:02X}, ', end = '')
+		idx -= 16
+		#print('\r')
+
+def print_header(data, cs):
+	if cs != 'none':
+		print(f'Checksum: 0x{cs:02x}')
+	else:
+		print(f'no Checksum.')		
 ##########################################
 def dump_registers(result):
 	if result[0] != None:
@@ -83,7 +108,7 @@ def read(channel, size = 1):
 			print('I/O error')
 			raise Exception('I/O error')
 	except:
-		result = ([0] * size)
+		#result = ([0] * size)
 		print(f'Read Error! Size: {size}')
 	return result
 
@@ -92,11 +117,18 @@ def make_checksum(data):
 
 def write_with_checksum(ser, data):
 	cs_file = make_checksum(data)
+	#print(f' Write with Checksum: {len(data)}')
+	if len(data) < 50:
+		print_header(data, cs_file)
 	data += bytes([cs_file])
+	dump_data(data)
+	print('\r')
 	write(ser, data)
 
 def read_with_checksum(ser, size):
 	data = read(ser, size)
+	dump_data(data)
+	print('\r')
 	checksum = ord(read(ser, 1))
 	cs_file = make_checksum(data)
 	if checksum != cs_file:
@@ -104,6 +136,7 @@ def read_with_checksum(ser, size):
 	return data
 
 def read_clock(ser):
+	print(f'Header: DR, ', end = '')
 	write_with_checksum(ser, b'DR')
 	result = read_with_checksum(ser, 9)
 	#dump_registers(result)
@@ -112,6 +145,7 @@ def read_clock(ser):
 def write_clock(ser, data):
 	length = len(data)
 	message = bytearray(b'DW') # Clock Write
+	print(f'Header: DW, ', end = '')
 	message += bytes((length,))
 	message += bytes(data)
 	write_with_checksum(ser, message)
@@ -119,34 +153,34 @@ def write_clock(ser, data):
 ##########################################
 def find_registers(freq_fast, freq_slow=1000000):
 	offset = 6
-	prescaler = 1
+	p0 = 1
 	stepsize = 5000 # Datasheet 5kHz Stepsize for DS1085-5
 	dacmax = 1023   # Datasheet DAC can be 0-1023
-	mclk_window_max = (int)((2560000 * (offset + 18) + (dacmax*stepsize)) / prescaler) # 2560000 is offset size from datasheet
-	mclk_window_min = (int)((2560000 * (offset + 18)) / prescaler)
-	#print (f'1st freq window: {mclk_window_max} - {mclk_window_min}, offset: {offset}, prescaler: {prescaler}')
+	mclk_window_max = (int)((2560000 * (offset + 18) + (dacmax*stepsize)) / p0) # 2560000 is offset size from datasheet
+	mclk_window_min = (int)((2560000 * (offset + 18)) / p0)
+	#print (f'1st freq window: {mclk_window_max} - {mclk_window_min}, offset: {offset}, p0: {p0}')
 	while freq_fast <= mclk_window_max:
 		if freq_fast >= mclk_window_min:
 			break
 		offset -= 1
 		if offset == -7:
 			offset = 6
-			prescaler *= 2
-		if prescaler == 16:
+			p0 *= 2
+		if p0 == 16:
 			print("too small, out of Range!")
 			exit()
-		mclk_window_max = (int)((2560000 * (offset + 18) + (dacmax*stepsize)) / prescaler) # 2560000 is offset size from datasheet
+		mclk_window_max = (int)((2560000 * (offset + 18) + (dacmax*stepsize)) / p0) # 2560000 is offset size from datasheet
 		mclk = (int)(2560000 * (offset + 18))
-		if (offset == -6) and (prescaler < 8):
-			mclk_window_min = int(33E6 / prescaler)
+		if (offset == -6) and (p0 < 8):
+			mclk_window_min = int(33E6 / p0)
 		else:
-			mclk_window_min = (int)((2560000 * (offset + 18)) / prescaler)
-		#print (f'freq window: {mclk_window_max} - {mclk_window_min}, offset: {offset}, prescaler: {prescaler}')
-	dac_off = round((freq_fast - mclk_window_min) * prescaler / stepsize) # 5kHz step size
-	real_freq = (int)((2560000 * (offset + 18) + (dac_off*stepsize)) / prescaler)
+			mclk_window_min = (int)((2560000 * (offset + 18)) / p0)
+		#print (f'freq window: {mclk_window_max} - {mclk_window_min}, offset: {offset}, p0: {p0}')
+	dac_off = round((freq_fast - mclk_window_min) * p0 / stepsize) # 5kHz step size
+	real_freq = (int)((2560000 * (offset + 18) + (dac_off*stepsize)) / p0)
 	error = 1E6 * ((real_freq - freq_fast) / freq_fast)
-	main_clock = real_freq * prescaler
-	print(f"found offset: {offset}, prescaler0: {prescaler}, DAC: {dac_off}, Main Clockfreq.: {main_clock}")	
+	main_clock = real_freq * p0
+	print(f"found offset: {offset}, prescler0: {p0}, DAC: {dac_off}, Main Clockfreq.: {main_clock}")	
 	if main_clock < 33000000:
 		print(f'****************************************************************')
 		print(f'****************************************************************')
@@ -163,10 +197,13 @@ def find_registers(freq_fast, freq_slow=1000000):
 	error2 = 1E6 * ((real_freq2 - freq_slow) / freq_slow)
 	error3 = 100 * ((real_freq2 - freq_slow) / freq_slow)
 	print(f'frequency slow in: {freq_slow} out: {int(real_freq2)}, divider: {div1} Error: {error3:#.3f} %, {error2:#.3f} ppm')
-	return offset,prescaler,dac_off,div1
+	return offset,p0,dac_off,div1
 
 
 def main(ser, f0=None, f1=None, p0=None, p1=None, offset=None, address=None, mux=None, dac=None, div=None):
+	#clocksettings = [0] * 9
+	#def_offset = 15
+	#o_mux = 0x1FE
 
 	clocksettings = read_clock(ser)
 	def_offset = clocksettings[0]   # first byte is range register
@@ -210,6 +247,7 @@ def main(ser, f0=None, f1=None, p0=None, p1=None, offset=None, address=None, mux
 		elif p0 == 8:
 			o_mux = temp | 0x0018
 
+	o_mux = o_mux & 0x1F9 # Set Prescaler 1 to 1
 	if p1 != None:
 		#print(f'Calculating registers for prescaler1. {p1}')
 		temp = o_mux & 0x1F9 # clr bit 1 and 2 (and 9)
@@ -404,9 +442,9 @@ if __name__ == '__main__':
 	if args.f1 != None:
 		f1 = (int)(args.f1)
 	#print (f'Got new f0: {f0:,.2f}')
+	ser.flush()
 	main(ser, f0, f1, p0, p1, offset, address, mux, dac, div)
-	try:
-		ser.close()
-	except:
-		pass
-	
+	print('Port flush')
+	ser.flush()
+	print('Port close')
+	ser.close()

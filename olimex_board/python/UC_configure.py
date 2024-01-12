@@ -101,18 +101,18 @@ def read_file(fn):
 	try:
 		with open(fn, "rb") as f:
 			img = f.read()
-			print(f'File {fn} read.')
+			#print(f'File {fn} read.')
 			return img
 	except Exception as e:
 		print(f'{bcolors.FAIL}---- File {fn} not found!{bcolors.ENDC}')
 		exit()
 
-def upload_image(ser, dir, cf, key):
+def upload_image(ser, fpath, cf, key):
 	try:
 		name = key
 		imgstart = int(cf[name]['start'], 0)
 		imgend  = int(cf[name]['end'] , 0)
-		imgnumber = dir + '/' + cf[name]['file']
+		imgnumber = fpath + '/' + cf[name]['file']
 		size = imgend - imgstart + 1
 		#print(f'Image {i}: {imgstart:04X} to {imgend:04X} (size: {size} bytes) file: {imgnumber}')
 		print(f'{bcolors.OKGREEN}trying to upload {imgnumber} from: {imgstart:04X} to {imgend:04X} {bcolors.ENDC}')
@@ -133,7 +133,7 @@ def upload_patch(ser, cf, key):
 		datalist = cf[name]['data']
 		datastr = ','.join(datalist)
 		mylist = []
-		print(f'read {key}: Address: 0x{imgstart:04X} Data: {datastr}')
+		#print(f'read {key}: Address: 0x{imgstart:04X} Data: {datastr}')
 		for b in datastr.split(','):
 			if b.isalnum():
 				n = int(b, 16)
@@ -490,16 +490,17 @@ def config_per(cf):
  #		print(f'Errval: {errval}')
 		new_file = make_bytearray(el)
 		new_file += b'\x00\x00\x00\x00\x00' # this marks is the end (Address = 0)
-		#write_file(new_file, 'configdata.uc')
+		write_file(new_file, 'configdata.uc')
 		dump_data(new_file, 5)
-		if errval == 0:
-			fr.main('config', new_file)
-		return errval
+		#if errval == 0:
+		#	fr.main(ser, 'config', new_file)
+		#	pass
+		return (errval, new_file)
 	except Exception as e:
 		print(f'Error: {e}')
 		#raise
 
-def main(ser, dir, cf, norom):
+def main(ser, fpath, cf, norom):
 	appname = cf['app']['name']
 	version = cf['app']['ver']
 	computername = cf['computer']['name']
@@ -510,18 +511,22 @@ def main(ser, dir, cf, norom):
 	print(f'Configure for:\n\t{computername} \n\t{clockfreqf/1E6:#.6f} MHz fast clock, \n\t{clockfreqs/1E6:#.6f} MHz slow clock.')
 	print(f'{bcolors.OKGREEN}-------------------------- Reset Unicomp ---------------------------{bcolors.ENDC}')
 	fr.main(ser, 'pins',bytes([0])) # Reset active
+	#time.sleep(0.5)
+	errval, retval = config_per(cf)
+	if errval > 0:
+		print(f'Error in config_per!')
+		exit()
+	print(f'{bcolors.OKGREEN}-------------------------- Upload Config ---------------------------{bcolors.ENDC}')
+	fr.main(ser, 'config', retval)
+	#time.sleep(1.5)
+
 	print(f'{bcolors.OKGREEN}-------------------------- Turn off Clock --------------------------{bcolors.ENDC}')
 	fr.main(ser, 'pins',bytes([3])) # Clock Off
-	print(f'{bcolors.OKGREEN}------------------------- Configure Clock --------------------------{bcolors.ENDC}')
-	sf.main(ser, clockfreqf*8, clockfreqs)  # configure Clock
 
-	if (config_per(cf)): # configure peripherals
-		exit()
-	
 	for k in cf.keys():
 		if 'img' in k:
 			if norom == 'false':
-				if (upload_image(ser, dir, cf, k)):
+				if (upload_image(ser, fpath, cf, k)):
 					print(f'{bcolors.FAIL}Problem uploading Image!{bcolors.ENDC}')
 			else:
 				print(f'{bcolors.FAIL}        ###### actually NOT uploading Image! ######{bcolors.ENDC}')
@@ -537,6 +542,40 @@ def main(ser, dir, cf, norom):
 			
 
 	
+	print(f'{bcolors.OKGREEN}------------------------- Configure Clock --------------------------{bcolors.ENDC}')
+	clocksettings = fr.read_clock(ser)
+	fr.dump_registers(clocksettings)
+	newval = [None] * 9
+	def_offset = clocksettings[0]
+	offset,p0,o_dac,o_div = sf.find_registers(clockfreqf*8, clockfreqs)  # configure Clock
+	o_offset = offset + def_offset
+	o_mux = clocksettings[4]+256*clocksettings[3]
+	o_mux = o_mux & 0x1F9 # Set Prescaler 1 to 1
+	temp = o_mux & 0x1E7 # clr bit 3 and 4 (and 9)
+	if p0 == 1:
+		o_mux = temp 
+	elif p0 == 2:
+		o_mux = temp | 0x0008
+	elif p0 == 4:
+		o_mux = temp | 0x0010
+	elif p0 == 8:
+		o_mux = temp | 0x0018
+	o_address = 8
+	newval[0] = def_offset # not used for writing
+	newval[1] = o_offset
+	newval[2] = o_address
+	temp = o_mux.to_bytes(2, 'big')
+	newval[3] = temp[0]  #Hi
+	newval[4] = temp[1]  #Lo
+	temp = o_dac.to_bytes(2, 'big')
+	newval[5] = temp[0]  #Hi
+	newval[6] = temp[1]  #Lo
+	temp = o_div.to_bytes(2, 'big')
+	newval[7] = temp[0]  #Hi
+	newval[8] = temp[1]  #Lo
+	fr.write_clock(ser, bytes(newval))	
+
+	print(f'{bcolors.OKGREEN}----------------------------- Clock on -----------------------------{bcolors.ENDC}')
 	fr.main(ser, 'pins',bytes([2])) # Clock On
 	print(f'{bcolors.OKGREEN}-------------------------- Reset inactive --------------------------{bcolors.ENDC}')
 	fr.main(ser, 'pins',bytes([1]))  # Reset inactive - Run
@@ -570,5 +609,15 @@ if __name__ == '__main__':
 		ser = Serial(port, 115200, timeout = 1, writeTimeout = 1)
 	except IOError:
 		print('Port not found!')
+		exit()
 
+	ser.flush()
 	main(ser, configpath, cf, norom)
+	#print('Port flush')
+	ser.flush()
+	#print('Port close')
+	ser.close()
+	#try:
+	#	ser.close()
+	#except:
+	#	pass

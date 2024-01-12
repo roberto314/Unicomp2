@@ -179,7 +179,8 @@ tmux serial window:
     - copy image to sd-card:
     sudo dd if=A20-OLinuXino-bullseye-minimal-20230515-130040.img of=/dev/sdb bs=1k status=progress
     - start olimex and login with 'olimex/olimex'
-    - change password with: 'sudo passwd olimex' to something shorter like 'oli'
+    - change password with: 'sudo passwd olimex' to something shorter like 'olim'
+    - alternatively: delete passwird: 'sudo passwd -d olimex'
     - make update: 'sudo apt update && sudo apt upgrade'
     - install minimal components: 'sudo apt install git mc'
     - clone github repository: 'git clone https://github.com/roberto314/Unicomp2.git'
