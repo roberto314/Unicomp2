@@ -134,6 +134,7 @@ A simple configuration block looks líke this:
 | DREAM 6800               | BAS (Video) | MC6802, MAX-II                | DREAM operating System (Chip8)   |Link: http://www.mjbauer.biz/DREAM6800.htm                               |
 | HD6303 Board (Eric Klaus)| serial      | HD6303                        | Monitor +BASIC                   |Link: https://sites.google.com/site/ericmklaus/projects-1/hd6303cpuboard |
 | MC3 Computer             | serial      | HD6303                        | Monitor                          |Link: https://www.waveguide.se/?article=mc3-a-diy-8-bit-computer         |
+| Psion Organizer I        | LCD         | HD6303                        | Psion OS                         |Link: https://www.jaapsch.net/psion/index.htm                            |
 
 ### linux single board computer (SBC) ###
 
@@ -153,18 +154,6 @@ tmux serial window:
 ### python helper scripts ###
 
 -- all scripts have to be executed with sudo bacause of direct hardware access!
-
-* UC_set_freq.py 
-	- can set the frequency for the main clock input
-	- read and write registers of the DS1085 chip
-	- Example: sudo UC_set_freq.py -M 14 - sets clock to 14 MHz
-	- Example: sudo UC_set_freq.py -k 14318 - sets clock to 14.318 MHz
-	- Example: sudo UC_set_freq.py -f 14318180 - sets clock to 14.31818 MHz
-	- Example: sudo UC_set_freq.py DIV -v 245 - sets divider to 245
-
-* UC_configure.py [configdir]
-	- configures the RAM, ROM and chipselect of all the boards with a configuration file
-	- Example: sudo UC_configure.py apple1
 
 * set_reset.py [0,1,xx]
 	- sets the reset line high or low (low = active)
