@@ -1,0 +1,33 @@
+Pin Freeze File:  version P.20131013
+
+9572XL44VQ XC9572XL-10-VQ44
+CLKF S:PIN3
+E_CPU S:PIN37
+RnW S:PIN36
+nHALT_in S:PIN30
+nRST S:PIN44
+E_Out S:PIN40
+PH0 S:PIN1
+nBUSFREE S:PIN43
+nDOE S:PIN31
+nAOE S:PIN32
+nHALT S:PIN41
+nMRD S:PIN34
+nMWR S:PIN33
+nPH0 S:PIN2
+
+
+;The remaining section of the .gyd file is for documentation purposes only.
+;It shows where your internal equations were placed in the last successful fit.
+
+PARTITION FB1_5 E_Out_OBUF$BUF0 nHALT_OBUF
+PARTITION FB1_9 nBUSFREE_OBUF
+PARTITION FB1_14 clk_divider<0> nPH0_OBUF
+
+PARTITION FB2_6 nDOE_OBUF
+PARTITION FB2_8 nDOE_OBUF$BUF0 nMWR_OBUF
+PARTITION FB2_11 nMRD_OBUF
+PARTITION FB2_18 s_ELEVEL
+
+
+

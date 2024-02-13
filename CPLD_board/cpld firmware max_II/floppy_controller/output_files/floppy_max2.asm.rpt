@@ -1,5 +1,5 @@
 Assembler report for floppy_max2
-Thu Oct 12 07:51:06 2023
+Mon Jan 15 21:45:50 2024
 Quartus II 64-Bit Version 13.0.1 Build 232 06/12/2013 Service Pack 1 SJ Web Edition
 
 
@@ -37,7 +37,7 @@ applicable agreement for further details.
 +---------------------------------------------------------------+
 ; Assembler Summary                                             ;
 +-----------------------+---------------------------------------+
-; Assembler Status      ; Successful - Thu Oct 12 07:51:06 2023 ;
+; Assembler Status      ; Successful - Mon Jan 15 21:45:50 2024 ;
 ; Revision Name         ; floppy_max2                           ;
 ; Top-level Entity Name ; floppy_controller                     ;
 ; Family                ; MAX II                                ;
@@ -90,8 +90,8 @@ applicable agreement for further details.
 ; Option         ; Setting                  ;
 +----------------+--------------------------+
 ; Device         ; EPM240T100C5             ;
-; JTAG usercode  ; 0x0016EED4               ;
-; Checksum       ; 0x0016F23C               ;
+; JTAG usercode  ; 0x0016C41B               ;
+; Checksum       ; 0x0016C813               ;
 +----------------+--------------------------+
 
 
@@ -114,14 +114,14 @@ Info: Running Quartus II 64-Bit Assembler
     Info: programming logic devices manufactured by Altera and sold by 
     Info: Altera or its authorized distributors.  Please refer to the 
     Info: applicable agreement for further details.
-    Info: Processing started: Thu Oct 12 07:51:06 2023
+    Info: Processing started: Mon Jan 15 21:45:49 2024
 Info: Command: quartus_asm floppy_max2
 Info (115031): Writing out detailed assembly data for power analysis
 Info (115030): Assembler is generating device programming files
 Info: Quartus II 64-Bit Assembler was successful. 0 errors, 0 warnings
-    Info: Peak virtual memory: 495 megabytes
-    Info: Processing ended: Thu Oct 12 07:51:06 2023
-    Info: Elapsed time: 00:00:00
+    Info: Peak virtual memory: 499 megabytes
+    Info: Processing ended: Mon Jan 15 21:45:50 2024
+    Info: Elapsed time: 00:00:01
     Info: Total CPU time (on all processors): 00:00:01
 
 

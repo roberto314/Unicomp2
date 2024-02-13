@@ -14,7 +14,7 @@ mkdir xc3sprog-libgpio/build
 cd xc3sprog-libgpio/build
 cmake .. -DUSE_WIRINGPI=OFF
 make
-cp xc3sprog ~/.local/bin
+cp xc3sprog ~/.local/bin/xc3sprog
 cd $OLDDIR
 
 git clone https://github.com/jimeh/tmuxifier.git ~/.tmuxifier

@@ -1,0 +1,1584 @@
+0001                          NAM MICRO  MICROBASIC
+0002                         
+0003                         * ***** VERSION 1.3A *****
+0004                         *
+0005                         * BY ROBERT H UITERWYK, TAMPA, FLORIDA
+0006                         *
+0007                         * MODIFIED TO RUN ON THE MC3
+0008                         * BY DANIEL TUFVESSON (DTU) 2013
+0009                         *
+0010                         * ADDITIONAL BUGFIXES
+0011                         * BY LES HILDENBRANDT (LHI) 2013
+0012                         *
+0013                         
+0014 0020                            ORG $20   
+0015 0020 00 00              INDEX1  FDB $0000
+0016 0022 00 00              INDEX2  FDB $0000 
+0017 0024 00 00              INDEX3  FDB $0000 
+0018 0026 00 00              INDEX4  FDB $0000 
+0019 0028 00 00              SAVESP  FDB $0000 
+0020 002a 0c bd              NEXTBA  FDB END  
+0021 002c 0c bd              WORKBA  FDB END  
+0022 002e 0c bd              SOURCE  FDB END  
+0023 0030 00 00              PACKLN  FDB $0000 
+0024 0032 00 00              HIGHLN  FDB $0000 
+0025 0034 00 00              BASPNT  FDB $0000 
+0026 0036 00 00              BASLIN  FDB $0000 
+0027 0038 00 00              PUSHTX  FDB $0000 
+0028 003a a0 7f              XSTACK  FDB $A07F 
+0029 003c 00 00              RNDVAL  FDB $0000 
+0030 003e 00 00              DIMPNT  FDB $0000 
+0031 0040 00 00              DIMCAL  FDB $0000 
+0032 0042 00                 PRCNT   FCB 0  
+0033 0043 48                 MAXLIN  FCB 72  
+0034 0044 08                 BACKSP  FCB $08		FCB $0F				#### /DTU  
+0035 0045 18                 CANCEL  FCB $18  
+0036 0046 6f ff              MEMEND  FDB $6FFF 	FDB $1FFF 			#### /DTU
+0037 0048 00 00              ARRTAB  FDB $0000 
+0038 004a 00 00              KEYWD   FDB $0000 
+0039 004c 00                 TSIGN   FCB 0  
+0040 004d 00                 NCMPR   FCB 0  
+0041 004e 00                 TNUMB   FCB 0  
+0042 004f 00                 ANUMB   FCB 0  
+0043 0050 00                 BNUMB   FCB 0  
+0044 0051 02 1a              AESTK   FDB ASTACK 
+0045 0053 00 69              FORPNT  FDB FORSTK 
+0046 0055 01 03              VARPNT  FDB VARTAB 
+0047 0057 00 59              SBRPNT  FDB SBRSTK 
+0048 0059                    SBRSTK  RMB 16  
+0049 0069                    FORSTK  RMB 48
+0050 0099 01 03              DIMVAR  FDB VARTAB 
+0051                              
+0052                              
+0053 00ac                      ORG $00AC   
+0054 00ac 00 b0              BUFNXT  FDB $00B0 
+0055 00ae 00 b0              ENDBUF  FDB $00B0 
+0056 00b0                            ORG $00B0   
+0057 00b0                    BUFFER  RMB $50 
+0058                         
+0059 0100                            ORG $0100
+0060 0100 7e 0c b6           PROGM   JMP STARTX	JMP START			#### /DTU
+0061 0103                    VARTAB  RMB 78
+0062 0151 1e                         FCB $1E
+0063 0152 52 55 4e           COMMAN  FCC /RUN/
+0064 0155 1e                         FCB $1E
+0065 0156 06 be                      FDB RUN
+0066 0158 4c 49 53 54                FCC /LIST/
+0067 015c 1e                         FCB $1E
+0068 015d 06 ec                      FDB CLIST 
+0069 015f 4e 45 57                   FCC /NEW/
+0070 0162 1e                         FCB $1E
+0071 0163 06 44                      FDB START
+0072 0165 50 41 54                   FCC /PAT/
+0073 0168 1e                         FCB $1E
+0074 0169 07 2e                      FDB PATCH
+0075 016b 47 4f 53 55 42     GOLIST  FCC /GOSUB/
+0076 0170 1e                         FCB $1E
+0077 0171 08 1a                      FDB GOSUB
+0078 0173 47 4f 54 4f                FCC /GOTO/
+0079 0177 1e                         FCB $1E
+0080 0178 08 3d                      FDB GOTO
+0081 017a 47 4f 20 54 4f             FCC /GO TO/
+0082 017f 1e                         FCB $1E
+0083 0180 08 3d                      FDB GOTO
+0084 0182 53 49 5a 45                FCC /SIZE/
+0085 0186 1e                         FCB $1E
+0086 0187 0a 66                      FDB SIZE
+0087 0189 54 48 45 4e                FCC /THEN/
+0088 018d 1e                         FCB $1E
+0089 018e 0c 26                      FDB IF2
+0090 0190 50 52 49 4e 54             FCC /PRINT/
+0091 0195 1e                         FCB $1E
+0092 0196 09 3e                      FDB PRINT
+0093 0198 4c 45 54                   FCC /LET/
+0094 019b 1e                         FCB $1E
+0095 019c 0a 42                      FDB LET
+0096 019e 49 4e 50 55 54             FCC /INPUT/
+0097 01a3 1e                         FCB $1E
+0098 01a4 08 87                      FDB INPUT
+0099 01a6 49 46                      FCC /IF/
+0100 01a8 1e                         FCB $1E
+0101 01a9 0c 11                      FDB IF
+0102 01ab 45 4e 44                   FCC /END/
+0103 01ae 1e                         FCB $1E
+0104 01af 06 60                      FDB READY
+0105 01b1 52 45 54 55 52 4e          FCC /RETURN/
+0106 01b7 1e                         FCB $1E
+0107 01b8 08 50                      FDB RETURN
+0108 01ba 44 49 4d                   FCC /DIM/
+0109 01bd 1e                         FCB $1E
+0110 01be 0a 88                      FDB DIM
+0111 01c0 46 4f 52                   FCC /FOR/
+0112 01c3 1e                         FCB $1E
+0113 01c4 0b 44                      FDB FOR
+0114 01c6 4e 45 58 54                FCC /NEXT/
+0115 01ca 1e                         FCB $1E
+0116 01cb 0b b4                      FDB NEXT
+0117 01cd 52 45 4d                   FCC /REM/
+0118 01d0 1e                         FCB $1E
+0119 01d1 0a 82                      FDB REMARK
+0120 01d3 50 41 55 53 45     PAUMSG  FCC /PAUSE/
+0121 01d8 1e                         FCB $1E
+0122 01d9 08 66                      FDB PAUSE
+0123 01db 20                         FCB $20
+0124 01dc 1e                 COMEND  FCB $1E
+0125 01dd 0a 42              IMPLET  FDB LET
+0126 01df                            RMB 60
+0127 021a                    ASTACK  EQU *-1
+0128 021b 0d                 RDYMSG  FCB $0D
+0129 021c 0a                         FCB $0A
+0130 021d 15                         FCB $15
+0131 021e 0a                         FCB $0A
+0132 021f 15                         FCB $15
+0133 0220 52 45 41 44 59             FCC /READY/
+0134 0225 1e                         FCB $1E
+0135 0226 23                 PROMPT  FCB $23
+0136 0227 00                         FCB $00
+0137 0228 1e                         FCB $1E
+0138 0229 1e                         FCB $1E
+0139 022a 10                 PGCNTL  FCB $10
+0140 022b 16                         FCB $16
+0141 022c 1e                         FCB $1E
+0142 022d 1e                         FCB $1E
+0143 022e 1e                         FCB $1E
+0144 022f 45 52 52 4f 52 23  ERRMS1  FCC /ERROR# /
+     20
+0145 0236 1e                         FCB $1E
+0146 0237 20 49 4e 20 4c 49  ERRMS2  FCC / IN LINE /
+     4e 45 20
+0147 0240 1e                         FCB $1E
+0148 0241 86 3f              KEYBD   LDAA #$3F
+0149 0243 8d 4d                      BSR OUTCH
+0150 0245 ce 00 b0           KEYBD0  LDX #BUFFER
+0151 0248 c6 0a                      LDAB #10
+0152 024a 8d 49              KEYBD1  BSR INCH
+0153 024c 81 00                      CMPA #$00
+0154 024e 26 06                      BNE KEYB11
+0155 0250 5a                         DECB
+0156 0251 26 f7                      BNE KEYBD1	BNE KEYBD11			#### /LHI
+0157 0253 7e 06 60           KEYB10  JMP READY
+0158 0256 91 45              KEYB11  CMPA CANCEL
+0159 0258 27 26                      BEQ DEL
+0160 025a 81 0d                      CMPA #$0D
+0161 025c 27 2b                      BEQ IEXIT
+0162 025e 81 0a              KEYBD2  CMPA #$0A
+0163 0260 27 e8                      BEQ KEYBD1
+0164 0262 81 15                      CMPA #$15
+0165 0264 27 e4                      BEQ KEYBD1
+0166 0266 81 13                      CMPA #$13
+0167 0268 27 e0                      BEQ KEYBD1
+0168 026a 91 44              KEYB55  CMPA BACKSP
+0169 026c 26 08                      BNE KEYBD3
+0170 026e 8c 00 b0                   CPX #BUFFER
+0171 0271 27 d7                      BEQ KEYBD1
+0172 0273 09                         DEX
+0173 0274 20 d4                      BRA KEYBD1
+0174 0276 8c 00 f7           KEYBD3  CPX #BUFFER+71
+0175 0279 27 cf                      BEQ KEYBD1
+0176 027b a7 00                      STAA 0,X
+0177 027d 08                         INX
+0178 027e 20 ca                      BRA KEYBD1
+0179 0280 8d 32              DEL     BSR CRLF
+0180 0282 ce 02 26           CNTLIN  LDX #PROMPT
+0181 0285 8d 26                      BSR OUTNCR
+0182 0287 20 bc                      BRA KEYBD0
+0183 0289 86 1e              IEXIT   LDAA #$1E
+0184 028b a7 00                      STAA ,X
+0185 028d df ae                      STX ENDBUF
+0186 028f 8d 23                      BSR CRLF
+0187 0291 39                         RTS
+0188                         
+0189                         OUTCH
+0190                         *	BSR BREAK					#### /DTU
+0191 0292 7e c0 03           	JMP OUTEEE
+0192 c003                    OUTEEE  EQU $C003					#### /DTU
+0193                         
+0194 0295 7e c0 06           INCH    JMP INEEE
+0195                         
+0196 0298 7e 02 9b           BREAK   JMP BREAK1	THIS BREAK ROUTINE IS NOT USED FOR THE MC3
+0197 029b 36                 BREAK1  PSHA		  DANIEL TUFVESSON 2013
+0198 029c b6 80 04                   LDAA PIAD	  CHKBRK IS USED INSTEAD
+0199 8004                    PIAD    EQU $8004
+0200 029f 2b 03                      BMI BREAK2
+0201 02a1 7e 06 60                   JMP READY
+0202                         
+0203 02a4 32                 BREAK2  PULA
+0204 02a5 39                         RTS
+0205                         
+0206 c006                    INEEE   EQU $C006					#### /DTU
+0207 02a6                    OUTPUT  EQU *
+0208 02a6 8d 05                      BSR OUTNCR
+0209 02a8 20 0a                      BRA CRLF
+0210                         
+0211 02aa 8d e6              OUTPU2  BSR  OUTCH
+0212 02ac 08                 OUTPU3  INX
+0213 02ad a6 00              OUTNCR  LDAA 0,X
+0214 02af 81 1e                      CMPA #$1E
+0215 02b1 26 f7                      BNE OUTPU2
+0216 02b3 39                         RTS
+0217                         
+0218 02b4 8d 12              CRLF    BSR PUSHX
+0219 02b6 ce 02 be                   LDX #CRLFST
+0220 02b9 8d f2                      BSR OUTNCR
+0221 02bb 8d 20                      BSR PULLX
+0222 02bd 39                         RTS
+0223                         
+0224 02be 00                 CRLFST  FCB $00
+0225 02bf 0d                         FCB $0D
+0226 02c0 0a                         FCB $0A
+0227 02c1 15                         FCB $15
+0228 02c2 1e                 CREND   FCB $1E
+0229 02c3 ff ff                      FCB $FF,$FF
+0230 02c5 ff ff                      FCB $FF,$FF
+0231 02c7 1e                         FCB $1E
+0232 02c8 df 38              PUSHX   STX PUSHTX
+0233 02ca de 3a                      LDX XSTACK
+0234 02cc 09                         DEX
+0235 02cd 09                         DEX
+0236 02ce df 3a                      STX XSTACK
+0237 02d0 36                         PSHA
+0238 02d1 96 38                      LDAA PUSHTX
+0239 02d3 a7 00                      STAA 0,X
+0240 02d5 96 39                      LDAA PUSHTX+1
+0241 02d7 a7 01                      STAA 1,X
+0242 02d9 32                         PULA
+0243 02da de 38                      LDX PUSHTX
+0244 02dc 39                         RTS
+0245                         
+0246 02dd de 3a              PULLX   LDX XSTACK
+0247 02df ee 00                      LDX 0,X
+0248 02e1 7c 00 3b                   INC XSTACK+1
+0249 02e4 7c 00 3b                   INC XSTACK+1
+0250 02e7 39                         RTS
+0251                         
+0252 02e8 36                 STORE   PSHA
+0253 02e9 37                         PSHB
+0254 02ea 8d dc                      BSR PUSHX
+0255 02ec bd 04 6e                   JSR PULLAE
+0256 02ef de 51                      LDX AESTK
+0257 02f1 08                         INX
+0258 02f2 08                         INX
+0259 02f3 df 51                      STX AESTK
+0260 02f5 09                         DEX
+0261 02f6 ee 00                      LDX 0,X
+0262 02f8 a7 00                      STAA 0,X
+0263 02fa e7 01                      STAB 1,X
+0264 02fc 8d df                      BSR PULLX
+0265 02fe 33                         PULB
+0266 02ff 32                         PULA
+0267 0300 39                         RTS
+0268                         
+0269 0301 8d c5              IND     BSR PUSHX
+0270 0303 36                         PSHA
+0271 0304 37                         PSHB
+0272 0305 de 51                      LDX AESTK
+0273 0307 08                         INX
+0274 0308 08                         INX
+0275 0309 df 51                      STX AESTK
+0276 030b 09                         DEX
+0277 030c ee 00                      LDX 0,X
+0278 030e a6 00                      LDAA 0,X
+0279 0310 e6 01                      LDAB 1,X
+0280 0312 bd 04 63                   JSR PUSHAE
+0281 0315 33                         PULB
+0282 0316 32                         PULA
+0283 0317 8d c4                      BSR PULLX
+0284 0319 39                         RTS
+0285                         
+0286 031a de 2a              LIST    LDX NEXTBA
+0287 031c df 2c                      STX WORKBA
+0288 031e de 2e                      LDX SOURCE
+0289 0320 20 02                      BRA LIST1
+0290 0322 de 24              LIST0   LDX INDEX3
+0291 0324 9c 2c              LIST1   CPX WORKBA
+0292 0326 27 05                      BEQ LEXIT
+0293 0328 8d 04                      BSR OUTLIN
+0294 032a 08                         INX
+0295 032b 20 f7                      BRA LIST1
+0296 032d 39                 LEXIT   RTS
+0297                         
+0298 032e a6 00              OUTLIN  LDAA 0,X
+0299 0330 7f 00 42                   CLR PRCNT
+0300 0333 08                         INX
+0301 0334 e6 00                      LDAB 0,X
+0302 0336 08                         INX
+0303 0337 7f 00 4c                   CLR TSIGN
+0304 033a bd 09 fb                   JSR PRN0
+0305 033d 8d 22                      BSR PRINSP
+0306 033f a6 00              OUTLI1  LDAA 0,X
+0307 0341 08                         INX
+0308 0342 8d 84                      BSR PUSHX
+0309 0344 ce 01 52                   LDX #COMMAN
+0310 0347 df 4a                      STX KEYWD
+0311 0349 97 4b                      STAA KEYWD+1
+0312 034b de 4a                      LDX KEYWD
+0313 034d 09                         DEX
+0314 034e 09                 OUTLI2  DEX
+0315 034f a6 00                      LDAA 0,X
+0316 0351 81 1e                      CMPA #$1E
+0317 0353 26 f9                      BNE OUTLI2
+0318 0355 08                         INX
+0319 0356 08                         INX
+0320 0357 08                         INX
+0321 0358 bd 02 ad                   JSR OUTNCR
+0322 035b bd 02 dd                   JSR PULLX
+0323 035e 7e 02 a6                   JMP OUTPUT
+0324                         
+0325 0361 36                 PRINSP  PSHA
+0326 0362 86 20                      LDAA #$20
+0327 0364 bd 02 92                   JSR OUTCH
+0328 0367 32                         PULA
+0329 0368 39                         RTS
+0330                         
+0331 0369 08                 RANDOM  INX
+0332 036a 08                         INX
+0333 036b a6 00                      LDAA 0,X
+0334 036d 81 44                      CMPA #'D
+0335 036f 26 65                      BNE  TSTVER
+0336 0371 bd 02 c8                   JSR PUSHX
+0337 0374 96 3c                      LDAA RNDVAL
+0338 0376 d6 3d                      LDAB RNDVAL+1
+0339 0378 ce 00 00                   LDX  #0000
+0340 037b e9 01              RAND1   ADCB 1,X
+0341 037d a9 00                      ADCA 0,X
+0342 037f 08                         INX
+0343 0380 08                         INX
+0344 0381 8c 00 3c                   CPX #RNDVAL
+0345 0384 26 f5                      BNE  RAND1
+0346 0386 84 7f                      ANDA #$7F
+0347 0388 97 3c                      STAA RNDVAL
+0348 038a d7 3d                      STAB RNDVAL+1
+0349 038c df 20                      STX   INDEX1
+0350 038e 96 20                      LDAA INDEX1
+0351 0390 d6 21                      LDAB INDEX1+1
+0352 0392 7e 04 44                   JMP   TSTV9
+0353                         
+0354 0395 bd 05 e5           TSTV    JSR   SKIPSP
+0355 0398 bd 0c a2           	JSR   CHKBRK	JSR BREAK			#### /DTU
+0356 039b bd 04 4d                   JSR   TSTLTR
+0357 039e 24 01                      BCC   TSTV1
+0358 03a0 39                         RTS
+0359                         
+0360 03a1 81 52              TSTV1   CMPA #'R
+0361 03a3 26 06                      BNE TSTV2
+0362 03a5 e6 01                      LDAB 1,X
+0363 03a7 c1 4e                      CMPB #'N
+0364 03a9 27 be                      BEQ  RANDOM
+0365 03ab bd 02 c8           TSTV2   JSR PUSHX
+0366 03ae 80 40                      SUBA #$40
+0367 03b0 97 56                      STAA VARPNT+1
+0368 03b2 48                         ASLA
+0369 03b3 9b 56                      ADDA VARPNT+1
+0370 03b5 97 56                      STAA VARPNT+1
+0371 03b7 de 55                      LDX VARPNT
+0372 03b9 96 55                      LDAA VARPNT
+0373 03bb d6 56                      LDAB VARPNT+1
+0374 03bd 6d 02                      TST  2,X
+0375 03bf 26 03                      BNE  TSTV20
+0376 03c1 7e 04 44                   JMP  TSTV9
+0377                         
+0378 03c4 ee 00              TSTV20  LDX  0,X
+0379 03c6 df 3e                      STX  DIMPNT
+0380 03c8 08                         INX
+0381 03c9 08                         INX
+0382 03ca df 40                      STX DIMCAL
+0383 03cc bd 02 dd                   JSR  PULLX
+0384 03cf bd 05 eb                   JSR INXSKP
+0385 03d2 81 28                      CMPA #'(
+0386 03d4 27 03                      BEQ TSTV22
+0387 03d6 7e 08 d2           TSTVER  JMP DBLLTR
+0388 03d9 08                 TSTV22  INX
+0389 03da bd 04 bd                   JSR EXPR
+0390 03dd bd 02 c8                   JSR PUSHX
+0391 03e0 bd 04 6e                   JSR PULLAE
+0392 03e3 4d                         TSTA
+0393 03e4 27 03                      BEQ TSTV3
+0394 03e6 7e 0a d5           SUBER1  JMP  SUBERR
+0395                         
+0396 03e9 de 3e              TSTV3   LDX DIMPNT
+0397 03eb 5d                         TSTB
+0398 03ec 27 f8                      BEQ  SUBER1
+0399 03ee e1 00                      CMPB 0,X
+0400 03f0 22 f4                      BHI  SUBER1
+0401 03f2 a6 01                      LDAA 1,X
+0402 03f4 97 4f                      STAA ANUMB
+0403 03f6 27 30                      BEQ TST666
+0404 03f8 de 40                      LDX DIMCAL
+0405 03fa 5a                 TSTV4   DECB
+0406 03fb 27 09                      BEQ TSTV6
+0407 03fd 96 4f                      LDAA ANUMB
+0408 03ff 08                 TSTV5   INX
+0409 0400 08                         INX
+0410 0401 4a                         DECA
+0411 0402 26 fb                      BNE TSTV5
+0412 0404 20 f4                      BRA TSTV4
+0413                         
+0414 0406 df 40              TSTV6   STX DIMCAL
+0415 0408 bd 02 dd                   JSR PULLX
+0416 040b bd 05 e5                   JSR SKIPSP
+0417 040e 81 2c                      CMPA #',
+0418 0410 26 c4                      BNE TSTVER
+0419 0412 08                         INX
+0420 0413 bd 04 bd                   JSR EXPR
+0421 0416 bd 02 c8                   JSR PUSHX
+0422 0419 bd 04 6e                   JSR PULLAE
+0423 041c 4d                         TSTA
+0424 041d 26 c7                      BNE SUBER1
+0425 041f de 3e                      LDX DIMPNT
+0426 0421 5d                         TSTB
+0427 0422 27 c2                      BEQ SUBER1
+0428 0424 e1 01                      CMPB 1,X
+0429 0426 22 be                      BHI SUBER1
+0430 0428 de 40              TST666  LDX DIMCAL
+0431 042a 08                 TSTV7   INX
+0432 042b 08                         INX
+0433 042c 5a                         DECB
+0434 042d 26 fb                      BNE TSTV7
+0435 042f 09                         DEX
+0436 0430 09                         DEX
+0437 0431 df 40                      STX DIMCAL
+0438 0433 bd 02 dd                   JSR PULLX
+0439 0436 bd 05 e5                   JSR SKIPSP
+0440 0439 81 29              TSTV8   CMPA  #')
+0441 043b 26 99                      BNE TSTVER
+0442 043d bd 02 c8                   JSR PUSHX
+0443 0440 96 40                      LDAA DIMCAL
+0444 0442 d6 41                      LDAB DIMCAL+1
+0445 0444 bd 02 dd           TSTV9   JSR  PULLX
+0446 0447 08                         INX
+0447 0448 bd 04 63                   JSR PUSHAE
+0448 044b 0c                         CLC
+0449 044c 39                         RTS
+0450                         
+0451 044d 81 41              TSTLTR  CMPA #$41
+0452 044f 2b 0c                      BMI NONO
+0453 0451 81 5a                      CMPA #$5A
+0454 0453 2f 0a                      BLE YESNO
+0455 0455 81 30              TESTNO  CMPA #$30
+0456 0457 2b 04                      BMI NONO
+0457 0459 81 39                      CMPA #$39
+0458 045b 2f 02                      BLE YESNO
+0459 045d 0d                 NONO    SEC
+0460 045e 39                         RTS
+0461 045f 0c                 YESNO   CLC
+0462 0460 39                         RTS
+0463                         
+0464 0461 8d 0b              PULPSH  BSR PULLAE
+0465 0463 9f 28              PUSHAE  STS SAVESP
+0466 0465 9e 51                      LDS AESTK
+0467 0467 37                         PSHB
+0468 0468 36                         PSHA
+0469 0469 9f 51                      STS AESTK
+0470 046b 9e 28                      LDS SAVESP
+0471 046d 39                         RTS
+0472                         
+0473 046e 9f 28              PULLAE  STS SAVESP
+0474 0470 9e 51                      LDS AESTK
+0475 0472 32                         PULA
+0476 0473 33                         PULB
+0477 0474 9f 51                      STS AESTK
+0478 0476 9e 28                      LDS SAVESP
+0479 0478 39                         RTS
+0480                         
+0481 0479 bd 05 e5           FACT    JSR SKIPSP
+0482 047c bd 03 95                   JSR TSTV
+0483 047f 25 04                      BCS FACT0
+0484 0481 bd 03 01                   JSR IND
+0485 0484 39                         RTS
+0486                         
+0487 0485 bd 08 d7           FACT0   JSR TSTN
+0488 0488 25 01                      BCS FACT1
+0489 048a 39                         RTS
+0490                         
+0491 048b 81 28              FACT1   CMPA #'(
+0492 048d 26 0c                      BNE FACT2
+0493 048f 08                         INX
+0494 0490 8d 2b                      BSR  EXPR
+0495 0492 bd 05 e5                   JSR  SKIPSP
+0496 0495 81 29                      CMPA #')
+0497 0497 26 02                      BNE FACT2
+0498 0499 08                         INX
+0499 049a 39                         RTS
+0500                         
+0501 049b c6 0d              FACT2   LDAB #13
+0502 049d 7e 06 92                   JMP  ERROR
+0503                         
+0504 04a0 8d d7              TERM    BSR  FACT
+0505 04a2 bd 05 e5           TERM0   JSR SKIPSP
+0506 04a5 81 2a                      CMPA #'*
+0507 04a7 26 07                      BNE TERM1
+0508 04a9 08                         INX
+0509 04aa 8d cd                      BSR FACT
+0510 04ac 8d 41                      BSR MPY
+0511 04ae 20 f2                      BRA TERM0
+0512                         
+0513 04b0 81 2f              TERM1   CMPA #'/
+0514 04b2 26 08                      BNE TERM2
+0515 04b4 08                         INX
+0516 04b5 8d c2                      BSR FACT
+0517 04b7 bd 05 42                   JSR DIV
+0518 04ba 20 e6                      BRA TERM0
+0519                         
+0520 04bc 39                 TERM2   RTS
+0521                         
+0522 04bd bd 05 e5           EXPR    JSR SKIPSP
+0523 04c0 81 2d                      CMPA #'-
+0524 04c2 26 08                      BNE EXPR0
+0525 04c4 08                         INX
+0526 04c5 8d d9                      BSR TERM
+0527 04c7 bd 05 8d                   JSR NEG
+0528 04ca 20 07                      BRA EXPR1
+0529 04cc 81 2b              EXPR0   CMPA #'+
+0530 04ce 26 01                      BNE EXPR00
+0531 04d0 08                         INX
+0532 04d1 8d cd              EXPR00  BSR TERM
+0533 04d3 bd 05 e5           EXPR1   JSR SKIPSP
+0534 04d6 81 2b                      CMPA #'+
+0535 04d8 26 08                      BNE EXPR2
+0536 04da 08                         INX
+0537 04db 8d c3                      BSR TERM
+0538 04dd bd 05 a3                   JSR ADD
+0539 04e0 20 f1                      BRA EXPR1
+0540 04e2 81 2d              EXPR2   CMPA #'-
+0541 04e4 26 08                      BNE EXPR3
+0542 04e6 08                         INX
+0543 04e7 8d b7                      BSR TERM
+0544 04e9 bd 05 a1                   JSR SUB
+0545 04ec 20 e5                      BRA EXPR1
+0546 04ee 39                 EXPR3   RTS
+0547                         
+0548 04ef 8d 32              MPY     BSR MDSIGN
+0549 04f1 86 0f                      LDAA #15
+0550 04f3 a7 00                      STAA 0,X
+0551 04f5 5f                         CLRB
+0552 04f6 4f                         CLRA
+0553 04f7 64 03              MPY4    LSR 3,X
+0554 04f9 66 04                      ROR 4,X
+0555 04fb 24 0b                      BCC MPY5
+0556 04fd eb 02                      ADDB 2,X
+0557 04ff a9 01                      ADCA 1,X
+0558 0501 24 05                      BCC MPY5
+0559 0503 86 02              MPYERR  LDAA #2
+0560 0505 7e 06 92                   JMP ERROR
+0561 0508 68 02              MPY5    ASL 2,X
+0562 050a 69 01                      ROL 1,X
+0563 050c 6a 00                      DEC 0,X
+0564 050e 26 e7                      BNE MPY4
+0565 0510 4d                         TSTA
+0566 0511 2b f0                      BMI MPYERR
+0567 0513 7d 00 4c                   TST TSIGN
+0568 0516 2a 03                      BPL MPY6
+0569 0518 bd 05 9a                   JSR NEGAB
+0570 051b e7 04              MPY6    STAB 4,X
+0571 051d a7 03                      STAA 3,X
+0572 051f bd 02 dd                   JSR PULLX
+0573 0522 39                         RTS
+0574                         
+0575 0523 bd 02 c8           MDSIGN  JSR PUSHX
+0576 0526 4f                         CLRA
+0577 0527 de 51                      LDX AESTK
+0578 0529 6d 01                      TST 1,X
+0579 052b 2a 04                      BPL MDS2
+0580 052d 8d 5e                      BSR NEG
+0581 052f 86 80                      LDAA #$80
+0582 0531 08                 MDS2    INX
+0583 0532 08                         INX
+0584 0533 df 51                      STX AESTK
+0585 0535 6d 01                      TST 1,X
+0586 0537 2a 04                      BPL MDS3
+0587 0539 8d 52                      BSR NEG
+0588 053b 8b 80                      ADDA #$80
+0589 053d 97 4c              MDS3    STAA TSIGN
+0590 053f 09                         DEX
+0591 0540 09                         DEX
+0592 0541 39                         RTS
+0593                         
+0594 0542 8d df              DIV     BSR MDSIGN
+0595 0544 6d 01                      TST 1,X
+0596 0546 26 09                      BNE DIV33
+0597 0548 6d 02                      TST 2,X
+0598 054a 26 05                      BNE DIV33
+0599 054c c6 08                      LDAB #8
+0600 054e 7e 06 92                   JMP ERROR
+0601 0551 86 01              DIV33   LDAA #1
+0602 0553 4c                 DIV4    INCA
+0603 0554 68 02                      ASL 2,X
+0604 0556 69 01                      ROL 1,X
+0605 0558 2b 04                      BMI DIV5
+0606 055a 81 11                      CMPA #17
+0607 055c 26 f5                      BNE DIV4
+0608 055e a7 00              DIV5    STAA 0,X
+0609 0560 a6 03                      LDAA 3,X
+0610 0562 e6 04                      LDAB 4,X
+0611 0564 6f 03                      CLR 3,X
+0612 0566 6f 04                      CLR 4,X
+0613 0568 e0 02              DIV163  SUBB 2,X
+0614 056a a2 01                      SBCA 1,X
+0615 056c 24 07                      BCC DIV165
+0616 056e eb 02                      ADDB 2,X
+0617 0570 a9 01                      ADCA 1,X
+0618 0572 0c                         CLC
+0619 0573 20 01                      BRA DIV167
+0620 0575 0d                 DIV165  SEC
+0621 0576 69 04              DIV167  ROL 4,X
+0622 0578 69 03                      ROL 3,X
+0623 057a 64 01                      LSR 1,X
+0624 057c 66 02                      ROR 2,X
+0625 057e 6a 00                      DEC 0,X
+0626 0580 26 e6                      BNE DIV163
+0627 0582 7d 00 4c                   TST TSIGN
+0628 0585 2a 02                      BPL DIV169
+0629 0587 8d 04                      BSR NEG
+0630 0589 bd 02 dd           DIV169  JSR PULLX
+0631 058c 39                         RTS
+0632                         
+0633 058d 36                 NEG     PSHA
+0634 058e 37                         PSHB
+0635 058f bd 04 6e                   JSR PULLAE
+0636 0592 8d 06                      BSR NEGAB
+0637 0594 bd 04 63                   JSR PUSHAE
+0638 0597 33                         PULB
+0639 0598 32                         PULA
+0640 0599 39                         RTS
+0641                         
+0642 059a 43                 NEGAB   COMA
+0643 059b 53                         COMB
+0644 059c cb 01                      ADDB #1
+0645 059e 89 00                      ADCA #0
+0646 05a0 39                         RTS
+0647                         
+0648 05a1 8d ea              SUB     BSR NEG
+0649 05a3 bd 04 6e           ADD     JSR PULLAE
+0650 05a6 d7 50              ADD1    STAB BNUMB
+0651 05a8 97 4f                      STAA ANUMB
+0652 05aa bd 04 6e                   JSR PULLAE
+0653 05ad db 50                      ADDB BNUMB
+0654 05af 99 4f                      ADCA ANUMB
+0655 05b1 bd 04 63                   JSR PUSHAE
+0656 05b4 0c                         CLC
+0657 05b5 39                         RTS
+0658                         
+0659 05b6 96 32              FINDNO  LDAA HIGHLN
+0660 05b8 d6 33                      LDAB HIGHLN+1
+0661 05ba d0 31                      SUBB PACKLN+1
+0662 05bc 92 30                      SBCA PACKLN
+0663 05be 25 1c                      BCS  HIBALL
+0664 05c0 de 2e              FINDN1  LDX  SOURCE
+0665 05c2 bd 04 61           FIND0   JSR PULPSH
+0666 05c5 e0 01                      SUBB 1,X
+0667 05c7 a2 00                      SBCA 0,X
+0668 05c9 25 13                      BCS FIND3
+0669 05cb 26 03                      BNE FIND1
+0670 05cd 5d                         TSTB
+0671 05ce 27 0f                      BEQ  FIND4
+0672 05d0 08                 FIND1   INX
+0673 05d1 8d 18              FIND2   BSR  INXSKP
+0674 05d3 81 1e                      CMPA #$1E
+0675 05d5 26 fa                      BNE  FIND2
+0676 05d7 08                         INX
+0677 05d8 9c 2a                      CPX NEXTBA
+0678 05da 26 e6                      BNE FIND0
+0679 05dc de 2a              HIBALL  LDX  NEXTBA
+0680 05de 0d                 FIND3   SEC
+0681 05df df 2c              FIND4   STX WORKBA
+0682 05e1 bd 04 6e                   JSR PULLAE
+0683 05e4 39                         RTS
+0684                         
+0685 05e5 a6 00              SKIPSP  LDAA 0,X
+0686 05e7 81 20                      CMPA #$20
+0687 05e9 26 03                      BNE  SKIPEX
+0688 05eb 08                 INXSKP  INX
+0689 05ec 20 f7                      BRA SKIPSP
+0690 05ee 39                 SKIPEX  RTS
+0691                         
+0692 05ef bd 08 f2           LINENO  JSR INTSTN
+0693 05f2 24 05                      BCC  LINE1
+0694 05f4 c6 07                      LDAB #7
+0695 05f6 7e 06 92                   JMP  ERROR
+0696 05f9 bd 04 61           LINE1   JSR PULPSH
+0697 05fc 97 30                      STAA PACKLN
+0698 05fe d7 31                      STAB PACKLN+1
+0699 0600 df ac                      STX BUFNXT
+0700 0602 39                         RTS
+0701                         
+0702 0603 de 34              NXTLIN  LDX  BASPNT
+0703 0605 a6 00              NXTL12  LDAA 0,X
+0704 0607 08                         INX
+0705 0608 81 1e                      CMPA #$1E
+0706 060a 26 f9                      BNE  NXTL12	BNE NXTLIN			#### /DTU
+0707 060c df 36                      STX BASLIN
+0708 060e 39                         RTS
+0709                         
+0710 060f 8d d4              CCODE   BSR SKIPSP
+0711 0611 df 26                      STX INDEX4
+0712 0613 9f 28                      STS SAVESP
+0713 0615 ce 01 51                   LDX #COMMAN-1
+0714 0618 9e 26              LOOP3   LDS  INDEX4
+0715 061a 34                         DES
+0716 061b 08                 LOOP4   INX
+0717 061c 32                         PULA
+0718 061d e6 00                      LDAB 0,X
+0719 061f c1 1e                      CMPB #$1E
+0720 0621 27 13                      BEQ LOOP7
+0721 0623 11                         CBA
+0722 0624 27 f5                      BEQ  LOOP4
+0723 0626 08                 LOOP5   INX
+0724 0627 8c 01 dc                   CPX #COMEND
+0725 062a 27 12                      BEQ CCEXIT
+0726 062c e6 00                      LDAB 0,X
+0727 062e c1 1e                      CMPB #$1E
+0728 0630 26 f4                      BNE  LOOP5
+0729 0632 08                 LOOP6   INX
+0730 0633 08                         INX
+0731 0634 20 e2                      BRA LOOP3
+0732 0636 08                 LOOP7   INX
+0733 0637 9f ac                      STS BUFNXT
+0734 0639 9f 34                      STS BASPNT
+0735 063b 9e 28              LOOP8   LDS SAVESP
+0736 063d 39                         RTS
+0737                         
+0738 063e 9e 28              CCEXIT  LDS SAVESP
+0739 0640 ce 01 dd                   LDX #IMPLET
+0740 0643 39                         RTS
+0741                         
+0742 0644 de 2e              START   LDX SOURCE
+0743 0646 df 2a                      STX NEXTBA
+0744 0648 df 2c                      STX WORKBA
+0745 064a df 48                      STX ARRTAB
+0746 064c 09                         DEX
+0747 064d 4f                         CLRA
+0748 064e 08                 START2  INX
+0749 064f a7 00                      STAA 0,X
+0750 0651 9c 46                      CPX MEMEND
+0751 0653 26 f9                      BNE  START2
+0752 0655 4f                 START1  CLRA
+0753 0656 97 30                      STAA PACKLN
+0754 0658 97 31                      STAA PACKLN+1
+0755 065a 97 42                      STAA PRCNT
+0756 065c de 30                      LDX PACKLN
+0757 065e df 32                      STX HIGHLN
+0758 0660 8e a0 45           READY   LDS #$A045
+0759 0663 ce 02 1b                   LDX #RDYMSG
+0760 0666 bd 02 a6                   JSR OUTPUT
+0761 0669 8e a0 45           NEWLIN  LDS #$A045
+0762 066c ce a0 7f                   LDX #$A07F
+0763 066f df 3a                      STX XSTACK
+0764 0671 7f 00 42                   CLR PRCNT
+0765 0674 bd 02 82           NEWL3   JSR CNTLIN
+0766 0677 ce 00 b0                   LDX #BUFFER
+0767 067a bd 05 e5                   JSR SKIPSP
+0768 067d df ac                      STX BUFNXT
+0769 067f bd 04 55                   JSR TESTNO
+0770 0682 25 03                      BCS LOOP2
+0771 0684 7e 07 40                   JMP NUMBER
+0772 0687 81 1e              LOOP2   CMPA #$1E
+0773 0689 27 de                      BEQ NEWLIN
+0774 068b bd 06 0f                   JSR CCODE
+0775 068e ee 00                      LDX 0,X
+0776 0690 6e 00                      JMP  0,X
+0777                         
+0778 0692 8e a0 45           ERROR   LDS #$A045
+0779 0695 bd 02 b4                   JSR CRLF
+0780 0698 ce 02 2f                   LDX #ERRMS1
+0781 069b bd 02 ad                   JSR OUTNCR
+0782 069e 4f                         CLRA
+0783 069f bd 04 63                   JSR PUSHAE
+0784 06a2 bd 09 e0                   JSR PRN
+0785 06a5 ce 02 37                   LDX #ERRMS2
+0786 06a8 bd 02 ad                   JSR OUTNCR
+0787 06ab 5f                         CLRB
+0788 06ac 96 36                      LDAA BASLIN
+0789 06ae 27 06                      BEQ ERROR2
+0790 06b0 de 36                      LDX BASLIN
+0791 06b2 a6 00                      LDAA 0,X
+0792 06b4 e6 01                      LDAB 1,X
+0793 06b6 bd 09 fb           ERROR2  JSR PRN0
+0794 06b9 bd 02 b4                   JSR CRLF
+0795 06bc 20 a2                      BRA READY
+0796                         
+0797 06be de 2e              RUN     LDX  SOURCE
+0798 06c0 df 36                      STX BASLIN
+0799 06c2 ce 00 59                   LDX #SBRSTK
+0800 06c5 df 57                      STX SBRPNT
+0801 06c7 ce 00 69                   LDX #FORSTK
+0802 06ca df 53                      STX FORPNT
+0803 06cc ce a0 7f                   LDX #$A07F
+0804 06cf df 3a                      STX XSTACK
+0805 06d1 de 2a                      LDX NEXTBA
+0806 06d3 df 48                      STX ARRTAB
+0807 06d5 4f                         CLRA
+0808 06d6 09                         DEX
+0809 06d7 08                 RUN1    INX
+0810 06d8 a7 00                      STAA 0,X
+0811 06da 9c 46                      CPX MEMEND
+0812 06dc 26 f9                      BNE RUN1
+0813 06de ce 01 03                   LDX #VARTAB
+0814 06e1 c6 4e                      LDAB  #78
+0815 06e3 a7 00              RUN2    STAA 0,X
+0816 06e5 08                         INX
+0817 06e6 5a                         DECB
+0818 06e7 26 fa                      BNE RUN2
+0819 06e9 7e 07 f3                   JMP  BASIC
+0820                         
+0821 06ec ce 02 2a           CLIST   LDX #PGCNTL
+0822 06ef bd 02 a6                   JSR OUTPUT
+0823 06f2 de 34                      LDX  BASPNT
+0824 06f4 bd 05 e5           CLIST1  JSR SKIPSP
+0825 06f7 81 1e                      CMPA #$1E
+0826 06f9 27 2c                      BEQ CLIST4
+0827 06fb bd 08 f2                   JSR INTSTN
+0828 06fe df 34                      STX BASPNT
+0829 0700 bd 05 c0                   JSR FINDN1
+0830 0703 df 24                      STX INDEX3
+0831 0705 de 34                      LDX BASPNT
+0832 0707 36                         PSHA
+0833 0708 bd 05 e5                   JSR SKIPSP
+0834 070b 81 1e                      CMPA #$1E
+0835 070d 32                         PULA
+0836 070e 26 05                      BNE CLIST2
+0837 0710 bd 04 63                   JSR PUSHAE
+0838 0713 20 04                      BRA  CLIST3
+0839 0715 08                 CLIST2  INX
+0840 0716 bd 08 f2                   JSR  INTSTN
+0841 0719 4f                 CLIST3  CLRA
+0842 071a c6 01                      LDAB #1
+0843 071c bd 05 a6                   JSR ADD1
+0844 071f bd 05 c0                   JSR FINDN1
+0845 0722 bd 03 22                   JSR LIST0
+0846 0725 20 03                      BRA CLIST5
+0847 0727 bd 03 1a           CLIST4  JSR  LIST
+0848 072a 7e 0a 82           CLIST5  JMP  REMARK
+0849 072d 01                         NOP
+0850                         
+0851 072e bd 06 03           PATCH   JSR  NXTLIN
+0852 0731 ce 07 f3                   LDX #BASIC
+0853 0734 ff a0 46                   STX $A046
+0854 0737 8e a0 40                   LDS #$A040
+0855 073a bf a0 08                   STS SP
+0856 a008                    SP      EQU $A008
+0857 073d 7e c0 00                   JMP CONTRL
+0858 c000                    CONTRL  EQU  $C000
+0859                         
+0860 0740 bd 05 ef           NUMBER  JSR LINENO
+0861 0743 bd 05 b6           NUM1    JSR FINDNO
+0862 0746 24 0a                      BCC DELREP
+0863 0748 de 2c                      LDX WORKBA
+0864 074a 9c 2a                      CPX NEXTBA
+0865 074c 27 1e                      BEQ CAPPEN
+0866 074e 8d 50                      BSR INSERT
+0867 0750 20 17                      BRA NEXIT
+0868 0752 de ac              DELREP  LDX BUFNXT
+0869 0754 bd 05 e5                   JSR SKIPSP
+0870 0757 81 1e                      CMPA #$1E
+0871 0759 26 0a                      BNE REPLAC
+0872 075b de 2a                      LDX NEXTBA
+0873 075d 9c 2e                      CPX SOURCE
+0874 075f 27 08                      BEQ NEXIT
+0875 0761 8d 11                      BSR DELETE
+0876 0763 20 04                      BRA NEXIT
+0877                         
+0878 0765 8d 0d              REPLAC  BSR DELETE
+0879 0767 8d 37                      BSR INSERT
+0880 0769 7e 06 69           NEXIT   JMP NEWLIN
+0881 076c 8d 32              CAPPEN  BSR INSERT
+0882 076e de 30                      LDX PACKLN
+0883 0770 df 32                      STX HIGHLN
+0884 0772 20 f5                      BRA NEXIT
+0885 0774 9f 28              DELETE  STS SAVESP
+0886 0776 de 2c                      LDX WORKBA
+0887 0778 9e 2a                      LDS NEXTBA
+0888 077a c6 02                      LDAB #2
+0889 077c 08                         INX
+0890 077d 08                         INX
+0891 077e 34                         DES
+0892 077f 34                         DES
+0893 0780 a6 00              DEL2    LDAA  0,X
+0894 0782 34                         DES
+0895 0783 08                         INX
+0896 0784 5c                         INCB
+0897 0785 81 1e                      CMPA #$1E
+0898 0787 26 f7                      BNE DEL2
+0899 0789 9f 2a                      STS NEXTBA
+0900 078b 9f 48                      STS ARRTAB
+0901 078d de 2c                      LDX WORKBA
+0902 078f f7 07 97                   STAB DEL5+1
+0903                         * IN AT OBJECT TIME
+0904 0792 9c 2a              DEL4    CPX  NEXTBA
+0905 0794 27 07                      BEQ  DELEX
+0906 0796 a6 00              DEL5    LDAA 0,X
+0907 0798 a7 00                      STAA 0,X
+0908 079a 08                         INX
+0909 079b 20 f5                      BRA DEL4
+0910                         
+0911 079d 9e 28              DELEX   LDS SAVESP
+0912 079f 39                         RTS
+0913                         
+0914 07a0 de ac              INSERT  LDX BUFNXT
+0915 07a2 bd 06 0f                   JSR  CCODE
+0916 07a5 df 4a              INS1    STX  KEYWD
+0917 07a7 d6 af                      LDAB ENDBUF+1
+0918 07a9 d0 ad                      SUBB BUFNXT+1
+0919 07ab cb 04                      ADDB #$04
+0920 07ad f7 07 ca                   STAB OFFSET+1
+0921 07b0 db 2b                      ADDB NEXTBA+1
+0922 07b2 86 00                      LDAA #$00
+0923 07b4 99 2a                      ADCA NEXTBA
+0924 07b6 91 46                      CMPA MEMEND
+0925 07b8 22 34                      BHI OVERFL
+0926 07ba d7 2b                      STAB NEXTBA+1
+0927 07bc 97 2a                      STAA NEXTBA
+0928 07be de 2a                      LDX NEXTBA
+0929 07c0 df 48                      STX  ARRTAB
+0930 07c2 9c 2c              INS2    CPX  WORKBA
+0931 07c4 27 07                      BEQ BUFWRT
+0932 07c6 09                         DEX
+0933 07c7 a6 00                      LDAA 0,X
+0934 07c9 a7 00              OFFSET  STAA 0,X
+0935 07cb 20 f5                      BRA  INS2
+0936 07cd de 2c              BUFWRT  LDX  WORKBA
+0937 07cf 9f 28                      STS SAVESP
+0938 07d1 96 30                      LDAA PACKLN
+0939 07d3 a7 00                      STAA 0,X
+0940 07d5 08                         INX
+0941 07d6 96 31                      LDAA PACKLN+1
+0942 07d8 a7 00                      STAA 0,X
+0943 07da 08                         INX
+0944 07db 96 4b                      LDAA KEYWD+1
+0945 07dd a7 00                      STAA 0,X
+0946 07df 08                         INX
+0947 07e0 9e ac                      LDS BUFNXT
+0948 07e2 34                         DES
+0949 07e3 32                 BUF3    PULA
+0950 07e4 a7 00                      STAA 0,X
+0951 07e6 08                         INX
+0952 07e7 81 1e                      CMPA #$1E
+0953 07e9 26 f8                      BNE BUF3
+0954 07eb 9e 28                      LDS SAVESP
+0955 07ed 39                         RTS
+0956                         
+0957 07ee c6 0e              OVERFL  LDAB #14
+0958 07f0 7e 06 92                   JMP ERROR
+0959 07f3 de 36              BASIC   LDX BASLIN
+0960 07f5 9c 2a                      CPX NEXTBA
+0961 07f7 26 03                      BNE BASIC1
+0962 07f9 7e 06 60           BASIC0  JMP READY
+0963 07fc 7d 00 36           BASIC1  TST BASLIN
+0964 07ff 27 f8                      BEQ BASIC0
+0965 0801 08                         INX
+0966 0802 08                         INX
+0967 0803 a6 00                      LDAA 0,X
+0968 0805 08                         INX
+0969 0806 df 34                      STX  BASPNT
+0970 0808 ce 01 52                   LDX #COMMAN
+0971 080b df 4a                      STX KEYWD
+0972 080d 97 4b                      STAA KEYWD+1
+0973 080f ce 02 1a                   LDX #ASTACK
+0974 0812 df 51                      STX AESTK
+0975 0814 de 4a                      LDX KEYWD
+0976 0816 ee 00                      LDX 0,X
+0977 0818 6e 00              BASIC2  JMP 0,X
+0978                         
+0979 081a de 36              GOSUB   LDX BASLIN
+0980 081c df 20                      STX INDEX1
+0981 081e bd 06 03                   JSR NXTLIN
+0982 0821 de 57                      LDX SBRPNT
+0983 0823 8c 00 69                   CPX #SBRSTK+16
+0984 0826 26 05                      BNE  GOSUB1
+0985 0828 c6 09                      LDAB #9
+0986 082a 7e 06 92                   JMP  ERROR
+0987 082d 96 36              GOSUB1  LDAA BASLIN
+0988 082f a7 00                      STAA 0,X
+0989 0831 08                         INX
+0990 0832 96 37                      LDAA BASLIN+1
+0991 0834 a7 00                      STAA 0,X
+0992 0836 08                         INX
+0993 0837 df 57                      STX SBRPNT
+0994 0839 de 20                      LDX INDEX1
+0995 083b df 36                      STX BASLIN
+0996 083d de 34              GOTO    LDX BASPNT
+0997 083f bd 04 bd                   JSR EXPR
+0998 0842 bd 05 c0                   JSR FINDN1
+0999 0845 24 05                      BCC GOTO2
+1000 0847 c6 07                      LDAB #7
+1001 0849 7e 06 92                   JMP  ERROR
+1002 084c df 36              GOTO2   STX BASLIN
+1003 084e 20 a3                      BRA  BASIC
+1004                         
+1005 0850 de 57              RETURN  LDX  SBRPNT
+1006 0852 8c 00 59                   CPX #SBRSTK
+1007 0855 26 05                      BNE RETUR1
+1008 0857 c6 0a                      LDAB #10
+1009 0859 7e 06 92                   JMP  ERROR
+1010 085c 09                 RETUR1  DEX
+1011 085d 09                         DEX
+1012 085e df 57                      STX SBRPNT
+1013 0860 ee 00                      LDX  0,X
+1014 0862 df 36                      STX BASLIN
+1015 0864 20 8d                      BRA BASIC
+1016                         
+1017 0866 ce 01 d3           PAUSE   LDX  #PAUMSG
+1018 0869 bd 02 ad                   JSR OUTNCR
+1019 086c bd 03 61                   JSR PRINSP
+1020 086f de 36                      LDX  BASLIN
+1021 0871 a6 00                      LDAA 0,X
+1022 0873 08                         INX
+1023 0874 e6 00                      LDAB 0,X
+1024 0876 08                         INX
+1025 0877 bd 09 fb                   JSR  PRN0
+1026 087a bd 02 95           PAUSE1  JSR  INCH
+1027 087d 81 0d                      CMPA #$0D
+1028 087f 26 f9                      BNE  PAUSE1
+1029 0881 bd 02 b4                   JSR  CRLF
+1030 0884 7e 0a 82           PAUSE2  JMP  REMARK
+1031 0887 96 34              INPUT   LDAA  BASPNT
+1032 0889 26 04                      BNE INPUT0
+1033 088b c6 0c                      LDAB #12
+1034 088d 20 20                      BRA INPERR
+1035 088f bd 02 41           INPUT0  JSR KEYBD
+1036 0892 ce 00 b0                   LDX  #BUFFER
+1037 0895 df ac                      STX BUFNXT
+1038 0897 de 34                      LDX BASPNT
+1039 0899 bd 03 95           INPUT1  JSR TSTV
+1040 089c 25 2c                      BCS INPEX
+1041 089e df 34                      STX BASPNT
+1042 08a0 de ac                      LDX BUFNXT
+1043 08a2 8d 43              INPUT2  BSR  INNUM
+1044 08a4 24 14                      BCC INPUT4
+1045 08a6 09                         DEX
+1046 08a7 a6 00                      LDAA 0,X
+1047 08a9 81 1e                      CMPA #$1E
+1048 08ab 27 05                      BEQ INPUTS
+1049 08ad c6 02                      LDAB #2
+1050 08af 7e 06 92           INPERR  JMP  ERROR
+1051 08b2 bd 02 41           INPUTS  JSR  KEYBD
+1052 08b5 ce 00 b0                   LDX #BUFFER
+1053 08b8 20 e8                      BRA INPUT2
+1054 08ba bd 02 e8           INPUT4  JSR  STORE
+1055 08bd 08                         INX
+1056 08be df ac                      STX BUFNXT
+1057 08c0 de 34                      LDX BASPNT
+1058 08c2 bd 05 e5                   JSR SKIPSP
+1059 08c5 08                         INX
+1060 08c6 81 2c                      CMPA #',
+1061 08c8 27 cf                      BEQ INPUT1
+1062 08ca 09                 INPEX   DEX
+1063 08cb 7f 00 42                   CLR PRCNT
+1064 08ce 81 1e                      CMPA #$1E
+1065 08d0 27 b2                      BEQ PAUSE2
+1066 08d2 c6 03              DBLLTR  LDAB #3
+1067 08d4 7e 06 92                   JMP  ERROR
+1068 08d7 8d 19              TSTN    BSR INTSTN
+1069 08d9 25 06                      BCS TSTN0
+1070 08db bd 04 6e                   JSR PULLAE
+1071 08de 4d                         TSTA
+1072 08df 2a 02                      BPL TSTN1
+1073 08e1 0d                 TSTN0   SEC
+1074 08e2 39                         RTS
+1075 08e3 bd 04 63           TSTN1   JSR  PUSHAE
+1076 08e6 39                         RTS
+1077                         
+1078 08e7 bd 05 e5           INNUM   JSR  SKIPSP
+1079 08ea 97 4c                      STAA TSIGN
+1080 08ec 08                         INX
+1081 08ed 81 2d                      CMPA #'-
+1082 08ef 27 04                      BEQ  INNUM0
+1083 08f1 09                         DEX
+1084 08f2 7f 00 4c           INTSTN  CLR  TSIGN
+1085 08f5 bd 05 e5           INNUM0  JSR   SKIPSP
+1086 08f8 bd 04 55                   JSR TESTNO
+1087 08fb 24 01                      BCC INNUM1
+1088 08fd 39                         RTS
+1089 08fe 09                 INNUM1  DEX
+1090 08ff 4f                         CLRA
+1091 0900 5f                         CLRB
+1092 0901 08                 INNUM2  INX
+1093 0902 36                         PSHA
+1094 0903 a6 00                      LDAA 0,X
+1095 0905 bd 04 55                   JSR TESTNO
+1096 0908 25 26                      BCS INNEX
+1097 090a 80 30                      SUBA #$30
+1098 090c 97 4e                      STAA TNUMB
+1099 090e 32                         PULA
+1100 090f 58                         ASLB
+1101 0910 49                         ROLA
+1102 0911 25 18                      BCS INNERR
+1103 0913 d7 50                      STAB BNUMB
+1104 0915 97 4f                      STAA ANUMB
+1105 0917 58                         ASLB
+1106 0918 49                         ROLA
+1107 0919 25 10                      BCS INNERR
+1108 091b 58                         ASLB
+1109 091c 49                         ROLA
+1110 091d 25 0c                      BCS INNERR
+1111 091f db 50                      ADDB BNUMB
+1112 0921 99 4f                      ADCA ANUMB
+1113 0923 25 06                      BCS INNERR
+1114 0925 db 4e                      ADDB TNUMB
+1115 0927 89 00                      ADCA #0
+1116 0929 24 d6                      BCC  INNUM2
+1117 092b c6 02              INNERR  LDAB #2
+1118 092d 7e 06 92                   JMP  ERROR
+1119 0930 32                 INNEX   PULA
+1120 0931 7d 00 4c                   TST TSIGN
+1121 0934 27 03                      BEQ INNEX2
+1122 0936 bd 05 9a                   JSR NEGAB
+1123 0939 bd 04 63           INNEX2  JSR PUSHAE
+1124 093c 0c                         CLC
+1125 093d 39                         RTS
+1126                         
+1127 093e de 34              PRINT   LDX  BASPNT
+1128 0940 bd 05 e5           PRINT0  JSR  SKIPSP
+1129 0943 81 22                      CMPA #'"
+1130 0945 26 18                      BNE PRINT4
+1131 0947 08                         INX
+1132 0948 a6 00              PRINT1  LDAA 0,X
+1133 094a 08                         INX
+1134 094b 81 22                      CMPA  #'"
+1135 094d 27 5a                      BEQ  PRIN88
+1136 094f 81 1e                      CMPA #$1E
+1137 0951 26 04                      BNE PRINT2
+1138 0953 c6 04                      LDAB  #4
+1139 0955 20 34                      BRA  PRINTE
+1140 0957 bd 02 92           PRINT2  JSR  OUTCH
+1141 095a bd 09 d0                   JSR ENLINE
+1142 095d 20 e9                      BRA PRINT1
+1143 095f 81 1e              PRINT4  CMPA #$1E
+1144 0961 26 14                      BNE PRINT6
+1145 0963 09                         DEX
+1146 0964 a6 00                      LDAA 0,X
+1147 0966 08                         INX
+1148 0967 81 3b                      CMPA #';
+1149 0969 27 06                      BEQ PRINT5
+1150 096b bd 02 b4                   JSR CRLF
+1151 096e 7f 00 42                   CLR PRCNT
+1152 0971 08                 PRINT5  INX
+1153 0972 df 36                      STX BASLIN
+1154 0974 7e 07 f3                   JMP BASIC
+1155 0977 81 54              PRINT6  CMPA #'T
+1156 0979 26 28                      BNE PRINT8
+1157 097b e6 01                      LDAB 1,X
+1158 097d c1 41                      CMPB #'A
+1159 097f 26 22                      BNE PRINT8
+1160 0981 08                         INX
+1161 0982 08                         INX
+1162 0983 a6 00                      LDAA 0,X
+1163 0985 81 42                      CMPA #'B
+1164 0987 27 05                      BEQ PRINT7
+1165 0989 c6 0b                      LDAB #11
+1166 098b 7e 06 92           PRINTE  JMP  ERROR
+1167 098e 08                 PRINT7  INX
+1168 098f bd 04 bd                   JSR EXPR
+1169 0992 bd 04 6e                   JSR PULLAE
+1170 0995 d0 42                      SUBB PRCNT
+1171 0997 23 10                      BLS PRIN88
+1172 0999 bd 03 61           PRIN77  JSR PRINSP
+1173 099c 8d 32                      BSR ENLINE
+1174 099e 5a                         DECB
+1175 099f 26 f8                      BNE PRIN77
+1176 09a1 20 06                      BRA PRIN88
+1177 09a3 bd 04 bd           PRINT8  JSR  EXPR
+1178 09a6 bd 09 e0                   JSR  PRN
+1179 09a9 bd 05 e5           PRIN88  JSR  SKIPSP
+1180 09ac 81 2c                      CMPA #',
+1181 09ae 26 10                      BNE PRIN99
+1182 09b0 08                         INX
+1183 09b1 96 42              PRLOOP  LDAA PRCNT
+1184 09b3 16                         TAB
+1185 09b4 c4 f8                      ANDB #$F8
+1186 09b6 10                         SBA
+1187 09b7 27 0c                      BEQ PRI999
+1188 09b9 bd 03 61                   JSR PRINSP
+1189 09bc 8d 12                      BSR ENLINE
+1190 09be 20 f1                      BRA PRLOOP
+1191 09c0 81 3b              PRIN99  CMPA #';
+1192 09c2 26 04                      BNE PREND
+1193 09c4 08                         INX
+1194 09c5 7e 09 40           PRI999  JMP  PRINT0
+1195 09c8 81 1e              PREND   CMPA #$1E
+1196 09ca 27 93                      BEQ PRINT4
+1197 09cc c6 06                      LDAB #6
+1198 09ce 20 bb                      BRA PRINTE
+1199 09d0 36                 ENLINE  PSHA
+1200 09d1 96 42                      LDAA PRCNT
+1201 09d3 4c                         INCA
+1202 09d4 91 43                      CMPA MAXLIN
+1203 09d6 26 04                      BNE ENLEXT
+1204 09d8 bd 02 b4                   JSR CRLF
+1205 09db 4f                         CLRA
+1206 09dc 97 42              ENLEXT  STAA PRCNT
+1207 09de 32                         PULA
+1208 09df 39                         RTS
+1209 09e0 bd 03 61           PRN     JSR PRINSP
+1210 09e3 8d eb                      BSR ENLINE
+1211 09e5 86 ff                      LDAA #$FF
+1212 09e7 97 4c                      STAA TSIGN
+1213 09e9 bd 04 6e                   JSR PULLAE
+1214 09ec 4d                         TSTA
+1215 09ed 2a 0c                      BPL PRN0
+1216 09ef bd 05 9a                   JSR NEGAB
+1217 09f2 36                         PSHA
+1218 09f3 86 2d                      LDAA #'-
+1219 09f5 bd 02 92                   JSR OUTCH
+1220 09f8 8d d6                      BSR ENLINE
+1221 09fa 32                         PULA
+1222 09fb bd 02 c8           PRN0    JSR  PUSHX
+1223 09fe ce 0a 38                   LDX #KIOK
+1224 0a01 7f 00 4e           PRN1    CLR  TNUMB
+1225 0a04 e0 01              PRN2    SUBB 1,X
+1226 0a06 a2 00                      SBCA 0,X
+1227 0a08 25 05                      BCS PRN5
+1228 0a0a 7c 00 4e                   INC TNUMB
+1229 0a0d 20 f5                      BRA PRN2
+1230 0a0f eb 01              PRN5    ADDB 1,X
+1231 0a11 a9 00                      ADCA 0,X
+1232 0a13 36                         PSHA
+1233 0a14 96 4e                      LDAA TNUMB
+1234 0a16 26 0a                      BNE PRN6
+1235 0a18 8c 0a 40                   CPX #KIOK+8
+1236 0a1b 27 05                      BEQ PRN6
+1237 0a1d 7d 00 4c                   TST TSIGN
+1238 0a20 26 0a                      BNE PRN7
+1239 0a22 8b 30              PRN6    ADDA #$30
+1240 0a24 7f 00 4c                   CLR TSIGN
+1241 0a27 bd 02 92                   JSR OUTCH
+1242 0a2a 8d a4                      BSR ENLINE
+1243 0a2c 32                 PRN7    PULA
+1244 0a2d 08                         INX
+1245 0a2e 08                         INX
+1246 0a2f 8c 0a 42                   CPX #KIOK+10
+1247 0a32 26 cd                      BNE PRN1
+1248 0a34 bd 02 dd                   JSR PULLX
+1249 0a37 39                         RTS
+1250                         
+1251 0a38 27 10              KIOK    FDB 10000
+1252 0a3a 03 e8                      FDB 1000
+1253 0a3c 00 64                      FDB 100
+1254 0a3e 00 0a                      FDB 10
+1255 0a40 00 01                      FDB 1
+1256                         
+1257 0a42 de 34              LET     LDX BASPNT
+1258 0a44 bd 03 95                   JSR TSTV
+1259 0a47 24 05                      BCC LET1
+1260 0a49 c6 0c              LET0    LDAB #12
+1261 0a4b 7e 06 92           LET00   JMP  ERROR
+1262 0a4e bd 05 e5           LET1    JSR  SKIPSP
+1263 0a51 08                         INX
+1264 0a52 81 3d                      CMPA #'=
+1265 0a54 27 04                      BEQ LET3
+1266 0a56 c6 06              LET2    LDAB #6
+1267 0a58 20 f1                      BRA LET00
+1268 0a5a bd 04 bd           LET3    JSR EXPR
+1269 0a5d 81 1e                      CMPA #$1E
+1270 0a5f 26 f5                      BNE LET2
+1271 0a61 bd 02 e8                   JSR STORE
+1272 0a64 20 1c                      BRA REMARK
+1273 0a66 d6 49              SIZE    LDAB ARRTAB+1
+1274 0a68 96 48                      LDAA ARRTAB
+1275 0a6a d0 2f                      SUBB SOURCE+1
+1276 0a6c 92 2e                      SBCA SOURCE
+1277 0a6e bd 09 fb                   JSR PRN0
+1278 0a71 bd 03 61                   JSR PRINSP
+1279 0a74 d6 47                      LDAB MEMEND+1
+1280 0a76 96 46                      LDAA MEMEND
+1281 0a78 d0 49                      SUBB ARRTAB+1
+1282 0a7a 92 48                      SBCA ARRTAB
+1283 0a7c bd 09 fb                   JSR PRN0
+1284 0a7f bd 02 b4                   JSR CRLF
+1285 0a82 bd 06 03           REMARK  JSR NXTLIN
+1286 0a85 7e 07 f3                   JMP BASIC
+1287 0a88 de 34              DIM     LDX BASPNT
+1288 0a8a bd 05 e5           DIM1    JSR SKIPSP
+1289 0a8d bd 04 4d                   JSR TSTLTR
+1290 0a90 24 03                      BCC DIM111
+1291 0a92 7e 0b 29                   JMP DIMEX
+1292 0a95 80 40              DIM111  SUBA #$40
+1293 0a97 97 9a                      STAA DIMVAR+1
+1294 0a99 48                         ASLA
+1295 0a9a 9b 9a                      ADDA DIMVAR+1
+1296 0a9c 97 9a                      STAA DIMVAR+1
+1297 0a9e bd 02 c8                   JSR PUSHX
+1298 0aa1 de 99                      LDX DIMVAR
+1299 0aa3 6d 00                      TST 0,X
+1300 0aa5 26 1c                      BNE DIMERR
+1301 0aa7 6d 01                      TST 1,X
+1302 0aa9 26 18                      BNE DIMERR
+1303 0aab 6d 02                      TST 2,X
+1304 0aad 26 14                      BNE DIMERR
+1305 0aaf 96 49                      LDAA ARRTAB+1
+1306 0ab1 a7 01                      STAA 1,X
+1307 0ab3 96 48                      LDAA ARRTAB
+1308 0ab5 a7 00                      STAA 0,X
+1309 0ab7 a7 02                      STAA 2,X
+1310 0ab9 bd 02 dd                   JSR PULLX
+1311 0abc bd 05 eb                   JSR INXSKP
+1312 0abf 81 28                      CMPA #'(
+1313 0ac1 27 05                      BEQ  DIM2
+1314 0ac3 c6 05              DIMERR  LDAB #5
+1315 0ac5 7e 06 92           DIMER1  JMP ERROR
+1316 0ac8 08                 DIM2    INX
+1317 0ac9 bd 04 bd                   JSR EXPR
+1318 0acc bd 04 61                   JSR PULPSH
+1319 0acf 5d                         TSTB
+1320 0ad0 27 03                      BEQ SUBERR
+1321 0ad2 4d                         TSTA
+1322 0ad3 27 04                      BEQ  DIM3
+1323 0ad5 c6 0f              SUBERR  LDAB #15
+1324 0ad7 20 ec                      BRA DIMER1
+1325 0ad9 8d 55              DIM3    BSR STRSUB
+1326 0adb a6 00                      LDAA 0,X
+1327 0add 81 2c                      CMPA #',
+1328 0adf 26 12                      BNE DIM6
+1329 0ae1 08                         INX
+1330 0ae2 bd 04 bd                   JSR EXPR
+1331 0ae5 bd 04 61                   JSR PULPSH
+1332 0ae8 5d                         TSTB
+1333 0ae9 27 ea                      BEQ SUBERR
+1334 0aeb 4d                         TSTA
+1335 0aec 26 e7                      BNE SUBERR
+1336 0aee 8d 40                      BSR STRSUB
+1337 0af0 bd 04 ef                   JSR MPY
+1338 0af3 4f                 DIM6    CLRA
+1339 0af4 c6 02                      LDAB #2
+1340 0af6 bd 04 63                   JSR PUSHAE
+1341 0af9 bd 04 ef                   JSR MPY
+1342 0afc a6 00                      LDAA 0,X
+1343 0afe 81 29                      CMPA #')
+1344 0b00 26 c1                      BNE DIMERR
+1345 0b02 08                         INX
+1346 0b03 d6 49                      LDAB ARRTAB+1
+1347 0b05 96 48                      LDAA ARRTAB
+1348 0b07 bd 05 a6                   JSR ADD1
+1349 0b0a 4f                         CLRA
+1350 0b0b c6 02                      LDAB #2
+1351 0b0d bd 05 a6                   JSR ADD1
+1352 0b10 bd 04 6e                   JSR PULLAE
+1353 0b13 91 46                      CMPA MEMEND
+1354 0b15 23 03                      BLS DIM7
+1355 0b17 7e 07 ee                   JMP OVERFL
+1356 0b1a 97 48              DIM7    STAA ARRTAB
+1357 0b1c d7 49                      STAB ARRTAB+1
+1358 0b1e bd 05 e5                   JSR SKIPSP
+1359 0b21 81 2c                      CMPA #',
+1360 0b23 26 04                      BNE DIMEX
+1361 0b25 08                         INX
+1362 0b26 7e 0a 8a                   JMP DIM1
+1363 0b29 81 1e              DIMEX   CMPA #$1E
+1364 0b2b 26 96                      BNE DIMERR
+1365 0b2d 7e 0a 82                   JMP REMARK
+1366 0b30 bd 02 c8           STRSUB  JSR PUSHX
+1367 0b33 de 99                      LDX DIMVAR
+1368 0b35 ee 00                      LDX 0,X
+1369 0b37 6d 00              STRSU2  TST 0,X
+1370 0b39 27 03                      BEQ STRSU3
+1371 0b3b 08                         INX
+1372 0b3c 20 f9                      BRA STRSU2
+1373 0b3e e7 00              STRSU3  STAB 0,X
+1374 0b40 bd 02 dd                   JSR PULLX
+1375 0b43 39                         RTS
+1376                         
+1377 0b44 de 34              FOR     LDX  BASPNT
+1378 0b46 bd 03 95                   JSR TSTV
+1379 0b49 24 03                      BCC FOR1
+1380 0b4b 7e 0a 49                   JMP LET0
+1381 0b4e df 34              FOR1    STX BASPNT
+1382 0b50 bd 04 61                   JSR PULPSH
+1383 0b53 de 53                      LDX FORPNT
+1384 0b55 8c 00 99                   CPX #FORSTK+48
+1385 0b58 26 05                      BNE FOR11
+1386 0b5a c6 10                      LDAB #16
+1387 0b5c 7e 06 92                   JMP ERROR
+1388 0b5f a7 00              FOR11   STAA 0,X
+1389 0b61 08                         INX
+1390 0b62 e7 00                      STAB 0,X
+1391 0b64 08                         INX
+1392 0b65 df 53                      STX FORPNT
+1393 0b67 de 34                      LDX BASPNT
+1394 0b69 bd 05 e5                   JSR SKIPSP
+1395 0b6c 08                         INX
+1396 0b6d 81 3d                      CMPA #'=
+1397 0b6f 27 03                      BEQ  FOR3
+1398 0b71 7e 0a 56           FOR2    JMP  LET2
+1399 0b74 bd 04 bd           FOR3    JSR EXPR
+1400 0b77 bd 02 e8                   JSR STORE
+1401 0b7a 08                         INX
+1402 0b7b 81 54                      CMPA #'T
+1403 0b7d 26 f2                      BNE FOR2
+1404 0b7f a6 00                      LDAA 0,X
+1405 0b81 08                         INX
+1406 0b82 81 4f                      CMPA #'O
+1407 0b84 26 eb                      BNE FOR2
+1408 0b86 bd 04 bd                   JSR EXPR
+1409 0b89 bd 04 6e                   JSR PULLAE
+1410 0b8c df 34                      STX BASPNT
+1411 0b8e de 53                      LDX FORPNT
+1412 0b90 a7 00                      STAA 0,X
+1413 0b92 08                         INX
+1414 0b93 e7 00                      STAB 0,X
+1415 0b95 08                         INX
+1416 0b96 df 53                      STX FORPNT
+1417 0b98 de 34                      LDX BASPNT
+1418 0b9a a6 00                      LDAA 0,X
+1419 0b9c 81 1e                      CMPA #$1E
+1420 0b9e 26 d1              FOR8    BNE FOR2
+1421 0ba0 08                         INX
+1422 0ba1 df 36                      STX BASLIN
+1423 0ba3 de 53                      LDX FORPNT
+1424 0ba5 96 36                      LDAA BASLIN
+1425 0ba7 a7 00                      STAA 0,X
+1426 0ba9 08                         INX
+1427 0baa d6 37                      LDAB BASLIN+1
+1428 0bac e7 00                      STAB 0,X
+1429 0bae 08                         INX
+1430 0baf df 53                      STX FORPNT
+1431 0bb1 7e 07 f3                   JMP BASIC
+1432                         
+1433 0bb4 de 34              NEXT    LDX BASPNT
+1434 0bb6 bd 03 95                   JSR TSTV
+1435 0bb9 24 03                      BCC NEXT1
+1436 0bbb 7e 0a 49                   JMP LET0
+1437 0bbe bd 05 e5           NEXT1   JSR SKIPSP
+1438 0bc1 81 1e                      CMPA #$1E
+1439 0bc3 26 d9                      BNE FOR8
+1440 0bc5 08                         INX
+1441 0bc6 df 36                      STX  BASLIN
+1442 0bc8 ce 00 69                   LDX #FORSTK
+1443 0bcb bd 04 61                   JSR PULPSH
+1444 0bce 9c 53              NEXT2   CPX FORPNT
+1445 0bd0 27 3a                      BEQ NEXT6
+1446 0bd2 a1 00                      CMPA 0,X
+1447 0bd4 26 2e                      BNE NEXT5
+1448 0bd6 e1 01                      CMPB 1,X
+1449 0bd8 26 2a                      BNE NEXT5
+1450 0bda bd 03 01                   JSR IND
+1451 0bdd bd 04 61                   JSR PULPSH
+1452 0be0 e0 03                      SUBB 3,X
+1453 0be2 a2 02                      SBCA 2,X
+1454 0be4 25 05                      BCS NEXT4
+1455 0be6 df 53                      STX  FORPNT
+1456 0be8 7e 07 f3           NEXT3   JMP  BASIC
+1457 0beb bd 04 6e           NEXT4   JSR PULLAE
+1458 0bee cb 01                      ADDB #1
+1459 0bf0 89 00                      ADCA #0
+1460 0bf2 bd 02 c8                   JSR PUSHX
+1461 0bf5 ee 00                      LDX 0,X
+1462 0bf7 a7 00                      STAA 0,X
+1463 0bf9 e7 01                      STAB 1,X
+1464 0bfb bd 02 dd                   JSR PULLX
+1465 0bfe ee 04                      LDX 4,X
+1466 0c00 df 36                      STX BASLIN
+1467 0c02 20 e4                      BRA  NEXT3
+1468 0c04 08                 NEXT5   INX
+1469 0c05 08                         INX
+1470 0c06 08                         INX
+1471 0c07 08                         INX
+1472 0c08 08                         INX
+1473 0c09 08                         INX
+1474 0c0a 20 c2                      BRA NEXT2
+1475 0c0c c6 11              NEXT6   LDAB #17 
+1476 0c0e 7e 06 92                   JMP ERROR
+1477                         
+1478 0c11 de 34              IF      LDX BASPNT
+1479 0c13 bd 04 bd                   JSR EXPR
+1480 0c16 8d 17                      BSR RELOP
+1481 0c18 97 4d                      STAA NCMPR
+1482 0c1a bd 04 bd                   JSR EXPR
+1483 0c1d df 34                      STX BASPNT
+1484 0c1f 8d 4a                      BSR CMPR
+1485 0c21 24 03                      BCC IF2
+1486 0c23 7e 0a 82                   JMP  REMARK
+1487 0c26 de 34              IF2     LDX  BASPNT
+1488 0c28 bd 06 0f                   JSR  CCODE
+1489 0c2b ee 00                      LDX 0,X
+1490 0c2d 6e 00                      JMP 0,X
+1491 0c2f bd 05 e5           RELOP   JSR SKIPSP
+1492 0c32 08                         INX
+1493 0c33 81 3d                      CMPA #'=
+1494 0c35 26 03                      BNE RELOP0
+1495 0c37 86 00                      LDAA #0
+1496 0c39 39                         RTS
+1497 0c3a e6 00              RELOP0  LDAB 0,X
+1498 0c3c 81 3c                      CMPA #'<
+1499 0c3e 26 13                      BNE RELOP4
+1500 0c40 c1 3d                      CMPB #'=
+1501 0c42 26 04                      BNE RELOP1
+1502 0c44 08                         INX
+1503 0c45 86 02                      LDAA #2
+1504 0c47 39                         RTS
+1505 0c48 c1 3e              RELOP1  CMPB #'>
+1506 0c4a 26 04                      BNE RELOP3
+1507 0c4c 08                 RELOP2  INX
+1508 0c4d 86 03                      LDAA #3
+1509 0c4f 39                         RTS
+1510 0c50 86 01              RELOP3  LDAA #1
+1511 0c52 39                         RTS
+1512 0c53 81 3e              RELOP4  CMPA #'>
+1513 0c55 27 05                      BEQ REL44
+1514 0c57 c6 06                      LDAB #6
+1515 0c59 7e 06 92                   JMP ERROR
+1516 0c5c c1 3d              REL44   CMPB  #'=
+1517 0c5e 26 04                      BNE RELOP5
+1518 0c60 08                         INX
+1519 0c61 86 05                      LDAA #5
+1520 0c63 39                         RTS
+1521 0c64 c1 3c              RELOP5  CMPB #'<
+1522 0c66 27 e4                      BEQ RELOP2
+1523 0c68 86 04                      LDAA #4
+1524 0c6a 39                         RTS
+1525                         
+1526 0c6b 96 4d              CMPR    LDAA  NCMPR
+1527 0c6d 48                         ASLA
+1528 0c6e 48                         ASLA
+1529 0c6f b7 0c 7d                   STAA FUNNY+1
+1530 0c72 ce 0c 7e                   LDX #CMPR1
+1531 0c75 bd 05 a1                   JSR SUB
+1532 0c78 bd 04 6e                   JSR PULLAE
+1533 0c7b 4d                         TSTA
+1534 0c7c 6e 00              FUNNY   JMP  0,X
+1535 0c7e 27 18              CMPR1   BEQ MAYEQ
+1536 0c80 20 12                      BRA NOCMPR
+1537 0c82 2b 12                      BMI OKCMPR
+1538 0c84 20 0e                      BRA NOCMPR
+1539 0c86 2b 0e                      BMI OKCMPR
+1540 0c88 20 f4                      BRA CMPR1
+1541 0c8a 26 0a                      BNE OKCMPR
+1542 0c8c 20 0f                      BRA MYNTEQ
+1543 0c8e 27 0d                      BEQ MYNTEQ
+1544 0c90 2b 02                      BMI NOCMPR
+1545 0c92 2a 02                      BPL OKCMPR
+1546 0c94 0d                 NOCMPR  SEC
+1547 0c95 39                         RTS
+1548 0c96 0c                 OKCMPR  CLC
+1549 0c97 39                         RTS
+1550 0c98 5d                 MAYEQ   TSTB
+1551 0c99 27 fb                      BEQ OKCMPR
+1552 0c9b 20 f7                      BRA NOCMPR
+1553 0c9d 5d                 MYNTEQ  TSTB
+1554 0c9e 26 f6                      BNE OKCMPR
+1555 0ca0 20 f2                      BRA NOCMPR
+1556                         
+1557                         ******************************
+1558                         * REPLACEMENT FOR BREAK ROUTINE /DTU
+1559 0ca2 36                 CHKBRK	PSHA
+1560 0ca3 bd 7f e5           	JSR	CONSVEC
+1561 0ca6 81 00              	CMPA	#$0		IS THERE ANY CHARACTER?
+1562 0ca8 27 0a              	BEQ	CHKNBRK
+1563 0caa bd 7f eb           	JSR	CONIVEC		READ CHARACTER
+1564 0cad 81 1b              	CMPA	#$1B		IS CHARACTER AN ESCAPE?
+1565 0caf 26 03              	BNE	CHKNBRK
+1566 0cb1 7e 06 60           	JMP	READY		BREAK. GOTO PROMPT
+1567 0cb4 32                 CHKNBRK	PULA			NO BREAK. CONTINUE
+1568 0cb5 39                 	RTS
+1569 7fe5                    CONSVEC	EQU	$7FE5	CONSOLE STATUS VECTOR
+1570 7feb                    CONIVEC	EQU	$7FEB	CONSOLE INPUT VECTOR
+1571                         
+1572                         ******************************
+1573                         * PAGE SELECT ROUTINE FOR MC3 /DTU
+1574 0cb6 86 87              STARTX	LDAA	#$87
+1575 0cb8 97 02              	STAA	$0002
+1576 0cba 7e 06 44           	JMP	START
+1577                         	
+1578 0cbd                    END     EQU *
+1579                                 END
+
+
+Number of errors 0

@@ -75,7 +75,7 @@ GNDIO                        : 10        : gnd    :                   :         
 GNDINT                       : 11        : gnd    :                   :         :           :                
 clk50                        : 12        : input  : 3.3-V LVTTL       :         : 1         : Y              
 VCCINT                       : 13        : power  :                   : 2.5V/3.3V :           :                
-GND*                         : 14        :        :                   :         : 1         :                
+SPI_A[2]                     : 14        : output : 3.3-V LVTTL       :         : 1         : N              
 As[10]                       : 15        : output : 3.3-V LVTTL       :         : 1         : Y              
 As[11]                       : 16        : output : 3.3-V LVTTL       :         : 1         : Y              
 As[8]                        : 17        : output : 3.3-V LVTTL       :         : 1         : Y              
@@ -143,7 +143,7 @@ GND*                         : 78        :        :                   :         
 GNDIO                        : 79        : gnd    :                   :         :           :                
 VCCIO2                       : 80        : power  :                   : 3.3V    : 2         :                
 GND*                         : 81        :        :                   :         : 2         :                
-SPI_A[2]                     : 82        : output : 3.3-V LVTTL       :         : 2         : N              
+GND*                         : 82        :        :                   :         : 2         :                
 GND*                         : 83        :        :                   :         : 2         :                
 GND*                         : 84        :        :                   :         : 2         :                
 RnWin                        : 85        : input  : 3.3-V LVTTL       :         : 2         : Y              

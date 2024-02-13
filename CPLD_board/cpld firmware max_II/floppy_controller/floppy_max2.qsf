@@ -18,7 +18,7 @@
 #
 # Quartus II 64-Bit
 # Version 13.0.1 Build 232 06/12/2013 Service Pack 1 SJ Web Edition
-# Date created = 07:50:56  October 12, 2023
+# Date created = 21:45:39  January 15, 2024
 #
 # -------------------------------------------------------------------------- #
 #
@@ -40,7 +40,7 @@ set_global_assignment -name FAMILY "MAX II"
 set_global_assignment -name DEVICE EPM240T100C5
 set_global_assignment -name TOP_LEVEL_ENTITY floppy_controller
 set_global_assignment -name ORIGINAL_QUARTUS_VERSION "13.0 SP1"
-set_global_assignment -name PROJECT_CREATION_TIME_DATE "07:50:56  OCTOBER 12, 2023"
+set_global_assignment -name PROJECT_CREATION_TIME_DATE "21:45:39  JANUARY 15, 2024"
 set_global_assignment -name LAST_QUARTUS_VERSION "13.0 SP1"# Pin definitions for external RAM (with As)
 set_location_assignment PIN_1   -to As[18]
 set_location_assignment PIN_2   -to As[19]
@@ -124,5 +124,5 @@ set_location_assignment PIN_99  -to A[3]
 set_location_assignment PIN_100 -to A[2]
 
 set_global_assignment -name SOURCE_FILE floppy_max2.vhd
-set_global_assignment -name SOURCE_FILE ../../../vhdl_components/spi_slave_in16.vhd
+set_global_assignment -name SOURCE_FILE ../../../vhdl_components/spi_slave_in8.vhd
 set_global_assignment -name SOURCE_FILE ../../../vhdl_components/spi_slave_out48.vhd

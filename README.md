@@ -118,20 +118,22 @@ A simple configuration block looks líke this:
 
 ### Working Recreations of old computers ###
 
-| Name                     | prim. IO    | chips used                    | os                               | weblink                                                             |
-|--------------------------|-------------|-------------------------------|----------------------------------|---------------------------------------------------------------------|
-| Grant Searle 6502 board  | serial      | MOS6502, MC6850               | OSI Basic                        |Link: http://searle.x10host.com/6502/Simple6502.html                 |
-| Daryl Rictor 6502 board  | serial      | MOS6502, R6551                | SBC-2 (monitor only)             |Link: https://sbc.rictor.org/info2.html                              |
-| Daryl Rictor 6502 board  | serial      | MOS6502, MC6850               | SBC-2 (monitor only)             |Link: https://sbc.rictor.org/info2.html                              |
-| SYM1                     | serial      | MOS6502, UM6532               | SYM1 ( +BASIC +RAE)              |Link: http://retro.hansotten.nl/6502-sbc/synertek-sym-ktm/sym-1/     |
-| KIM1                     | serial      | MOS6502, UM6532               | KIM1                             |Link: http://retro.hansotten.nl/6502-sbc/kim-1-manuals-and-software/ |
-| Apple I                  | serial      | MOS6502, MĆ6821 (plus Arduino)| Wozmon + BASIC                   |Link: http://retro.hansotten.nl/6502-sbc/apple-1/                    |
-| Motorola MEK D2          | serial      | MC6802, MĆ6850                | newbug, xswtbug, mondeb          |Link: https://www.retrotechnology.com/restore/smithbug.html          |
-| Motorola MEK D1          | serial      | MC6802, MĆ6821 (plus Arduino) | Mikbug                           |Link: https://www.retrotechnology.com/restore/smithbug.html          |
-| Heathkit ET3400          | serial      | MC6802, MĆ6850                | MITS BASIC, TSC MicroBASIC,...   |Link: https://github.com/jefftranter                                 |
-| SWTPC 6800               | serial      | MC6802, MĆ6821 (plus Arduino) | Mikbug                           |Link: https://deramp.com/swtpc.com/                                  |
-| SWTPC 6800               | serial      | MC6802, MĆ6850                | SWTBUG, SWTBUGA, Mondeb, xSWTBUG |Link: https://deramp.com/swtpc.com/                                  |
-| DREAM 6800               | BAS (Video) | MC6802, MAX-II                | DREAM operating System (Chip8)   |Link: http://www.mjbauer.biz/DREAM6800.htm                           |
+| Name                     | prim. IO    | chips used                    | os                               | weblink                                                                 |
+|--------------------------|-------------|-------------------------------|----------------------------------|-------------------------------------------------------------------------|
+| Grant Searle 6502 board  | serial      | MOS6502, MC6850               | OSI Basic                        |Link: http://searle.x10host.com/6502/Simple6502.html                     |
+| Daryl Rictor 6502 board  | serial      | MOS6502, R6551                | SBC-2 (monitor only)             |Link: https://sbc.rictor.org/info2.html                                  |
+| Daryl Rictor 6502 board  | serial      | MOS6502, MC6850               | SBC-2 (monitor only)             |Link: https://sbc.rictor.org/info2.html                                  |
+| SYM1                     | serial      | MOS6502, UM6532               | SYM1 ( +BASIC +RAE)              |Link: http://retro.hansotten.nl/6502-sbc/synertek-sym-ktm/sym-1/         |
+| KIM1                     | serial      | MOS6502, UM6532               | KIM1                             |Link: http://retro.hansotten.nl/6502-sbc/kim-1-manuals-and-software/     |
+| Apple I                  | serial      | MOS6502, MĆ6821 (plus Arduino)| Wozmon + BASIC                   |Link: http://retro.hansotten.nl/6502-sbc/apple-1/                        |
+| Motorola MEK D2          | serial      | MC6802, MĆ6850                | newbug, xswtbug, mondeb          |Link: https://www.retrotechnology.com/restore/smithbug.html              |
+| Motorola MEK D1          | serial      | MC6802, MĆ6821 (plus Arduino) | Mikbug                           |Link: https://www.retrotechnology.com/restore/smithbug.html              |
+| Heathkit ET3400          | serial      | MC6802, MĆ6850                | MITS BASIC, TSC MicroBASIC,...   |Link: https://github.com/jefftranter                                     |
+| SWTPC 6800               | serial      | MC6802, MĆ6821 (plus Arduino) | Mikbug                           |Link: https://deramp.com/swtpc.com/                                      |
+| SWTPC 6800               | serial      | MC6802, MĆ6850                | SWTBUG, SWTBUGA, Mondeb, xSWTBUG |Link: https://deramp.com/swtpc.com/                                      |
+| DREAM 6800               | BAS (Video) | MC6802, MAX-II                | DREAM operating System (Chip8)   |Link: http://www.mjbauer.biz/DREAM6800.htm                               |
+| HD6303 Board (Eric Klaus)| serial      | HD6303                        | Monitor +BASIC                   |Link: https://sites.google.com/site/ericmklaus/projects-1/hd6303cpuboard |
+| MC3 Computer             | serial      | HD6303                        | Monitor                          |Link: https://www.waveguide.se/?article=mc3-a-diy-8-bit-computer         |
 
 ### linux single board computer (SBC) ###
 

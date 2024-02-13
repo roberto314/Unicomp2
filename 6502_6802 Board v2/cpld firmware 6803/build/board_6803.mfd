@@ -1,0 +1,95 @@
+MDF Database:  version 1.0
+MDF_INFO | board_6803 | XC9572XL-10-VQ44
+MACROCELL | 1 | 17 | s_ELEVEL
+ATTRIBUTES | 8520484 | 0
+OUTPUTMC | 2 | 0 | 13 | 0 | 14
+INPUTS | 2 | E_CPU  | CLKF
+INPUTP | 2 | 9 | 27
+EQ | 2 | 
+   s_ELEVEL.D = E_CPU;
+   s_ELEVEL.CLK = CLKF;
+
+MACROCELL | 0 | 13 | clk_divider<0>
+ATTRIBUTES | 4588322 | 0
+OUTPUTMC | 2 | 0 | 13 | 0 | 14
+INPUTS | 4 | s_ELEVEL  | PH0  | E_CPU  | CLKF
+INPUTMC | 2 | 1 | 17 | 0 | 13
+INPUTP | 2 | 9 | 27
+EQ | 2 | 
+   !PH0.T = !s_ELEVEL & PH0 & E_CPU;
+   PH0.CLK = CLKF;
+
+MACROCELL | 0 | 8 | nBUSFREE_OBUF
+ATTRIBUTES | 264962 | 0
+INPUTS | 2 | nRST  | E_CPU
+INPUTP | 2 | 21 | 9
+EQ | 1 | 
+   nBUSFREE = nRST & E_CPU;
+
+MACROCELL | 0 | 5 | nHALT_OBUF
+ATTRIBUTES | 8651554 | 0
+INPUTS | 2 | nHALT_in  | E_CPU
+INPUTP | 2 | 88 | 9
+EQ | 2 | 
+   nHALT.D = nHALT_in;
+   nHALT.CLK = E_CPU;
+
+MACROCELL | 1 | 10 | nMRD_OBUF
+ATTRIBUTES | 264962 | 0
+INPUTS | 2 | E_CPU  | RnW
+INPUTP | 2 | 9 | 7
+EQ | 1 | 
+   !nMRD = E_CPU & RnW;
+
+MACROCELL | 1 | 8 | nMWR_OBUF
+ATTRIBUTES | 264962 | 0
+INPUTS | 2 | E_CPU  | RnW
+INPUTP | 2 | 9 | 7
+EQ | 1 | 
+   !nMWR = E_CPU & !RnW;
+
+MACROCELL | 0 | 4 | E_Out_OBUF$BUF0
+ATTRIBUTES | 264962 | 0
+INPUTS | 1 | E_CPU
+INPUTP | 1 | 9
+EQ | 1 | 
+   E_Out = E_CPU;
+
+MACROCELL | 1 | 5 | nDOE_OBUF
+ATTRIBUTES | 264962 | 0
+INPUTS | 2 | nRST  | E_CPU
+INPUTP | 2 | 21 | 9
+EQ | 1 | 
+   !nDOE = nRST & E_CPU;
+
+MACROCELL | 1 | 7 | nDOE_OBUF$BUF0
+ATTRIBUTES | 264962 | 0
+INPUTS | 2 | nRST  | E_CPU
+INPUTP | 2 | 21 | 9
+EQ | 1 | 
+   !nAOE = nRST & E_CPU;
+
+MACROCELL | 0 | 14 | nPH0_OBUF
+ATTRIBUTES | 8651558 | 0
+INPUTS | 4 | PH0  | s_ELEVEL  | E_CPU  | CLKF
+INPUTMC | 2 | 0 | 13 | 1 | 17
+INPUTP | 2 | 9 | 27
+EQ | 3 | 
+   !nPH0.D = !PH0
+	# !s_ELEVEL & E_CPU;
+   nPH0.CLK = CLKF;
+
+PIN | CLKF | 64 | 0 | N/A | 27 | 3 | 1 | 17 | 0 | 13 | 0 | 14
+PIN | E_CPU | 64 | 0 | N/A | 9 | 10 | 1 | 17 | 0 | 13 | 0 | 8 | 0 | 5 | 1 | 10 | 1 | 8 | 0 | 4 | 1 | 5 | 1 | 7 | 0 | 14
+PIN | nRST | 64 | 0 | N/A | 21 | 3 | 0 | 8 | 1 | 5 | 1 | 7
+PIN | nHALT_in | 64 | 0 | N/A | 88 | 1 | 0 | 5
+PIN | RnW | 64 | 0 | N/A | 7 | 2 | 1 | 10 | 1 | 8
+PIN | PH0 | 536871040 | 0 | N/A | 24
+PIN | nBUSFREE | 536871040 | 0 | N/A | 20
+PIN | nHALT | 536871040 | 0 | N/A | 13
+PIN | nMRD | 536871040 | 0 | N/A | 3
+PIN | nMWR | 536871040 | 0 | N/A | 92
+PIN | E_Out | 536871040 | 0 | N/A | 12
+PIN | nDOE | 536871040 | 0 | N/A | 89
+PIN | nAOE | 536871040 | 0 | N/A | 90
+PIN | nPH0 | 536871040 | 0 | N/A | 26

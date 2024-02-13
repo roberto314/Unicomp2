@@ -3,36 +3,36 @@ TimeQuest Timing Analyzer Summary
 ------------------------------------------------------------
 
 Type  : Setup 'clk50'
-Slack : -6.363
-TNS   : -143.933
+Slack : -6.415
+TNS   : -139.017
 
 Type  : Setup 'nCSCPLD'
-Slack : -3.551
-TNS   : -26.097
+Slack : -5.001
+TNS   : -32.651
 
 Type  : Setup 'uRnW'
-Slack : -2.457
-TNS   : -82.780
+Slack : -2.466
+TNS   : -80.432
 
 Type  : Hold 'uRnW'
-Slack : -0.024
-TNS   : -0.096
+Slack : -0.325
+TNS   : -2.600
 
 Type  : Hold 'clk50'
-Slack : 1.235
+Slack : 1.449
 TNS   : 0.000
 
 Type  : Hold 'nCSCPLD'
-Slack : 3.591
+Slack : 3.653
 TNS   : 0.000
 
 Type  : Recovery 'uRnW'
-Slack : 0.180
+Slack : 0.222
 TNS   : 0.000
 
 Type  : Removal 'uRnW'
-Slack : -2.455
-TNS   : -103.100
+Slack : -2.502
+TNS   : -103.953
 
 Type  : Minimum Pulse Width 'clk50'
 Slack : -2.289

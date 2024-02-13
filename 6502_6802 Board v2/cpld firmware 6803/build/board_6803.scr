@@ -1,0 +1,1 @@
+run -ifn board_6803.prj -ofn board_6803.ngc -ifmt mixed  -top board_6803 -ofmt NGC -p XC9572XL-10-VQ44

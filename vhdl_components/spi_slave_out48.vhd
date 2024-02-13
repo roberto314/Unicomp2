@@ -20,7 +20,7 @@ architecture archi of spi_slave_out48 is
       begin 
         if (ss_n='1') then 
           dat_reg <= data; 
-        elsif (sclk'event and sclk='1') then 
+        elsif (sclk'event and sclk='0') then 
           dat_reg <= dat_reg(46 downto 0) & mosi; 
         end if; 
     end process; 
