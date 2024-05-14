@@ -2627,7 +2627,7 @@
   (symbol (lib_id "Connector_Generic:Conn_02x20_Odd_Even") (at 141.605 114.3 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid 01d93ce2-142b-46c0-a02b-e72b7032329d)
-    (property "Reference" "J?" (at 142.875 86.59 0)
+    (property "Reference" "J4" (at 142.875 86.59 0)
       (effects (font (size 1.27 1.27)))
     )
     (property "Value" "BUS" (at 142.875 88.638 0)
@@ -2681,9 +2681,6 @@
     (pin "9" (uuid 7f4a11ed-5eac-4fc3-bcce-d1bac0c1a89b))
     (instances
       (project "CPU6502_6802"
-        (path "/2eaa3998-c9cb-43b1-9b23-df656c8158b0"
-          (reference "J?") (unit 1)
-        )
         (path "/2eaa3998-c9cb-43b1-9b23-df656c8158b0/9272637d-1dcb-4eb8-96b5-e029cf524af1"
           (reference "J4") (unit 1)
         )
@@ -2694,7 +2691,7 @@
   (symbol (lib_id "power:+5V") (at 73.66 89.535 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid 0aa073a2-00a3-4d0f-8383-ac076567e15c)
-    (property "Reference" "#PWR?" (at 73.66 93.345 0)
+    (property "Reference" "#PWR08" (at 73.66 93.345 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "+5V" (at 73.66 85.9592 0)
@@ -2709,9 +2706,6 @@
     (pin "1" (uuid 73efbf07-0d01-4423-87f7-688b2495259d))
     (instances
       (project "CPU6502_6802"
-        (path "/2eaa3998-c9cb-43b1-9b23-df656c8158b0"
-          (reference "#PWR?") (unit 1)
-        )
         (path "/2eaa3998-c9cb-43b1-9b23-df656c8158b0/9272637d-1dcb-4eb8-96b5-e029cf524af1"
           (reference "#PWR08") (unit 1)
         )
@@ -2722,7 +2716,7 @@
   (symbol (lib_id "power:GND") (at 154.94 140.97 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid 16590cfd-eb01-4309-b84a-cba3c9afd160)
-    (property "Reference" "#PWR?" (at 154.94 147.32 0)
+    (property "Reference" "#PWR031" (at 154.94 147.32 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "GND" (at 154.94 145.4134 0)
@@ -2737,9 +2731,6 @@
     (pin "1" (uuid 49c7d4b6-82d4-42fb-962c-179bf2881eb2))
     (instances
       (project "CPU6502_6802"
-        (path "/2eaa3998-c9cb-43b1-9b23-df656c8158b0"
-          (reference "#PWR?") (unit 1)
-        )
         (path "/2eaa3998-c9cb-43b1-9b23-df656c8158b0/9272637d-1dcb-4eb8-96b5-e029cf524af1"
           (reference "#PWR031") (unit 1)
         )
@@ -2750,7 +2741,7 @@
   (symbol (lib_id "Connector_Generic:Conn_02x20_Odd_Even") (at 80.645 114.3 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid 2c89d1ba-a216-4d0f-8cd8-d02113b541cb)
-    (property "Reference" "J?" (at 81.915 86.59 0)
+    (property "Reference" "J2" (at 81.915 86.59 0)
       (effects (font (size 1.27 1.27)))
     )
     (property "Value" "BUS" (at 81.915 88.638 0)
@@ -2804,9 +2795,6 @@
     (pin "9" (uuid b0823abd-1024-4e1c-a588-1fcd4c843f0e))
     (instances
       (project "CPU6502_6802"
-        (path "/2eaa3998-c9cb-43b1-9b23-df656c8158b0"
-          (reference "J?") (unit 1)
-        )
         (path "/2eaa3998-c9cb-43b1-9b23-df656c8158b0/9272637d-1dcb-4eb8-96b5-e029cf524af1"
           (reference "J2") (unit 1)
         )
@@ -2817,7 +2805,7 @@
   (symbol (lib_id "power:GND") (at 76.835 76.2 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid 330a27cd-9a06-45ee-a36a-ae684081fe47)
-    (property "Reference" "#PWR?" (at 76.835 82.55 0)
+    (property "Reference" "#PWR023" (at 76.835 82.55 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "GND" (at 76.835 80.6434 0)
@@ -2832,9 +2820,6 @@
     (pin "1" (uuid 4597b80b-5aef-4d61-b417-3a1bb666d3c5))
     (instances
       (project "CPU6502_6802"
-        (path "/2eaa3998-c9cb-43b1-9b23-df656c8158b0"
-          (reference "#PWR?") (unit 1)
-        )
         (path "/2eaa3998-c9cb-43b1-9b23-df656c8158b0/9272637d-1dcb-4eb8-96b5-e029cf524af1"
           (reference "#PWR023") (unit 1)
         )
@@ -2845,7 +2830,7 @@
   (symbol (lib_id "power:+3V3") (at 104.14 133.985 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid 33837d3e-762a-48f7-a3de-e4c92ff5ec4c)
-    (property "Reference" "#PWR?" (at 104.14 137.795 0)
+    (property "Reference" "#PWR016" (at 104.14 137.795 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "+3V3" (at 104.14 130.4092 0)
@@ -2860,9 +2845,6 @@
     (pin "1" (uuid 9879f6d4-c05b-41da-ab2b-70f3fc24a49e))
     (instances
       (project "CPU6502_6802"
-        (path "/2eaa3998-c9cb-43b1-9b23-df656c8158b0"
-          (reference "#PWR?") (unit 1)
-        )
         (path "/2eaa3998-c9cb-43b1-9b23-df656c8158b0/9272637d-1dcb-4eb8-96b5-e029cf524af1"
           (reference "#PWR016") (unit 1)
         )
@@ -2873,7 +2855,7 @@
   (symbol (lib_id "power:+3V3") (at 59.055 133.985 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid 3ca45a61-0d00-4b84-814a-480cf40b7430)
-    (property "Reference" "#PWR?" (at 59.055 137.795 0)
+    (property "Reference" "#PWR013" (at 59.055 137.795 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "+3V3" (at 59.055 130.4092 0)
@@ -2888,9 +2870,6 @@
     (pin "1" (uuid dd81f6fa-0704-42d0-879e-f3800bece03f))
     (instances
       (project "CPU6502_6802"
-        (path "/2eaa3998-c9cb-43b1-9b23-df656c8158b0"
-          (reference "#PWR?") (unit 1)
-        )
         (path "/2eaa3998-c9cb-43b1-9b23-df656c8158b0/9272637d-1dcb-4eb8-96b5-e029cf524af1"
           (reference "#PWR013") (unit 1)
         )
@@ -2901,7 +2880,7 @@
   (symbol (lib_id "power:+5V") (at 75.565 24.765 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid 4193fa7c-a8ad-423c-ace3-bbd595fb2c85)
-    (property "Reference" "#PWR?" (at 75.565 28.575 0)
+    (property "Reference" "#PWR019" (at 75.565 28.575 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "+5V" (at 75.565 21.1892 0)
@@ -2916,9 +2895,6 @@
     (pin "1" (uuid 1f964c0b-2d5f-4c42-b136-41735cbeacf8))
     (instances
       (project "CPU6502_6802"
-        (path "/2eaa3998-c9cb-43b1-9b23-df656c8158b0"
-          (reference "#PWR?") (unit 1)
-        )
         (path "/2eaa3998-c9cb-43b1-9b23-df656c8158b0/9272637d-1dcb-4eb8-96b5-e029cf524af1"
           (reference "#PWR019") (unit 1)
         )
@@ -2929,7 +2905,7 @@
   (symbol (lib_id "power:GND") (at 91.44 76.2 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid 68a4409e-678f-4a9e-b8ac-529c2f6d259a)
-    (property "Reference" "#PWR?" (at 91.44 82.55 0)
+    (property "Reference" "#PWR024" (at 91.44 82.55 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "GND" (at 91.44 80.6434 0)
@@ -2944,9 +2920,6 @@
     (pin "1" (uuid 7c7d5ef5-6f7f-4071-b03c-381807cd2aea))
     (instances
       (project "CPU6502_6802"
-        (path "/2eaa3998-c9cb-43b1-9b23-df656c8158b0"
-          (reference "#PWR?") (unit 1)
-        )
         (path "/2eaa3998-c9cb-43b1-9b23-df656c8158b0/9272637d-1dcb-4eb8-96b5-e029cf524af1"
           (reference "#PWR024") (unit 1)
         )
@@ -2957,7 +2930,7 @@
   (symbol (lib_id "power:+3V3") (at 168.275 133.985 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid 8a26f79b-4252-4163-898a-c8cadac38c35)
-    (property "Reference" "#PWR?" (at 168.275 137.795 0)
+    (property "Reference" "#PWR027" (at 168.275 137.795 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "+3V3" (at 168.275 130.4092 0)
@@ -2972,9 +2945,6 @@
     (pin "1" (uuid 1ffa0f07-cce4-41e4-ba9c-fe039ad27e27))
     (instances
       (project "CPU6502_6802"
-        (path "/2eaa3998-c9cb-43b1-9b23-df656c8158b0"
-          (reference "#PWR?") (unit 1)
-        )
         (path "/2eaa3998-c9cb-43b1-9b23-df656c8158b0/9272637d-1dcb-4eb8-96b5-e029cf524af1"
           (reference "#PWR027") (unit 1)
         )
@@ -2985,7 +2955,7 @@
   (symbol (lib_id "power:+5V") (at 132.715 24.765 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid 8af9d4cc-2bab-4d23-8c13-50ba061fffa9)
-    (property "Reference" "#PWR?" (at 132.715 28.575 0)
+    (property "Reference" "#PWR021" (at 132.715 28.575 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "+5V" (at 132.715 21.1892 0)
@@ -3000,9 +2970,6 @@
     (pin "1" (uuid 6a247936-d7b5-4a37-8695-30f37638ffdb))
     (instances
       (project "CPU6502_6802"
-        (path "/2eaa3998-c9cb-43b1-9b23-df656c8158b0"
-          (reference "#PWR?") (unit 1)
-        )
         (path "/2eaa3998-c9cb-43b1-9b23-df656c8158b0/9272637d-1dcb-4eb8-96b5-e029cf524af1"
           (reference "#PWR021") (unit 1)
         )
@@ -3013,7 +2980,7 @@
   (symbol (lib_id "Connector_Generic:Conn_02x20_Odd_Even") (at 139.7 49.53 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid 90d6960f-7a05-42b1-89d5-d9c35ac40d81)
-    (property "Reference" "J?" (at 140.97 21.82 0)
+    (property "Reference" "J3" (at 140.97 21.82 0)
       (effects (font (size 1.27 1.27)))
     )
     (property "Value" "BUS" (at 140.97 23.868 0)
@@ -3067,9 +3034,6 @@
     (pin "9" (uuid f1fd6047-ce2b-4af5-85ba-b05d6c2e2e97))
     (instances
       (project "CPU6502_6802"
-        (path "/2eaa3998-c9cb-43b1-9b23-df656c8158b0"
-          (reference "J?") (unit 1)
-        )
         (path "/2eaa3998-c9cb-43b1-9b23-df656c8158b0/9272637d-1dcb-4eb8-96b5-e029cf524af1"
           (reference "J3") (unit 1)
         )
@@ -3080,7 +3044,7 @@
   (symbol (lib_id "Connector_Generic:Conn_02x20_Odd_Even") (at 82.55 49.53 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid aa5f4b82-acf7-4273-a5e1-2830e046937d)
-    (property "Reference" "J?" (at 83.82 21.82 0)
+    (property "Reference" "J1" (at 83.82 21.82 0)
       (effects (font (size 1.27 1.27)))
     )
     (property "Value" "BUS" (at 83.82 23.868 0)
@@ -3134,9 +3098,6 @@
     (pin "9" (uuid 46a66d5a-0c6b-4bf2-8ca8-44ffce2184ca))
     (instances
       (project "CPU6502_6802"
-        (path "/2eaa3998-c9cb-43b1-9b23-df656c8158b0"
-          (reference "J?") (unit 1)
-        )
         (path "/2eaa3998-c9cb-43b1-9b23-df656c8158b0/9272637d-1dcb-4eb8-96b5-e029cf524af1"
           (reference "J1") (unit 1)
         )
@@ -3199,7 +3160,7 @@
   (symbol (lib_id "power:+3V3") (at 117.475 133.985 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid bc378594-081e-4c8d-84b4-fe63fd4f3d50)
-    (property "Reference" "#PWR?" (at 117.475 137.795 0)
+    (property "Reference" "#PWR017" (at 117.475 137.795 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "+3V3" (at 117.475 130.4092 0)
@@ -3214,9 +3175,6 @@
     (pin "1" (uuid 8e35bf6a-9582-44ae-a140-8a87a2132025))
     (instances
       (project "CPU6502_6802"
-        (path "/2eaa3998-c9cb-43b1-9b23-df656c8158b0"
-          (reference "#PWR?") (unit 1)
-        )
         (path "/2eaa3998-c9cb-43b1-9b23-df656c8158b0/9272637d-1dcb-4eb8-96b5-e029cf524af1"
           (reference "#PWR017") (unit 1)
         )
@@ -3227,7 +3185,7 @@
   (symbol (lib_id "power:+5V") (at 90.17 89.535 0) (mirror y) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid beaa8e08-1eaa-43f1-9f1f-d1324ab35591)
-    (property "Reference" "#PWR?" (at 90.17 93.345 0)
+    (property "Reference" "#PWR09" (at 90.17 93.345 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "+5V" (at 90.17 85.9592 0)
@@ -3242,9 +3200,6 @@
     (pin "1" (uuid 892debf4-9f8d-4e36-8589-6c385a2e58e1))
     (instances
       (project "CPU6502_6802"
-        (path "/2eaa3998-c9cb-43b1-9b23-df656c8158b0"
-          (reference "#PWR?") (unit 1)
-        )
         (path "/2eaa3998-c9cb-43b1-9b23-df656c8158b0/9272637d-1dcb-4eb8-96b5-e029cf524af1"
           (reference "#PWR09") (unit 1)
         )
@@ -3255,7 +3210,7 @@
   (symbol (lib_id "power:GND") (at 74.93 140.97 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid cd7c63b1-b454-4468-8b19-dd87ac5f6c6e)
-    (property "Reference" "#PWR?" (at 74.93 147.32 0)
+    (property "Reference" "#PWR028" (at 74.93 147.32 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "GND" (at 74.93 145.4134 0)
@@ -3270,9 +3225,6 @@
     (pin "1" (uuid c1c57273-5694-437d-bc12-2a2f0a1e0f80))
     (instances
       (project "CPU6502_6802"
-        (path "/2eaa3998-c9cb-43b1-9b23-df656c8158b0"
-          (reference "#PWR?") (unit 1)
-        )
         (path "/2eaa3998-c9cb-43b1-9b23-df656c8158b0/9272637d-1dcb-4eb8-96b5-e029cf524af1"
           (reference "#PWR028") (unit 1)
         )
@@ -3283,7 +3235,7 @@
   (symbol (lib_id "power:+5V") (at 129.54 89.535 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid da06588a-d9be-4e0d-811f-c0b0c26e227c)
-    (property "Reference" "#PWR?" (at 129.54 93.345 0)
+    (property "Reference" "#PWR010" (at 129.54 93.345 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "+5V" (at 129.54 85.9592 0)
@@ -3298,9 +3250,6 @@
     (pin "1" (uuid ad90b72a-0c6b-4b3d-849f-a848b899e257))
     (instances
       (project "CPU6502_6802"
-        (path "/2eaa3998-c9cb-43b1-9b23-df656c8158b0"
-          (reference "#PWR?") (unit 1)
-        )
         (path "/2eaa3998-c9cb-43b1-9b23-df656c8158b0/9272637d-1dcb-4eb8-96b5-e029cf524af1"
           (reference "#PWR010") (unit 1)
         )
@@ -3311,7 +3260,7 @@
   (symbol (lib_id "power:+5V") (at 149.225 24.765 0) (mirror y) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid dd2c4c89-a193-4e8e-bf2e-46cbcfbed4ef)
-    (property "Reference" "#PWR?" (at 149.225 28.575 0)
+    (property "Reference" "#PWR022" (at 149.225 28.575 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "+5V" (at 149.225 21.1892 0)
@@ -3326,9 +3275,6 @@
     (pin "1" (uuid 72770ec7-ba2f-4ccc-9cd5-2ff35c61f69c))
     (instances
       (project "CPU6502_6802"
-        (path "/2eaa3998-c9cb-43b1-9b23-df656c8158b0"
-          (reference "#PWR?") (unit 1)
-        )
         (path "/2eaa3998-c9cb-43b1-9b23-df656c8158b0/9272637d-1dcb-4eb8-96b5-e029cf524af1"
           (reference "#PWR022") (unit 1)
         )
@@ -3339,7 +3285,7 @@
   (symbol (lib_id "power:GND") (at 133.985 76.2 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid e6d0a9f4-55e5-4920-b543-ec1ab1f2a95f)
-    (property "Reference" "#PWR?" (at 133.985 82.55 0)
+    (property "Reference" "#PWR025" (at 133.985 82.55 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "GND" (at 133.985 80.6434 0)
@@ -3354,9 +3300,6 @@
     (pin "1" (uuid 28282d34-3836-4a57-81c3-159ea12d03a1))
     (instances
       (project "CPU6502_6802"
-        (path "/2eaa3998-c9cb-43b1-9b23-df656c8158b0"
-          (reference "#PWR?") (unit 1)
-        )
         (path "/2eaa3998-c9cb-43b1-9b23-df656c8158b0/9272637d-1dcb-4eb8-96b5-e029cf524af1"
           (reference "#PWR025") (unit 1)
         )
@@ -3367,7 +3310,7 @@
   (symbol (lib_id "power:GND") (at 148.59 76.2 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid e9d6c289-a75c-4755-ac76-5f2ae0cf7ff7)
-    (property "Reference" "#PWR?" (at 148.59 82.55 0)
+    (property "Reference" "#PWR026" (at 148.59 82.55 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "GND" (at 148.59 80.6434 0)
@@ -3382,9 +3325,6 @@
     (pin "1" (uuid 7fdc27bc-a08d-4fce-b202-371bb6930308))
     (instances
       (project "CPU6502_6802"
-        (path "/2eaa3998-c9cb-43b1-9b23-df656c8158b0"
-          (reference "#PWR?") (unit 1)
-        )
         (path "/2eaa3998-c9cb-43b1-9b23-df656c8158b0/9272637d-1dcb-4eb8-96b5-e029cf524af1"
           (reference "#PWR026") (unit 1)
         )
@@ -3395,7 +3335,7 @@
   (symbol (lib_id "power:GND") (at 89.535 140.97 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid ed0fa873-7c3d-4474-8dc5-50ccde240994)
-    (property "Reference" "#PWR?" (at 89.535 147.32 0)
+    (property "Reference" "#PWR029" (at 89.535 147.32 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "GND" (at 89.535 145.4134 0)
@@ -3410,9 +3350,6 @@
     (pin "1" (uuid 6131acb8-f98e-4950-bbc2-c9809a754b90))
     (instances
       (project "CPU6502_6802"
-        (path "/2eaa3998-c9cb-43b1-9b23-df656c8158b0"
-          (reference "#PWR?") (unit 1)
-        )
         (path "/2eaa3998-c9cb-43b1-9b23-df656c8158b0/9272637d-1dcb-4eb8-96b5-e029cf524af1"
           (reference "#PWR029") (unit 1)
         )
@@ -3423,7 +3360,7 @@
   (symbol (lib_id "power:+5V") (at 92.075 24.765 0) (mirror y) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid f12375ad-bf79-4a25-90cf-7612744ee5de)
-    (property "Reference" "#PWR?" (at 92.075 28.575 0)
+    (property "Reference" "#PWR020" (at 92.075 28.575 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "+5V" (at 92.075 21.1892 0)
@@ -3438,9 +3375,6 @@
     (pin "1" (uuid 252b84c0-1b5b-4ace-91c8-7b1de5c164a1))
     (instances
       (project "CPU6502_6802"
-        (path "/2eaa3998-c9cb-43b1-9b23-df656c8158b0"
-          (reference "#PWR?") (unit 1)
-        )
         (path "/2eaa3998-c9cb-43b1-9b23-df656c8158b0/9272637d-1dcb-4eb8-96b5-e029cf524af1"
           (reference "#PWR020") (unit 1)
         )
@@ -3451,7 +3385,7 @@
   (symbol (lib_id "power:+5V") (at 155.575 89.535 0) (mirror y) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid f7fccff7-9d0b-4420-9e3f-5717a68006b9)
-    (property "Reference" "#PWR?" (at 155.575 93.345 0)
+    (property "Reference" "#PWR012" (at 155.575 93.345 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "+5V" (at 155.575 85.9592 0)
@@ -3466,9 +3400,6 @@
     (pin "1" (uuid 1be1e272-efdc-41cb-bb95-5bd3aa26b329))
     (instances
       (project "CPU6502_6802"
-        (path "/2eaa3998-c9cb-43b1-9b23-df656c8158b0"
-          (reference "#PWR?") (unit 1)
-        )
         (path "/2eaa3998-c9cb-43b1-9b23-df656c8158b0/9272637d-1dcb-4eb8-96b5-e029cf524af1"
           (reference "#PWR012") (unit 1)
         )
@@ -3479,7 +3410,7 @@
   (symbol (lib_id "power:GND") (at 130.81 140.97 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid fccbc8b0-6930-48cd-ba47-9efadd670d72)
-    (property "Reference" "#PWR?" (at 130.81 147.32 0)
+    (property "Reference" "#PWR030" (at 130.81 147.32 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "GND" (at 130.81 145.4134 0)
@@ -3494,9 +3425,6 @@
     (pin "1" (uuid bb4e7e89-cc9e-492a-9449-f488be7ca1b2))
     (instances
       (project "CPU6502_6802"
-        (path "/2eaa3998-c9cb-43b1-9b23-df656c8158b0"
-          (reference "#PWR?") (unit 1)
-        )
         (path "/2eaa3998-c9cb-43b1-9b23-df656c8158b0/9272637d-1dcb-4eb8-96b5-e029cf524af1"
           (reference "#PWR030") (unit 1)
         )
