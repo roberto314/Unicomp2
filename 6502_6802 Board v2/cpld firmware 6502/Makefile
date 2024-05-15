@@ -44,7 +44,6 @@ FUSE_OPTS       ?= -incremental
 #PROGRAMMER      ?= xc3sprog
 PROGRAMMER      ?= impact
 
-#IMPACT_OPTS     ?= setCable -port svf 
 IMPACT_OPTS     ?= -batch impact.cmd
 
 DJTG_EXE        ?= djtgcfg
@@ -143,6 +142,17 @@ $(BITFILE): project.cfg $(VSOURCE) $(CONSTRAINTS) build/$(PROJECT).prj build/$(P
 
 ifeq ($(PROGRAMMER), impact)
 prog:
+	@echo "setMode -bs" > impact.cmd
+	@echo "setCable -port xsvf -file "build/$(PROJECT).xsvf"" >> impact.cmd
+	@echo "addDevice -p 1 -file "build/$(PROJECT).jed"" >> impact.cmd
+	@echo "Program -p 1 -e -defaultVersion 0" >> impact.cmd
+	@echo "quit" >> impact.cmd
+	$(XILINX)/bin/$(XILINX_PLATFORM)/impact $(IMPACT_OPTS)
+	@echo "setMode -bs" > impact.cmd
+	@echo "setCable -port svf -file "build/$(PROJECT).svf"" >> impact.cmd
+	@echo "addDevice -p 1 -file "build/$(PROJECT).jed"" >> impact.cmd
+	@echo "Program -p 1 -e -defaultVersion 0" >> impact.cmd
+	@echo "quit" >> impact.cmd
 	$(XILINX)/bin/$(XILINX_PLATFORM)/impact $(IMPACT_OPTS)
 endif
 
