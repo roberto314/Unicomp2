@@ -44,19 +44,18 @@ Optimization Effort                : 1
 *                          HDL Compilation                              *
 =========================================================================
 Compiling vhdl file "/home/rob/Data/rob/Projects/Unicomp2/6502_6802 Board v2/cpld firmware 6502/board_6502.vhd" in Library work.
-Entity <board_6502> compiled.
-Entity <board_6502> (Architecture <Behavioral>) compiled.
+Architecture behavioral of Entity board_6502 is up to date.
 
 =========================================================================
 *                     Design Hierarchy Analysis                         *
 =========================================================================
-Analyzing hierarchy for entity <board_6502> in library <work> (architecture <Behavioral>).
+Analyzing hierarchy for entity <board_6502> in library <work> (architecture <behavioral>).
 
 
 =========================================================================
 *                            HDL Analysis                               *
 =========================================================================
-Analyzing Entity <board_6502> in library <work> (Architecture <Behavioral>).
+Analyzing Entity <board_6502> in library <work> (Architecture <behavioral>).
 Entity <board_6502> analyzed. Unit <board_6502> generated.
 
 
@@ -153,12 +152,12 @@ Cell Usage :
 
 
 Total REAL time to Xst completion: 2.00 secs
-Total CPU time to Xst completion: 2.32 secs
+Total CPU time to Xst completion: 2.14 secs
  
 --> 
 
 
-Total memory usage is 494900 kilobytes
+Total memory usage is 494932 kilobytes
 
 Number of errors   :    0 (   0 filtered)
 Number of warnings :   12 (   0 filtered)

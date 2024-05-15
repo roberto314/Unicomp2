@@ -41,8 +41,10 @@ BITGEN_OPTS     ?=
 TRACE_OPTS      ?=
 FUSE_OPTS       ?= -incremental
 
-PROGRAMMER      ?= xc3sprog
+#PROGRAMMER      ?= xc3sprog
+PROGRAMMER      ?= impact
 
+#IMPACT_OPTS     ?= setCable -port svf 
 IMPACT_OPTS     ?= -batch impact.cmd
 
 DJTG_EXE        ?= djtgcfg
@@ -140,7 +142,7 @@ $(BITFILE): project.cfg $(VSOURCE) $(CONSTRAINTS) build/$(PROJECT).prj build/$(P
 ###########################################################################
 
 ifeq ($(PROGRAMMER), impact)
-prog: $(BITFILE)
+prog:
 	$(XILINX)/bin/$(XILINX_PLATFORM)/impact $(IMPACT_OPTS)
 endif
 
